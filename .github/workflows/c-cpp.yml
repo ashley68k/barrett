@@ -13,6 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install SDL2 + mixer dev libraries
+      run: |
+        sudo apt update
+        sudo apt install -y libsdl2-dev libsdl2-mixer-dev
     - name: make
       run: make
       working-directory: ./src
