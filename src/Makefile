@@ -10,7 +10,7 @@ CPPFLAGS += -DSHAREWARE=$(SHAREWARE)
 CPPFLAGS += -DSUPERROTT=$(SUPERROTT)
 CPPFLAGS += -DSITELICENSE=$(SITELICENSE)
 
-ROTT ?= rott
+BARRETT ?= build/barrett
 
 # Regular build flags and rules
 
@@ -86,9 +86,9 @@ OBJS += HashTable.o
 
 AUDIOLIB := audiolib/audiolib.a
 
-all: $(ROTT)
+all: $(BARRETT)
 
-$(ROTT): $(OBJS) $(AUDIOLIB)
+$(BARRETT): $(OBJS) $(AUDIOLIB)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJS): develop.h
