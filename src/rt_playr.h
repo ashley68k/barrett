@@ -93,7 +93,7 @@ typedef struct weaptype
     int impulse;
     int numattacks;
     attack_t attackinfo[14];
-} williamdidthis;
+} weaponinfo;
 
 typedef struct
 {
@@ -158,7 +158,7 @@ typedef struct
 }
 
 
-extern williamdidthis  DOGSCRATCH;
+extern weaponinfo  DOGSCRATCH;
 extern int        GRAVITY;
 extern int        controlupdatetime;
 extern int        controlupdatestarted;
@@ -170,9 +170,9 @@ extern playertype PLAYERSTATE[MAXPLAYERS],*locplayerstate;
 
 extern ROTTCHARS  characters[5];
 
-extern williamdidthis FREE;
+extern weaponinfo FREE;
 extern statetype s_player;
-extern williamdidthis WEAPONS[MAXWEAPONS];
+extern weaponinfo WEAPONS[MAXWEAPONS];
 extern boolean mouseenabled;
 extern boolean joystickenabled;
 extern boolean joypadenabled;

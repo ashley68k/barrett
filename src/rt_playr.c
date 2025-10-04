@@ -173,24 +173,24 @@ int      buttonjoy[8] = {bt_attack, bt_strafe, bt_run, bt_use,
                          bt_nobutton, bt_nobutton, bt_nobutton, bt_nobutton
                         };
 
-williamdidthis FREE = {84,5,0,0,9,{{done,2,1},{done,2,2},{done,2,3},
+weaponinfo FREE = {84,5,0,0,9,{{done,2,1},{done,2,2},{done,2,3},
         {done,2,4},{done,2,5},{done,2,6},{done,2,7},{done,2,8},
         {reset,2,9}
     }
 };
 
-williamdidthis DOGSCRATCH = {128,5,0,0,4,{{done,2,8},{at_pulltrigger,2,9},{done,2,10},
+weaponinfo DOGSCRATCH = {128,5,0,0,4,{{done,2,8},{at_pulltrigger,2,9},{done,2,10},
         {reset,2,11}
     }
 };
 
-williamdidthis DOGLICK =    {128,5,0,0,4,{{done,2,4},{done,2,5},{done,2,6},
+weaponinfo DOGLICK =    {128,5,0,0,4,{{done,2,4},{done,2,5},{done,2,6},
         {reset,2,7}
     }
 };
 
 
-williamdidthis WEAPONS[MAXWEAPONS] =
+weaponinfo WEAPONS[MAXWEAPONS] =
 
 {
     {100,-1,10,0x2000l,3,{{at_pulltrigger,4,1},{done,4,2},{reset,4,0}}}, //single pistol
