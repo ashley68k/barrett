@@ -4400,8 +4400,8 @@ void Died (void)
                 SD_Play (SD_PLAYERTCDEATHSND+(pstate->player));
                 if (killerobj->which==PWALL)
                 {
-                    dx = ((pushwallobj_t *)killerobj)->x - player->x;
-                    dy = player->y - ((pushwallobj_t *)killerobj)->y;
+                    dx = ((pwallobj_t *)killerobj)->x - player->x;
+                    dy = player->y - ((pwallobj_t *)killerobj)->y;
                 }
                 else
                 {

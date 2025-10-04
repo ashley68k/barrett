@@ -62,7 +62,7 @@ typedef struct
     char name[10];
     boolean loop;
     boolean usefile;
-} cineevent;
+} flicevent;
 
 typedef struct
 {

@@ -54,7 +54,7 @@ extern void DisplayMessage   (int num,int position);
 typedef struct {
     char code[15];
     byte length;
-} CheatCode;
+} CodeStruct;
 
 enum
 {

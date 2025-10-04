@@ -119,7 +119,7 @@ typedef struct pwallstruct
     enum      {pw_npushed,pw_pushing,pw_pushed,pw_moving}       action;
     int       state;
     byte      flags;
-} pushwallobj_t;
+} pwallobj_t;
 
 typedef struct tplate
 {   void (*action)(long);
@@ -191,7 +191,7 @@ extern doorobj_t           *doorobjlist[MAXDOORS];
 extern int                 doornum;
 extern maskedwallobj_t     *maskobjlist[MAXMASKED];
 extern int                 maskednum;
-extern pushwallobj_t          *pwallobjlist[MAXPWALLS];
+extern pwallobj_t          *pwallobjlist[MAXPWALLS];
 extern int                 pwallnum;
 // 0xffff = fully open
 extern byte                areaconnect[NUMAREAS][NUMAREAS];

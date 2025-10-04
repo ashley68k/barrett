@@ -189,7 +189,7 @@ typedef struct
     int      DangerDamage;
     unsigned TimeLimit;
     unsigned RespawnTime;
-} battlemode_cfg;
+} battle_type;
 
 #define bo_normal_respawn_time 30
 

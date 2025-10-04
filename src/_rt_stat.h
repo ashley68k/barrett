@@ -34,7 +34,7 @@ typedef struct
     int  tictime,
          numanims;
     char firstlump[9];
-} animwallinfo_t;
+} awallinfo_t;
 
 
 typedef struct sas

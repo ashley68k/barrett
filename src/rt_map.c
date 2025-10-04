@@ -61,9 +61,9 @@ static int mapcolor=8;
 typedef struct PType {
     int   x;
     int   y;
-} MapPoint;
+} Ptype;
 
-static MapPoint arrows[8][7]=
+static Ptype arrows[8][7]=
 {
     { {4,2}, {2,4}, {2,3}, {0,3}, {0,1}, {2,1}, {2,0} },
     { {4,0}, {4,3}, {3,2}, {1,4}, {0,3}, {2,1}, {1,0} },
@@ -263,7 +263,7 @@ void DrawMap_Door (int x, int y, int tile)
 =======================
 */
 
-void DrawMap_PushWall (int x, int y, pushwallobj_t * pw)
+void DrawMap_PushWall (int x, int y, pwallobj_t * pw)
 {
     if (pw->texture&0x1000)
         DrawMap_AnimatedWall(x,y,pw->texture&0x3ff);
@@ -513,7 +513,7 @@ void DrawMap( int cx, int cy )
                     case PWALL:
                         if (!mapseen[mapx][mapy])
                             continue;
-                        DrawMap_PushWall(i,j,(pushwallobj_t *)a);
+                        DrawMap_PushWall(i,j,(pwallobj_t *)a);
                         break;
                     case ACTOR:
                         DrawMap_Actor(i,j,a);

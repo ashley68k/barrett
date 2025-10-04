@@ -80,7 +80,7 @@ int			   doornum;
 maskedwallobj_t *maskobjlist[MAXMASKED];
 int            maskednum;
 
-pushwallobj_t     *pwallobjlist[MAXPWALLS];
+pwallobj_t     *pwallobjlist[MAXPWALLS];
 int            pwallnum;
 
 byte	         areaconnect[NUMAREAS][NUMAREAS];
@@ -3137,13 +3137,13 @@ int GetAreaNumber ( int tilex, int tiley, int dir )
 
 void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int type)
 {
-    pushwallobj_t * lastpwallobj;
+    pwallobj_t * lastpwallobj;
 
     if (pwallnum==MAXPWALLS)
         Error ("MAXPWALLS on level!");
 
-    pwallobjlist[pwallnum]=(pushwallobj_t*)Z_LevelMalloc(sizeof(pushwallobj_t),PU_LEVELSTRUCT,NULL);
-    memset(pwallobjlist[pwallnum],0,sizeof(pushwallobj_t));
+    pwallobjlist[pwallnum]=(pwallobj_t*)Z_LevelMalloc(sizeof(pwallobj_t),PU_LEVELSTRUCT,NULL);
+    memset(pwallobjlist[pwallnum],0,sizeof(pwallobj_t));
     lastpwallobj=pwallobjlist[pwallnum];
 
     lastpwallobj->x = (tilex<<16)+0x8000;
@@ -3157,7 +3157,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
     lastpwallobj->which = PWALL;
     lastpwallobj->dir = dir;
     lastpwallobj->num = pwallnum;
-    actorat[tilex][tiley] = (pushwallobj_t*)(lastpwallobj);	// consider it a solid wall
+    actorat[tilex][tiley] = (pwallobj_t*)(lastpwallobj);	// consider it a solid wall
 
     if ( (MAPSPOT(tilex,tiley,0)==44) ||
             (MAPSPOT(tilex,tiley,0)==233)
@@ -3217,7 +3217,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
 */
 void OperatePushWall (int pwall, int dir, boolean localplayer )
 {
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3298,7 +3298,7 @@ void ActivateAllPushWalls(void)
 
 void ActivatePushWall (long pwall)
 {
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3329,7 +3329,7 @@ void ActivatePushWall (long pwall)
 
 void ActivateMoveWall (long pwall)
 {
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3362,7 +3362,7 @@ void ConnectPushWall (int pwall)
     int		area1,area2;
     int		area3,area4;
     word  	*map;
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3410,7 +3410,7 @@ void ConnectPushWall (int pwall)
 
 void SetupPushWall (int pwall)
 {
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
     int speed;
 
     pw=pwallobjlist[pwall];
@@ -3498,7 +3498,7 @@ void MovePWalls (void)
 }
 
 
-void ClearActorat(pushwallobj_t*pw)
+void ClearActorat(pwallobj_t*pw)
 {   int txhigh,txlow,tyhigh,tylow;
     int tryx,tryy,x,y;
     int pwrad = 0x6fff;
@@ -3517,7 +3517,7 @@ void ClearActorat(pushwallobj_t*pw)
         }
 }
 
-void SetActorat(pushwallobj_t*pw)
+void SetActorat(pwallobj_t*pw)
 {   int txhigh,txlow,tyhigh,tylow;
     int tryx,tryy,x,y;
     int pwrad = 0x6fff;
@@ -3541,7 +3541,7 @@ void SetActorat(pushwallobj_t*pw)
 =
 =================
 */
-void FinishPushWall (pushwallobj_t * pw)
+void FinishPushWall (pwallobj_t * pw)
 {
     pw->action = pw_pushed;
     actorat[pw->tilex][pw->tiley] = (wall_t*)&walls[GetWallIndex(pw->texture)];
@@ -3555,7 +3555,7 @@ void FinishPushWall (pushwallobj_t * pw)
 =
 =================
 */
-void ResetPushWall (pushwallobj_t * pw)
+void ResetPushWall (pwallobj_t * pw)
 {
     SetActorat(pw);
     tilemap[pw->tilex][pw->tiley] = pw->texture|0x800;
@@ -3572,7 +3572,7 @@ void WallPushing (int pwall)
 {
     int      checkx,checky;
     int      spot;
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3669,7 +3669,7 @@ void WallMoving (int pwall)
 {
     int      checkx,checky;
     int      spot;
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
 
     pw=pwallobjlist[pwall];
 
@@ -3766,7 +3766,7 @@ void WallMoving (int pwall)
 void SavePushWalls(byte ** buf, int * sz)
 {
     int unitsize;
-    pushwallobj_t * pw;
+    pwallobj_t * pw;
     byte * bufptr;
     int i;
     int size;
@@ -3830,8 +3830,8 @@ void SavePushWalls(byte ** buf, int * sz)
 void LoadPushWalls(byte * bufptr, int sz)
 {
     int unitsize;
-    pushwallobj_t * pw;
-    pushwallobj_t new;
+    pwallobj_t * pw;
+    pwallobj_t new;
     int i;
     int num;
     int size;
