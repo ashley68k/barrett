@@ -43,11 +43,11 @@ rott.exe
 barrett.exe
 
 # ROTT data files
-*.rtc
-*.rts
-*.rtl
-*.dmo
-*.wad
+*.RTC
+*.RTS
+*.RTL
+*.DMO
+*.WAD
 
 # Debug files
 *.dSYM/
