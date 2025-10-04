@@ -86,13 +86,10 @@ ModemMessage MSG;
 
 #if USE_SDL
 static SDL_Joystick* sdl_joysticks[MaxJoys];
-static int sdl_mouse_delta_x = 0;
-static int sdl_mouse_delta_y = 0;
 static word sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
 static word *sdl_stick_button_state = NULL;
 static word sdl_sticks_joybits = 0;
-static int sdl_mouse_grabbed = 0;
 //static unsigned int scancodes[SDL_NUM_SCANCODES]; //TODO: replace with a hashtable if possible
 static HashTable * scancodes;
 extern boolean sdl_fullscreen;
@@ -168,47 +165,6 @@ static int sdl_mouse_button_filter(SDL_Event const *event)
     if (bmask & SDL_BUTTON_MMASK) sdl_mouse_button_mask |= 4;
     return(0);
 } /* sdl_mouse_up_filter */
-
-
-static int sdl_mouse_motion_filter(SDL_Event const *event)
-{
-    static int mouse_x = 0;
-    static int mouse_y = 0;
-    int mouse_relative_x = 0;
-    int mouse_relative_y = 0;
-
-    if (event->type == SDL_JOYBALLMOTION)
-    {
-        mouse_relative_x = event->jball.xrel/100;
-        mouse_relative_y = event->jball.yrel/100;
-        mouse_x += mouse_relative_x;
-        mouse_y += mouse_relative_y;
-    } /* if */
-    else
-    {
-        //if (sdl_mouse_grabbed || sdl_fullscreen)
-        //{
-            mouse_relative_x = event->motion.xrel;
-            mouse_relative_y = event->motion.yrel;
-            mouse_x += mouse_relative_x;
-            mouse_y += mouse_relative_y;
-        //} /* if */
-        //else
-        //{
-            //mouse_relative_x = event->motion.x - mouse_x;
-            //mouse_relative_y = event->motion.y - mouse_y;
-            //mouse_x = event->motion.x;
-            //mouse_y = event->motion.y;
-        //} /* else */
-    } /* else */
-
-    /* set static vars... */
-    sdl_mouse_delta_x += mouse_relative_x;
-    sdl_mouse_delta_y += mouse_relative_y;
-
-    return(0);
-} /* sdl_mouse_motion_filter */
-
 
 /**
  * Attempt to flip the video surface to fullscreen or windowed mode.
@@ -384,7 +340,6 @@ static int root_sdl_event_filter(const SDL_Event *event)
         return(sdl_key_filter(event));
     case SDL_JOYBALLMOTION:
     case SDL_MOUSEMOTION:
-        return(sdl_mouse_motion_filter(event));
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
         return(sdl_mouse_button_filter(event));
@@ -435,11 +390,7 @@ void INL_GetMouseDelta(int *x,int *y)
 {
     IN_PumpEvents();
 
-    *x = sdl_mouse_delta_x;
-    *y = sdl_mouse_delta_y;
-
-    sdl_mouse_delta_x = sdl_mouse_delta_y = 0;
-
+    SDL_GetRelativeMouseState(x, y);
 }
 
 
