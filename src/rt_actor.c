@@ -100,7 +100,7 @@ byte              RANDOMACTORTYPE[10];
 #if (SHAREWARE == 0)
 _2Dpoint          SNAKEPATH[512];
 #endif
-misc_stuff        mstruct,*MISCVARS = &mstruct;
+actor_misc_flags        mstruct,*MISCVARS = &mstruct;
 int               angletodir[ANGLES];
 objtype           *new;
 
@@ -550,12 +550,12 @@ void SaveActors(byte **buffer,int*size)
 
 
 
-    *size = sizeof(int) + sizeof(numplayers) + sizeof(misc_stuff) + objcount*sizeof(saved_actor_type);
+    *size = sizeof(int) + sizeof(numplayers) + sizeof(actor_misc_flags) + objcount*sizeof(saved_actor_type);
     *buffer = (byte*)SafeMalloc(*size);
     tptr = *buffer;
 
-    memcpy(tptr,MISCVARS,sizeof(misc_stuff));
-    tptr += sizeof(misc_stuff);
+    memcpy(tptr,MISCVARS,sizeof(actor_misc_flags));
+    tptr += sizeof(actor_misc_flags);
 
     memcpy(tptr,&numplayers,sizeof(numplayers));
     tptr += sizeof(numplayers);
@@ -650,8 +650,8 @@ void LoadActors(byte *buffer,int size)
 
     InitActorList();
 
-    memcpy(MISCVARS,buffer,sizeof(misc_stuff));
-    buffer += sizeof(misc_stuff);
+    memcpy(MISCVARS,buffer,sizeof(actor_misc_flags));
+    buffer += sizeof(actor_misc_flags);
 
     memcpy(&numplayers,buffer,sizeof(numplayers));
     buffer += sizeof(numplayers);
@@ -659,7 +659,7 @@ void LoadActors(byte *buffer,int size)
     memcpy(&playerindex,buffer,sizeof(playerindex));
     buffer += sizeof(playerindex);
 
-    size -= (sizeof(misc_stuff)+sizeof(numplayers)+sizeof(playerindex));
+    size -= (sizeof(actor_misc_flags)+sizeof(numplayers)+sizeof(playerindex));
     numactors = size/sizeof(saved_actor_type);
 
 
@@ -1256,7 +1256,7 @@ void InitActorList (void)
     //============================================================
 
     objcount = 0;
-    memset(MISCVARS,0,sizeof(misc_stuff));
+    memset(MISCVARS,0,sizeof(actor_misc_flags));
     MISCVARS->gibgravity = -1;
     MISCVARS->gibspeed = NORMALGIBSPEED;
 
@@ -7007,10 +7007,10 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
 
                 else if (tempwall->which==PWALL)
                 {
-                    pwallobj_t*pw;
+                    pushwallobj_t*pw;
                     int dx,dy;
 
-                    pw=(pwallobj_t *)tempwall;
+                    pw=(pushwallobj_t *)tempwall;
                     dx = abs(pw->x - tryx);
                     if (dx > PWALLRAD+0x5000)
                         continue;
@@ -7545,7 +7545,7 @@ boolean ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
 void PushWallMove(int num)
 {
     int             tcl;
-    pwallobj_t      *pwall;
+    pushwallobj_t      *pwall;
     int             dx,dy;
     int             actrad;
     objtype         *temp;

@@ -132,13 +132,13 @@ typedef struct
    {
    VoiceNode *start;
    VoiceNode *end;
-   } VList;
+   } VoiceList;
 
 typedef struct
    {
    unsigned char left;
    unsigned char right;
-   } Pan;
+   } AudioPan;
 
 typedef signed short MONO16;
 typedef signed char  MONO8;

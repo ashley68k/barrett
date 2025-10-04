@@ -150,7 +150,7 @@ typedef struct
     int hitpoints;
     int accuracy;
     int height;
-} ROTTCHARS;
+} character_trait;
 
 
 #define M_LINKSTATE(x,y) \

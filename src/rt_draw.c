@@ -5229,13 +5229,13 @@ void DoInBetweenCinematic (int yoffset, int lump, int delay, char * string )
 #define NUMFIRSTCREDITMESSAGES 22
 #define NUMSECONDCREDITMESSAGES 28
 
-typedef struct CreditType {
+typedef struct CreditText {
     char  text[80];
     byte  font;
     byte  endy;
-} CreditType;
+} CreditText;
 
-CreditType FirstCredits[NUMFIRSTCREDITMESSAGES] =
+CreditText FirstCredits[NUMFIRSTCREDITMESSAGES] =
 {
     {"Rise of the Triad Credits",0,0},
     {"COPYRIGHT (c) 1995 Apogee Software Ltd.",1,10},
@@ -5260,7 +5260,7 @@ CreditType FirstCredits[NUMFIRSTCREDITMESSAGES] =
     {"John Carmack  Ken Silverman  Gregor Punchatz",1,184},
 };
 
-CreditType SecondCredits[NUMSECONDCREDITMESSAGES] =
+CreditText SecondCredits[NUMSECONDCREDITMESSAGES] =
 {
     {"Rise of the Triad Credits",0,0},
     {"COPYRIGHT (c) 1995 Apogee Software Ltd.",1,10},
@@ -5291,7 +5291,7 @@ CreditType SecondCredits[NUMSECONDCREDITMESSAGES] =
     {"Loyal, Ric, Teller, Amano",1,190},
 };
 
-void DrawPreviousCredits ( int num, CreditType * Credits )
+void DrawPreviousCredits ( int num, CreditText * Credits )
 {
     int width;
     int height;
@@ -5319,7 +5319,7 @@ void DrawPreviousCredits ( int num, CreditType * Credits )
 //******************************************************************************
 
 extern boolean dopefish;
-void WarpCreditString ( int time, byte * back, int num, CreditType * Credits)
+void WarpCreditString ( int time, byte * back, int num, CreditText * Credits)
 {
     int dy;
     int cy;

@@ -1556,7 +1556,7 @@ void Cmd_Use (objtype*ob)
 //      statobj_t*      tempsprite=NULL;
     objtype*        tempactor= NULL;
     doorobj_t*      tempdoor=NULL;
-    pwallobj_t*      temppwall=NULL;
+    pushwallobj_t*      temppwall=NULL;
     wall_t*         tempwall=NULL;
     int             index;
     playertype * pstate;
@@ -1679,7 +1679,7 @@ void Cmd_Use (objtype*ob)
     }
     else if (tempdoor && tempdoor->which==PWALL)
     {
-        temppwall=(pwallobj_t *)tempdoor;
+        temppwall=(pushwallobj_t *)tempdoor;
         OperatePushWall (temppwall->num,ob->dir, ob == player );
     }
     else if ((doorn&0x8000) && (!(doorn&0x4000)))

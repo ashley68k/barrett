@@ -4025,7 +4025,7 @@ void PrintMapStats (void)
     total=0;
     MapDebug("MAP STATS Map Number %d\n",gamestate.mapon);
     MapDebug("=======================\n");
-    size=pwallnum*sizeof(pwallobj_t);
+    size=pwallnum*sizeof(pushwallobj_t);
     total+=size;
     MapDebug("Number of PushWalls   : %4d size = %6d\n",pwallnum,size);
     size=maskednum*sizeof(maskedwallobj_t);
