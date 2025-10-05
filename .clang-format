@@ -15,12 +15,11 @@ AlignTrailingComments:
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 
-AllowShortEnumsOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortCaseExpressionOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseExpressionOnASingleLine: false
 
-AllowShortIfStatementsOnASingleLine:
-  ShortIfStyle: SIS_WithoutElse
+AllowShortIfStatementsOnASingleLine: false
 
 ColumnLimit: 80
 BreakBeforeBraces: Allman
