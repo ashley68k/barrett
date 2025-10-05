@@ -18,9 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _cin_util_public
 #define _cin_util_public
 
-
-void CinematicGetPalette (byte *pal);
-void CinematicSetPalette (byte *pal);
+void CinematicGetPalette(byte* pal);
+void CinematicSetPalette(byte* pal);
 
 #endif
-

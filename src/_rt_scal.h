@@ -18,6 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_scale_private
 #define _rt_scale_private
 
-#define PLAYERHEIGHT (260<<HEIGHTFRACTION)
+#define PLAYERHEIGHT (260 << HEIGHTFRACTION)
 
 #endif

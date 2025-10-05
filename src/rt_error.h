@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extern boolean DivisionError;
 
-void UL_ErrorStartup ( void );
-void UL_ErrorShutdown ( void );
+void UL_ErrorStartup(void);
+void UL_ErrorShutdown(void);
 
 #endif

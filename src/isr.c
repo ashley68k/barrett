@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 /*
 ============================================================================
 
@@ -38,7 +36,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_main.h"
 #include "SDL2/SDL.h"
 
-
 // Global Variables
 
 volatile int Keyboard[MAXKEYBOARDSCAN];
@@ -49,40 +46,56 @@ volatile int Keytail;
 
 volatile boolean PausePressed = false;
 volatile boolean PanicPressed = false;
-int KeyboardStarted=false;
+int KeyboardStarted = false;
 
-const int ASCIINames[] =          // Unshifted ASCII for scan codes
-{
-//       0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
-    0,27,'1','2','3','4','5','6','7','8','9','0','-','=',8,9,               // 0
-    'q','w','e','r','t','y','u','i','o','p','[',']',13,0,'a','s',           // 1
-    'd','f','g','h','j','k','l',';',39,'`',0,92,'z','x','c','v',            // 2
-    'b','n','m',',','.','/',0,'*',0,' ',0,0,0,0,0,0,                        // 3
-    0,0,0,0,0,0,0,'7','8','9','-','4','5','6','+','1',                      // 4
-    '2','3','0',127,0,0,0,0,0,0,0,0,0,0,0,0,                                // 5
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,                                        // 6
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0                                         // 7
+const int ASCIINames[] = // Unshifted ASCII for scan codes
+	{
+		//       0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+		0,	 27,  '1', '2', '3', '4', '5', '6',
+		'7', '8', '9', '0', '-', '=', 8,   9, // 0
+		'q', 'w', 'e', 'r', 't', 'y', 'u', 'i',
+		'o', 'p', '[', ']', 13,	 0,	  'a', 's', // 1
+		'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',
+		39,	 '`', 0,   92,	'z', 'x', 'c', 'v', // 2
+		'b', 'n', 'm', ',', '.', '/', 0,   '*',
+		0,	 ' ', 0,   0,	0,	 0,	  0,   0, // 3
+		0,	 0,	  0,   0,	0,	 0,	  0,   '7',
+		'8', '9', '-', '4', '5', '6', '+', '1', // 4
+		'2', '3', '0', 127, 0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0, // 5
+		0,	 0,	  0,   0,	0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0, // 6
+		0,	 0,	  0,   0,	0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0 // 7
 };
 
-const int ShiftNames[] =              // Shifted ASCII for scan codes
-{
-//       0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
-    0,27,'!','@','#','$','%','^','&','*','(',')','_','+',8,9,               // 0
-    'Q','W','E','R','T','Y','U','I','O','P','{','}',13,0,'A','S',           // 1
-    'D','F','G','H','J','K','L',':',34,'~',0,'|','Z','X','C','V',           // 2
-    'B','N','M','<','>','?',0,'*',0,' ',0,0,0,0,0,0,                        // 3
-    0,0,0,0,0,0,0,'7','8','9','-','4','5','6','+','1',                      // 4
-    '2','3','0',127,0,0,0,0,0,0,0,0,0,0,0,0,                                // 5
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,                                        // 6
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0                                         // 7
+const int ShiftNames[] = // Shifted ASCII for scan codes
+	{
+		//       0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+		0,	 27,  '!', '@', '#', '$', '%', '^',
+		'&', '*', '(', ')', '_', '+', 8,   9, // 0
+		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I',
+		'O', 'P', '{', '}', 13,	 0,	  'A', 'S', // 1
+		'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',
+		34,	 '~', 0,   '|', 'Z', 'X', 'C', 'V', // 2
+		'B', 'N', 'M', '<', '>', '?', 0,   '*',
+		0,	 ' ', 0,   0,	0,	 0,	  0,   0, // 3
+		0,	 0,	  0,   0,	0,	 0,	  0,   '7',
+		'8', '9', '-', '4', '5', '6', '+', '1', // 4
+		'2', '3', '0', 127, 0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0, // 5
+		0,	 0,	  0,   0,	0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0, // 6
+		0,	 0,	  0,   0,	0,	 0,	  0,   0,
+		0,	 0,	  0,   0,	0,	 0,	  0,   0 // 7
 };
 
-static int ticoffset;    /* offset for SDL_GetTicks() */
-static int ticbase;      /* game-supplied base */
+static int ticoffset; /* offset for SDL_GetTicks() */
+static int ticbase;	  /* game-supplied base */
 
-int GetTicCount (void)
+int GetTicCount(void)
 {
-    return ((SDL_GetTicks() - ticoffset) * VBLCOUNTER) / 1000 + ticbase;
+	return ((SDL_GetTicks() - ticoffset) * VBLCOUNTER) / 1000 + ticbase;
 }
 
 /*
@@ -94,22 +107,22 @@ int GetTicCount (void)
 */
 void ISR_SetTime(int settime)
 {
-    ticoffset = SDL_GetTicks();
-    ticbase = settime;
+	ticoffset = SDL_GetTicks();
+	ticbase = settime;
 }
 
 /* developer-only */
 
-int GetFastTics (void)
+int GetFastTics(void)
 {
-    /* STUB_FUNCTION; */
+	/* STUB_FUNCTION; */
 
-    return 0;
+	return 0;
 }
 
-void SetFastTics (int settime)
+void SetFastTics(int settime)
 {
-    /* STUB_FUNCTION; */
+	/* STUB_FUNCTION; */
 }
 
 /*
@@ -120,17 +133,17 @@ void SetFastTics (int settime)
 ================
 */
 
-void I_Delay ( int delay )
+void I_Delay(int delay)
 {
-    int time;
+	int time;
 
-    delay=(VBLCOUNTER*delay)/10;
-    IN_ClearKeysDown();
-    time=GetTicCount();
-    while (!LastScan && !IN_GetMouseButtons() && GetTicCount()<time+delay)
-    {
-        IN_UpdateKeyboard();
-    }
+	delay = (VBLCOUNTER * delay) / 10;
+	IN_ClearKeysDown();
+	time = GetTicCount();
+	while (!LastScan && !IN_GetMouseButtons() && GetTicCount() < time + delay)
+	{
+		IN_UpdateKeyboard();
+	}
 }
 
 /*
@@ -141,11 +154,11 @@ void I_Delay ( int delay )
 ===============
 */
 
-void I_StartupTimer (void)
+void I_StartupTimer(void)
 {
 }
 
-void I_ShutdownTimer (void)
+void I_ShutdownTimer(void)
 {
 }
 
@@ -157,11 +170,10 @@ void I_ShutdownTimer (void)
 ===============
 */
 
-void I_StartupKeyboard (void)
+void I_StartupKeyboard(void)
 {
 }
 
-
-void I_ShutdownKeyboard (void)
+void I_ShutdownKeyboard(void)
 {
 }

@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
-#define MAXPACKET	512
+#define MAXPACKET 512
 
 #include "rottnet.h"
 
@@ -34,13 +34,12 @@ extern byte ROTTpacket[MAXCOMBUFFERSIZE];
 
 extern int controlsynctime;
 
+// #define consoleplayer (rottcom->consoleplayer)
 
-//#define consoleplayer (rottcom->consoleplayer)
-
-void InitROTTNET (void);
-boolean ReadPacket (void);
-void WritePacket (void * buffer, int len, int destination);
-void ComSetTime (void);
-int GetTransitTime( int client );
+void InitROTTNET(void);
+boolean ReadPacket(void);
+void WritePacket(void* buffer, int len, int destination);
+void ComSetTime(void);
+int GetTransitTime(int client);
 
 #endif

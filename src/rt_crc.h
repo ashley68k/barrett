@@ -17,6 +17,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include "rt_def.h"
 
-int updatecrc(int,int);
-word CalculateCRC (byte *source, unsigned size);
-
+int updatecrc(int, int);
+word CalculateCRC(byte* source, unsigned size);

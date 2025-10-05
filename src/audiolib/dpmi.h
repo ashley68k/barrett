@@ -30,47 +30,47 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define __DPMI_H
 
 enum DPMI_Errors
-   {
-   DPMI_Warning = -2,
-   DPMI_Error   = -1,
-   DPMI_Ok      = 0
-   };
+{
+	DPMI_Warning = -2,
+	DPMI_Error = -1,
+	DPMI_Ok = 0
+};
 
 typedef struct
-   {
-   unsigned long  EDI;
-   unsigned long  ESI;
-   unsigned long  EBP;
-   unsigned long  Reserved;
-   unsigned long  EBX;
-   unsigned long  EDX;
-   unsigned long  ECX;
-   unsigned long  EAX;
-   unsigned short Flags;
-   unsigned short ES;
-   unsigned short DS;
-   unsigned short FS;
-   unsigned short GS;
-   unsigned short IP;
-   unsigned short CS;
-   unsigned short SP;
-   unsigned short SS;
-   } dpmi_regs;
+{
+	unsigned long EDI;
+	unsigned long ESI;
+	unsigned long EBP;
+	unsigned long Reserved;
+	unsigned long EBX;
+	unsigned long EDX;
+	unsigned long ECX;
+	unsigned long EAX;
+	unsigned short Flags;
+	unsigned short ES;
+	unsigned short DS;
+	unsigned short FS;
+	unsigned short GS;
+	unsigned short IP;
+	unsigned short CS;
+	unsigned short SP;
+	unsigned short SS;
+} dpmi_regs;
 
-unsigned long DPMI_GetRealModeVector( int num );
-void DPMI_SetRealModeVector( int num, unsigned long vector );
-int  DPMI_CallRealModeFunction( dpmi_regs *callregs );
-int  DPMI_GetDOSMemory( void **ptr, long *descriptor, unsigned length );
-int  DPMI_FreeDOSMemory( long descriptor );
-int  DPMI_LockMemory( void *address, unsigned length );
-int  DPMI_LockMemoryRegion( void *start, void *end );
-int  DPMI_UnlockMemory( void *address, unsigned length );
-int  DPMI_UnlockMemoryRegion( void *start, void *end );
+unsigned long DPMI_GetRealModeVector(int num);
+void DPMI_SetRealModeVector(int num, unsigned long vector);
+int DPMI_CallRealModeFunction(dpmi_regs* callregs);
+int DPMI_GetDOSMemory(void** ptr, long* descriptor, unsigned length);
+int DPMI_FreeDOSMemory(long descriptor);
+int DPMI_LockMemory(void* address, unsigned length);
+int DPMI_LockMemoryRegion(void* start, void* end);
+int DPMI_UnlockMemory(void* address, unsigned length);
+int DPMI_UnlockMemoryRegion(void* start, void* end);
 
-#define DPMI_Lock( variable ) \
-   ( DPMI_LockMemory( (void *) &( variable ), sizeof( variable ) ) )
+#define DPMI_Lock(variable)                                                    \
+	(DPMI_LockMemory((void*)&(variable), sizeof(variable)))
 
-#define DPMI_Unlock( variable ) \
-   ( DPMI_UnlockMemory( (void *) &( variable ), sizeof( variable ) ) )
+#define DPMI_Unlock(variable)                                                  \
+	(DPMI_UnlockMemory((void*)&(variable), sizeof(variable)))
 
 #endif

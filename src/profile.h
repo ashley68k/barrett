@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _profile
 #define _profile
 
-#define PROFILE 0
+#define PROFILE		0
 #define PROFILETICS 2
 
 #endif

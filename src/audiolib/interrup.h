@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef __INTERRUPT_H
 #define __INTERRUPT_H
 
-unsigned long DisableInterrupts( void );
-void          RestoreInterrupts( unsigned long flags );
+unsigned long DisableInterrupts(void);
+void RestoreInterrupts(unsigned long flags);
 
 #endif

@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_glob.h"
 #include "modexlib.h"
 
-
 /*
 ==============
 =
@@ -29,9 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ==============
 */
 
-void CinematicGetPalette (byte *pal)
+void CinematicGetPalette(byte* pal)
 {
-    STUB_FUNCTION;
+	STUB_FUNCTION;
 }
 
 /*
@@ -44,7 +43,7 @@ void CinematicGetPalette (byte *pal)
 ==============
 */
 
-void CinematicSetPalette (byte *pal)
+void CinematicSetPalette(byte* pal)
 {
-    STUB_FUNCTION;
+	STUB_FUNCTION;
 }

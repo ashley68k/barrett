@@ -24,13 +24,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_in_private
 #define _rt_in_private
 
-
 //****************************************************************************
 //
 // TYPEDEFS
 //
 //****************************************************************************
-
 
 //****************************************************************************
 //
@@ -38,15 +36,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //****************************************************************************
 
-#define  KeyInt         9  // The keyboard ISR number
-#define  MReset         0
-#define  MButtons       3
-#define  MDelta         11
-#define  MouseInt       0x33
-#define  JoyScaleMax    32768
-#define  JoyScaleShift  8
-#define  MaxJoyValue    5000
+#define KeyInt		  9 // The keyboard ISR number
+#define MReset		  0
+#define MButtons	  3
+#define MDelta		  11
+#define MouseInt	  0x33
+#define JoyScaleMax	  32768
+#define JoyScaleShift 8
+#define MaxJoyValue	  5000
 
-void Mouse (int x);
+void Mouse(int x);
 
 #endif

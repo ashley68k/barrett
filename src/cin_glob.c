@@ -19,23 +19,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_in.h"
 #include "rt_draw.h"
 
-void CinematicDelay ( void )
+void CinematicDelay(void)
 {
-    CalcTics();
+	CalcTics();
 }
 
-int GetCinematicTime ( void )
+int GetCinematicTime(void)
 {
-    return GetTicCount ();
+	return GetTicCount();
 }
 
-boolean CinematicAbort( void )
+boolean CinematicAbort(void)
 {
-    return (IN_CheckAck ());
+	return (IN_CheckAck());
 }
 
-void ClearCinematicAbort( void )
+void ClearCinematicAbort(void)
 {
-    IN_StartAck ();
+	IN_StartAck();
 }
-

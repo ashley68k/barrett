@@ -34,11 +34,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 typedef enum
 {
-//   ASS_NoSound,
-    SoundBlaster,
-    SoundScape,
-    UltraSound,
-    NumSoundCards
+	//   ASS_NoSound,
+	SoundBlaster,
+	SoundScape,
+	UltraSound,
+	NumSoundCards
 } soundcardnames;
 
 #endif

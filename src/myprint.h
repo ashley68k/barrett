@@ -20,22 +20,38 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 enum COLORS
 {
-    BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, LIGHTGRAY, DARKGRAY,
-    LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE
+	BLACK,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	LIGHTGRAY,
+	DARKGRAY,
+	LIGHTBLUE,
+	LIGHTGREEN,
+	LIGHTCYAN,
+	LIGHTRED,
+	LIGHTMAGENTA,
+	YELLOW,
+	WHITE
 };
 
-#define NONE         -1
+#define NONE		 -1
 #define SINGLE_FRAME -1
 #define DOUBLE_FRAME -2
 
-void DrawRottText( int x, int y, int ch, int foreground, int background );
-void TextBox( int x1, int y1, int x2, int y2, int ch, int foreground, int background );
-void TextFrame( int x1, int y1, int x2, int y2, int type, int foreground, int background );
-void mysetxy( int x, int y );
-void myputch( char ch );
-int  printstring( char *string );
-int  printnum( int number );
-int  printunsigned( unsigned long number, int radix );
-int  myprintf( char *fmt, ... ) __attribute__((format(printf,1,2)));
+void DrawRottText(int x, int y, int ch, int foreground, int background);
+void TextBox(int x1, int y1, int x2, int y2, int ch, int foreground,
+			 int background);
+void TextFrame(int x1, int y1, int x2, int y2, int type, int foreground,
+			   int background);
+void mysetxy(int x, int y);
+void myputch(char ch);
+int printstring(char* string);
+int printnum(int number);
+int printunsigned(unsigned long number, int radix);
+int myprintf(char* fmt, ...) __attribute__((format(printf, 1, 2)));
 
 #endif

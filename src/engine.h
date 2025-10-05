@@ -27,24 +27,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 typedef struct
 {
-    int      offset;
-    int      wallheight;
-    int      ceilingclip;
-    int      floorclip;
-    int      texture;
-    int      lump;
-    int      posttype;
-    int      alttile;
+	int offset;
+	int wallheight;
+	int ceilingclip;
+	int floorclip;
+	int texture;
+	int lump;
+	int posttype;
+	int alttile;
 } wallcast_t;
-extern wallcast_t posts[MAXSCREENWIDTH+4];//bna++ JUST MAKE IT MAX RES
-//extern wallcast_t posts[642];//bna++
-//extern wallcast_t posts[321];
+extern wallcast_t posts[MAXSCREENWIDTH + 4]; // bna++ JUST MAKE IT MAX RES
+// extern wallcast_t posts[642];//bna++
+// extern wallcast_t posts[321];
 
 extern int lasttilex;
 extern int lasttiley;
 
-void Refresh ( void );
+void Refresh(void);
 
-#define IsWindow(x,y)       (MAPSPOT((x),(y),2)==13)
+#define IsWindow(x, y) (MAPSPOT((x), (y), 2) == 13)
 
 #endif

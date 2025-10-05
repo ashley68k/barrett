@@ -22,7 +22,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include <time.h>
 
-
 //****************************************************************************
 //
 // GLOBALS
@@ -32,16 +31,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 static int rndindex;
 static int sndindex = 0;
 
-
 //****************************************************************************
 //
 // GetRandomSeed ()
 //
 //****************************************************************************
 
-int GetRandomSeed ( void )
+int GetRandomSeed(void)
 {
-    return ( time (NULL) % (SIZE_OF_RANDOM_TABLE) );
+	return (time(NULL) % (SIZE_OF_RANDOM_TABLE));
 }
 
 //****************************************************************************
@@ -50,10 +48,10 @@ int GetRandomSeed ( void )
 //
 //****************************************************************************
 
-void  InitializeRNG ( void )
+void InitializeRNG(void)
 {
-    SetRNGindex(GetRandomSeed());
-    sndindex=GetRandomSeed();
+	SetRNGindex(GetRandomSeed());
+	sndindex = GetRandomSeed();
 }
 
 //****************************************************************************
@@ -62,10 +60,10 @@ void  InitializeRNG ( void )
 //
 //****************************************************************************
 
-void  SetRNGindex ( int i )
+void SetRNGindex(int i)
 {
-    rndindex=i;
-    SoftError("RNG index set at %d\n",i);
+	rndindex = i;
+	SoftError("RNG index set at %d\n", i);
 }
 
 //****************************************************************************
@@ -74,25 +72,22 @@ void  SetRNGindex ( int i )
 //
 //****************************************************************************
 
-int GetRNGindex ( void )
+int GetRNGindex(void)
 {
-    return rndindex;
+	return rndindex;
 }
-
 
 //****************************************************************************
 //
 // int GameRNG (void)
 //
 //****************************************************************************
-int   GameRNG ( void )
+int GameRNG(void)
 {
-    rndindex = (rndindex+1)&(SIZE_OF_RANDOM_TABLE-1);
+	rndindex = (rndindex + 1) & (SIZE_OF_RANDOM_TABLE - 1);
 
-    return RandomTable[rndindex];
+	return RandomTable[rndindex];
 }
-
-
 
 //****************************************************************************
 //
@@ -100,10 +95,9 @@ int   GameRNG ( void )
 //
 //****************************************************************************
 
-int   RNG( void )
+int RNG(void)
 {
-    sndindex = (sndindex+1)&(SIZE_OF_RANDOM_TABLE-1);
+	sndindex = (sndindex + 1) & (SIZE_OF_RANDOM_TABLE - 1);
 
-    return RandomTable[sndindex];
+	return RandomTable[sndindex];
 }
-

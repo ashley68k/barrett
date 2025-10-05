@@ -20,30 +20,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "develop.h"
 
-#define MINFRAGMENT     64
-#define DPMI_INT  0x31
-#define MAXMEMORYSIZE   900000000
+#define MINFRAGMENT	  64
+#define DPMI_INT	  0x31
+#define MAXMEMORYSIZE 900000000
 
-#define LEVELZONESIZE   250000
+#define LEVELZONESIZE 250000
 
 // memory storage data types
 
-#define MEMORYPRETAG   (0x1a2b3c4d)
-#define MEMORYPOSTTAG  (0x9f8e7d6b)
+#define MEMORYPRETAG  (0x1a2b3c4d)
+#define MEMORYPOSTTAG (0x9f8e7d6b)
 
 typedef struct memblock_s
 {
-    int     size;   // including the header and possibly tiny fragments
-    void    **user; // NULL if a free block
-    int     tag;    // purgelevel
-    struct memblock_s   *next, *prev;
+	int size;	 // including the header and possibly tiny fragments
+	void** user; // NULL if a free block
+	int tag;	 // purgelevel
+	struct memblock_s *next, *prev;
 } memblock_t;
 
 typedef struct
 {
-    int     size;          // total bytes malloced, including header
-    memblock_t  blocklist; // start / end cap for linked list
-    memblock_t  *rover;
+	int size;			  // total bytes malloced, including header
+	memblock_t blocklist; // start / end cap for linked list
+	memblock_t* rover;
 } memzone_t;
 
 #endif

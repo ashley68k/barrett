@@ -18,39 +18,38 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_stat_private
 #define _rt_stat_private
 
-void        AddStatic(statobj_t*);
-void        AddAnimStatic(statobj_t*);
-void        PreCacheStaticSounds(int);
+void AddStatic(statobj_t*);
+void AddAnimStatic(statobj_t*);
+void PreCacheStaticSounds(int);
 
-#define SOLIDCOLORTICTIME   1
+#define SOLIDCOLORTICTIME	1
 #define SOLIDCOLORINCREMENT 1
-#define MAXFIRECOLOR      248
-#define INITIALFIRECOLOR  246
-#define IsLight(x,y)          ( (x>=0) && (x<=127) && (y>=0) && (y<=127) &&   \
-										  (sprites[x][y]) && (sprites[x][y]->flags & FL_LIGHT) )
+#define MAXFIRECOLOR		248
+#define INITIALFIRECOLOR	246
+#define IsLight(x, y)                                                          \
+	((x >= 0) && (x <= 127) && (y >= 0) && (y <= 127) && (sprites[x][y]) &&    \
+	 (sprites[x][y]->flags & FL_LIGHT))
 
 typedef struct
 {
-    int  tictime,
-         numanims;
-    char firstlump[9];
+	int tictime, numanims;
+	char firstlump[9];
 } awallinfo_t;
-
 
 typedef struct sas
 {
-    int          x,y,z;
-    int          flags;
-    signed char  ticcount;
-    int          hitpoints;
-    short int    shapenum;
-    signed char  ammo;
-    signed char  count;
-    signed char  itemnumber;
-    short int    areanumber;
-    short int    whichstat;
-    byte         numanims;
-    int          linked_to;
+	int x, y, z;
+	int flags;
+	signed char ticcount;
+	int hitpoints;
+	short int shapenum;
+	signed char ammo;
+	signed char count;
+	signed char itemnumber;
+	short int areanumber;
+	short int whichstat;
+	byte numanims;
+	int linked_to;
 } saved_stat_type;
 
 #endif

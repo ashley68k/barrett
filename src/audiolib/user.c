@@ -29,8 +29,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include "user.h"
 
-#define TRUE  ( 1 == 1 )
-#define FALSE ( !TRUE )
+#define TRUE  (1 == 1)
+#define FALSE (!TRUE)
 
 /*---------------------------------------------------------------------
    Function: USER_CheckParameter
@@ -38,15 +38,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
    Checks if the specified string is present in the command line.
 ---------------------------------------------------------------------*/
 
-int USER_CheckParameter
-   (
-   const char *parameter
-   )
+int USER_CheckParameter(const char* parameter)
 
-   {
-   return FALSE;
-   }
-
+{
+	return FALSE;
+}
 
 /*---------------------------------------------------------------------
    Function: USER_GetText
@@ -55,11 +51,8 @@ int USER_CheckParameter
    and returns a pointer to the text following it.
 ---------------------------------------------------------------------*/
 
-char *USER_GetText
-   (
-   const char *parameter
-   )
+char* USER_GetText(const char* parameter)
 
-   {
-   return NULL;
-   }
+{
+	return NULL;
+}

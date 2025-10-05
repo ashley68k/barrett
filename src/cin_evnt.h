@@ -21,19 +21,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_glob.h"
 #include "cin_def.h"
 
-extern eventtype * firstevent;
-extern eventtype * lastevent;
+extern eventtype* firstevent;
+extern eventtype* lastevent;
 
-void AddEvent (eventtype * event);
-void DeleteEvent(eventtype * event);
+void AddEvent(eventtype* event);
+void DeleteEvent(eventtype* event);
 
-eventtype * GetNewEvent ( void );
-void StartupEvents ( void );
-void ShutdownEvents ( void );
-eventtype * CreateEvent ( int time, int type );
-void ParseEvent ( int time );
-void UpdateCinematicEvents ( int time );
-void PrecacheCinematic ( void );
+eventtype* GetNewEvent(void);
+void StartupEvents(void);
+void ShutdownEvents(void);
+eventtype* CreateEvent(int time, int type);
+void ParseEvent(int time);
+void UpdateCinematicEvents(int time);
+void PrecacheCinematic(void);
 
 #endif
-

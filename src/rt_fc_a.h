@@ -24,10 +24,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
-void DrawSkyPost (byte * buf, byte * src, int height);
-void DrawRow(int count, byte * dest, byte * src);
-void DrawRotRow(int count, byte * dest, byte * src);
-void DrawMaskedRotRow(int count, byte * dest, byte * src);
+void DrawSkyPost(byte* buf, byte* src, int height);
+void DrawRow(int count, byte* dest, byte* src);
+void DrawRotRow(int count, byte* dest, byte* src);
+void DrawMaskedRotRow(int count, byte* dest, byte* src);
 
 #endif
-

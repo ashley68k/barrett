@@ -20,20 +20,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _scriplib_public
 #define _scriplib_public
 
-#define	MAXTOKEN	128
+#define MAXTOKEN 128
 
-extern	char	token[MAXTOKEN];
-extern	char	name[MAXTOKEN*2];
-extern	char	*scriptbuffer,*script_p,*scriptend_p;
-extern	int		scriptline;
-extern	boolean	endofscript;
-extern   boolean tokenready;      // only true if UnGetToken was just called
+extern char token[MAXTOKEN];
+extern char name[MAXTOKEN * 2];
+extern char *scriptbuffer, *script_p, *scriptend_p;
+extern int scriptline;
+extern boolean endofscript;
+extern boolean tokenready; // only true if UnGetToken was just called
 
-
-void LoadScriptFile (char *filename);
-void GetToken (boolean crossline);
-void GetTokenEOL (boolean crossline);
-void UnGetToken (void);
-boolean TokenAvailable (void);
+void LoadScriptFile(char* filename);
+void GetToken(boolean crossline);
+void GetTokenEOL(boolean crossline);
+void UnGetToken(void);
+boolean TokenAvailable(void);
 
 #endif

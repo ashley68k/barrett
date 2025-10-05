@@ -30,14 +30,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define __PITCH_H
 
 enum PITCH_ERRORS
-   {
-   PITCH_Warning = -2,
-   PITCH_Error = -1,
-   PITCH_Ok = 0,
-   };
+{
+	PITCH_Warning = -2,
+	PITCH_Error = -1,
+	PITCH_Ok = 0,
+};
 
-//void          PITCH_Init( void );
-unsigned long PITCH_GetScale( int pitchoffset );
-void          PITCH_UnlockMemory( void );
-int           PITCH_LockMemory( void );
+// void          PITCH_Init( void );
+unsigned long PITCH_GetScale(int pitchoffset);
+void PITCH_UnlockMemory(void);
+int PITCH_LockMemory(void);
 #endif

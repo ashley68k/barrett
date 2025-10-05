@@ -19,14 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define _develop_public
 
 #define NOMEMCHECK
-#define WEAPONCHEAT  1
-#define SYNCCHECK    1
+#define WEAPONCHEAT 1
+#define SYNCCHECK	1
 
-#define DELUXE   0
-#define LOWCOST  0
+#define DELUXE	0
+#define LOWCOST 0
 
-#define BNACRASHPREVENT  1 //bna added 
-// Flavor selection (shareware, registered, cd version, site license) has moved to the Makefile
+#define BNACRASHPREVENT 1 // bna added
+// Flavor selection (shareware, registered, cd version, site license) has moved
+// to the Makefile
 #ifndef SHAREWARE
 #define SHAREWARE 0
 #endif
@@ -36,6 +37,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // okay?
 
-#define TEDLAUNCH   0
+#define TEDLAUNCH 0
 
 #endif

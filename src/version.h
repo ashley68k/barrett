@@ -21,6 +21,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #define ROTTMAJORVERSION 1
 #define ROTTMINORVERSION 4
-#define ROTTVERSION ((ROTTMAJORVERSION*10)+(ROTTMINORVERSION))
+#define ROTTVERSION		 ((ROTTMAJORVERSION * 10) + (ROTTMINORVERSION))
 
 #endif

@@ -18,34 +18,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_com_private
 #define _rt_com_private
 
-
 #define SYNCPACKETSIZE 32
 
-#define SYNC_PHASE0 6
-#define SYNC_PHASE1 0
-#define SYNC_PHASE2 1
-#define SYNC_PHASE3 2
-#define SYNC_PHASE4 3
-#define SYNC_PHASE5 4
-#define SYNC_MEMO   99
+#define SYNC_PHASE0	  6
+#define SYNC_PHASE1	  0
+#define SYNC_PHASE2	  1
+#define SYNC_PHASE3	  2
+#define SYNC_PHASE4	  3
+#define SYNC_PHASE5	  4
+#define SYNC_MEMO	  99
 #define NUMSYNCPHASES 5
 
-#define SYNCTIME    15
+#define SYNCTIME 15
 
 typedef struct
 {
-    byte type;
-    int  phase;
-    int  clocktime;
-    int  delta;
-    byte data[SYNCPACKETSIZE];
+	byte type;
+	int phase;
+	int clocktime;
+	int delta;
+	byte data[SYNCPACKETSIZE];
 } syncpackettype;
 
 typedef struct
 {
-    int  sendtime;
-    int  deltatime;
-    syncpackettype pkt;
+	int sendtime;
+	int deltatime;
+	syncpackettype pkt;
 } synctype;
 
 #endif

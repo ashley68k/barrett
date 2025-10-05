@@ -24,19 +24,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
-extern int		mr_xstep;
-extern int		mr_ystep;
-extern int		mr_xfrac;
-extern int		mr_yfrac;
+extern int mr_xstep;
+extern int mr_ystep;
+extern int mr_xfrac;
+extern int mr_yfrac;
 
-extern int     sky;      //Whether Parallax is on or off
-void DrawPlanes (void);
-void SetPlaneViewSize( void );
-void MakeSkyTile (byte * tile);
-void DrawFullSky( void );
-boolean SkyExists (void);
+extern int sky; // Whether Parallax is on or off
+void DrawPlanes(void);
+void SetPlaneViewSize(void);
+void MakeSkyTile(byte* tile);
+void DrawFullSky(void);
+boolean SkyExists(void);
 
 #endif
-
-
-

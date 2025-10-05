@@ -18,24 +18,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_door_private
 #define _rt_door_private
 
-#define OPENTICS	165
+#define OPENTICS 165
 
 typedef struct tp
 {
-    signed char actionindex;
-    signed char swapactionindex;
-    int         whichobj;
-    byte        tictime;
-    byte        ticcount;
-    byte        triggered;
-    byte        complete;
-    byte        done;
+	signed char actionindex;
+	signed char swapactionindex;
+	int whichobj;
+	byte tictime;
+	byte ticcount;
+	byte triggered;
+	byte complete;
+	byte done;
 } saved_touch_type;
-
 
 #define NUMTOUCHPLATEACTIONS 8
 
-#define FL_TACT 0x4000
+#define FL_TACT	 0x4000
 #define FL_TSTAT 0x8000
 
 #define PUSHWALLSPEED 10

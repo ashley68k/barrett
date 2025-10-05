@@ -18,11 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef __DEBUGIO_H
 #define __DEBUGIO_H
 
-void DB_SetXY( int x, int y );
-void DB_PutChar( char ch );
-int  DB_PrintString( char *string );
-int  DB_PrintNum( int number );
-int  DB_PrintUnsigned( unsigned long number, int radix );
-int  DB_printf( char *fmt, ... );
+void DB_SetXY(int x, int y);
+void DB_PutChar(char ch);
+int DB_PrintString(char* string);
+int DB_PrintNum(int number);
+int DB_PrintUnsigned(unsigned long number, int radix);
+int DB_printf(char* fmt, ...);
 
 #endif

@@ -20,8 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #define RECORDINGSAMPLERATE 7000
 #define RECORDINGBUFFERSIZE 16384
-#define PLAYBACKBUFFERSIZE 16384
-#define PLAYBACKDELTASIZE  256
+#define PLAYBACKBUFFERSIZE	16384
+#define PLAYBACKDELTASIZE	256
 
 #endif
-

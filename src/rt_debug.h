@@ -24,9 +24,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
-void ResetCheatCodes (void);
-int  DebugKeys (void);
-void CheckDebug (void);
-void EndDemo ( void );
+void ResetCheatCodes(void);
+int DebugKeys(void);
+void CheckDebug(void);
+void EndDemo(void);
 
 #endif

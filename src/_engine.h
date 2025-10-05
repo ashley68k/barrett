@@ -18,8 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _engine_private
 #define _engine_private
 
-#define NOTSAMETILE(x1,x2)     ( (posts[(x1)].posttype!=posts[(x2)].posttype) || \
-                                 (posts[(x1)].offset!=posts[(x2)].offset))
-#define SGN(x)                 (x>0 ? 1 : -1)
+#define NOTSAMETILE(x1, x2)                                                    \
+	((posts[(x1)].posttype != posts[(x2)].posttype) ||                         \
+	 (posts[(x1)].offset != posts[(x2)].offset))
+#define SGN(x) (x > 0 ? 1 : -1)
 
 #endif

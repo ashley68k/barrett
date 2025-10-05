@@ -24,255 +24,261 @@
  */
 
 int _argc;
-char **_argv;
+char** _argv;
 
 #if PLATFORM_UNIX
 long filelength(int handle)
 {
-    struct stat buf;
+	struct stat buf;
 
-    if (fstat(handle, &buf) == -1) {
-        perror("filelength");
-        exit(EXIT_FAILURE);
-    }
+	if (fstat(handle, &buf) == -1)
+	{
+		perror("filelength");
+		exit(EXIT_FAILURE);
+	}
 
-    return buf.st_size;
+	return buf.st_size;
 }
 
-char *ultoa(unsigned long value, char *string, int radix)
+char* ultoa(unsigned long value, char* string, int radix)
 {
-    switch (radix) {
-    case 10:
-        sprintf(string, "%lu", value);
-        break;
-    case 16:
-        sprintf(string, "%lux", value);
-        break;
-    default:
-        STUB_FUNCTION;
-        break;
-    }
+	switch (radix)
+	{
+	case 10:
+		sprintf(string, "%lu", value);
+		break;
+	case 16:
+		sprintf(string, "%lux", value);
+		break;
+	default:
+		STUB_FUNCTION;
+		break;
+	}
 
-    return string;
+	return string;
 }
 #endif
 
 char getch(void)
 {
-    getchar();
-    return 0;
+	getchar();
+	return 0;
 }
 
 extern char ApogeePath[256];
 
-int setup_homedir (void)
+int setup_homedir(void)
 {
 #if PLATFORM_UNIX && !defined(__MINGW32__)
-    int err;
+	int err;
 
-    /* try to create the root directory */
-    snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/", getenv ("HOME"));
-    err = mkdir (ApogeePath, S_IRWXU);
+	/* try to create the root directory */
+	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
+	err = mkdir(ApogeePath, S_IRWXU);
 
-    /* keep the shareware and registered game data separated */
+	/* keep the shareware and registered game data separated */
 #if (SHAREWARE == 1)
-    snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/", getenv ("HOME"));
+	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
 #else
-    snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/darkwar/", getenv ("HOME"));
+	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/darkwar/",
+			 getenv("HOME"));
 #endif
 
-    err = mkdir (ApogeePath, S_IRWXU);
-    if (err == -1 && errno != EEXIST)
-    {
-        fprintf (stderr, "Couldn't create preferences directory: %s\n",
-                 strerror (errno));
-        return -1;
-    }
+	err = mkdir(ApogeePath, S_IRWXU);
+	if (err == -1 && errno != EEXIST)
+	{
+		fprintf(stderr, "Couldn't create preferences directory: %s\n",
+				strerror(errno));
+		return -1;
+	}
 #else
-    sprintf(ApogeePath, ".%s", PATH_SEP_STR);
+	sprintf(ApogeePath, ".%s", PATH_SEP_STR);
 #endif
 
-    return 0;
+	return 0;
 }
 
 /*
  * GetDigitCount returns the number of digits that are found in an integer
- * 
+ *
  * Params: number - number to measure # of digits
- * 
+ *
  * Returns: number of digits founded in number
-*/
+ */
 int CountDigits(const int number)
 {
-    int lenResult = 1;
-    
-    //int remainder = number;
-    
-    if(number)
-    {
-        int oldRemainder;
-        int remainder = number;
-        
-        while(1)
-        {
-            oldRemainder = remainder;
-            
-            remainder%=10;
-            if (oldRemainder == remainder)
-                break;
-            
-            lenResult++;
-            
-        }
-    }
-    
-    return lenResult;
+	int lenResult = 1;
+
+	// int remainder = number;
+
+	if (number)
+	{
+		int oldRemainder;
+		int remainder = number;
+
+		while (1)
+		{
+			oldRemainder = remainder;
+
+			remainder %= 10;
+			if (oldRemainder == remainder)
+				break;
+
+			lenResult++;
+		}
+	}
+
+	return lenResult;
 }
 
-char *strlwr(char *s)
+char* strlwr(char* s)
 {
-    char *p = s;
+	char* p = s;
 
-    while (*p) {
-        *p = tolower(*p);
-        p++;
-    }
+	while (*p)
+	{
+		*p = tolower(*p);
+		p++;
+	}
 
-    return s;
+	return s;
 }
 
-char *strupr(char *s)
+char* strupr(char* s)
 {
-    char *p = s;
+	char* p = s;
 
-    while (*p) {
-        *p = toupper(*p);
-        p++;
-    }
+	while (*p)
+	{
+		*p = toupper(*p);
+		p++;
+	}
 
-    return s;
+	return s;
 }
 
-char *itoa(int value, char *string, int radix)
+char* itoa(int value, char* string, int radix)
 {
-    switch (radix) {
-    case 10:
-        sprintf(string, "%d", value);
-        break;
-    case 16:
-        sprintf(string, "%x", value);
-        break;
-    default:
-        STUB_FUNCTION;
-        break;
-    }
+	switch (radix)
+	{
+	case 10:
+		sprintf(string, "%d", value);
+		break;
+	case 16:
+		sprintf(string, "%x", value);
+		break;
+	default:
+		STUB_FUNCTION;
+		break;
+	}
 
-    return string;
+	return string;
 }
 
-char *ltoa(long value, char *string, int radix)
+char* ltoa(long value, char* string, int radix)
 {
-    switch (radix) {
-    case 10:
-        sprintf(string, "%ld", value);
-        break;
-    case 16:
-        sprintf(string, "%lx", value);
-        break;
-    default:
-        STUB_FUNCTION;
-        break;
-    }
+	switch (radix)
+	{
+	case 10:
+		sprintf(string, "%ld", value);
+		break;
+	case 16:
+		sprintf(string, "%lx", value);
+		break;
+	default:
+		STUB_FUNCTION;
+		break;
+	}
 
-    return string;
+	return string;
 }
-
 
 /* from Dan Olson */
 void put_dos2ansi(byte attrib)
 {
-    int lookup[] = {30,34,32,36,31,35,33,37};
-    byte fore,back,blink=0,intens=0;
+	int lookup[] = {30, 34, 32, 36, 31, 35, 33, 37};
+	byte fore, back, blink = 0, intens = 0;
 
-    fore = attrib&15;	/* bits 0-3 */
-    back = attrib&112; /* bits 4-6 */
-    blink = attrib&128; /* bit 7 */
+	fore = attrib & 15;	  /* bits 0-3 */
+	back = attrib & 112;  /* bits 4-6 */
+	blink = attrib & 128; /* bit 7 */
 
-    /* Fix background, blink is either on or off. */
-    back = back>>4;
+	/* Fix background, blink is either on or off. */
+	back = back >> 4;
 
-    /* Fix foreground */
-    if (fore > 7) {
-        intens = 1;
-        fore-=8;
-    }
+	/* Fix foreground */
+	if (fore > 7)
+	{
+		intens = 1;
+		fore -= 8;
+	}
 
-    /* Convert fore/back */
-    fore = lookup[fore];
-    back = lookup[back]+10;
+	/* Convert fore/back */
+	fore = lookup[fore];
+	back = lookup[back] + 10;
 
-    // 'Render"
-    if (blink)
-        printf ("\033[%d;5;%dm\033[%dm", intens, fore, back);
-    else
-        printf ("\033[%d;25;%dm\033[%dm", intens, fore, back);
+	// 'Render"
+	if (blink)
+		printf("\033[%d;5;%dm\033[%dm", intens, fore, back);
+	else
+		printf("\033[%d;25;%dm\033[%dm", intens, fore, back);
 }
 
-void DisplayTextSplash(byte *text, int l)
+void DisplayTextSplash(byte* text, int l)
 {
-    int i;
-    int bound = 80*l*2;
+	int i;
+	int bound = 80 * l * 2;
 
-    for (i=0; i<bound; i+=2)
-    {
-        put_dos2ansi(text[i+1]);
-        putchar (text[i]);
-    }
+	for (i = 0; i < bound; i += 2)
+	{
+		put_dos2ansi(text[i + 1]);
+		putchar(text[i]);
+	}
 
-    printf ("\033[m");
+	printf("\033[m");
 }
 
 #if !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__ANDROID__)
 #include <execinfo.h>
 
-void print_stack (int level)
+void print_stack(int level)
 {
-    void *array[64];
-    char **syms;
-    int size, i;
+	void* array[64];
+	char** syms;
+	int size, i;
 
-    printf ("Stack dump:\n");
-    printf ("{\n");
-    size = backtrace (array, (sizeof (array))/(sizeof (array[0])));
-    syms = backtrace_symbols (array, size);
-    for (i=level+1; i<size; ++i) {
-        printf ("\t%s\n",syms[i]);
-    }
-    free (syms);
-    /*
-    for (i = 2; i <size; ++i) {
-    	printf ("\t%p\n", array[i]);
-    }
-    */
-    printf ("}\n");
+	printf("Stack dump:\n");
+	printf("{\n");
+	size = backtrace(array, (sizeof(array)) / (sizeof(array[0])));
+	syms = backtrace_symbols(array, size);
+	for (i = level + 1; i < size; ++i)
+	{
+		printf("\t%s\n", syms[i]);
+	}
+	free(syms);
+	/*
+	for (i = 2; i <size; ++i) {
+		printf ("\t%p\n", array[i]);
+	}
+	*/
+	printf("}\n");
 }
 #else
 
-void print_stack (int level)
+void print_stack(int level)
 {
-    printf("Stack dump not implemented.\n");
+	printf("Stack dump not implemented.\n");
 }
 
 #endif
 
-void crash_print (int sig)
+void crash_print(int sig)
 {
-    printf ("OH NO OH NO ROTT CRASHED!\n");
-    printf ("Here is where:\n");
-    print_stack (1);
+	printf("OH NO OH NO ROTT CRASHED!\n");
+	printf("Here is where:\n");
+	print_stack(1);
 #if defined(USE_SDL)
-    atexit(SDL_Quit);
+	atexit(SDL_Quit);
 #endif
-    exit (1);
+	exit(1);
 }
-

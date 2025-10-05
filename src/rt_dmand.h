@@ -18,11 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_dmand_public
 #define _rt_dmand_public
 
-typedef enum {
-    rs_nodata,
-    rs_newsound,
-    rs_endsound,
-    rs_data
+typedef enum
+{
+	rs_nodata,
+	rs_newsound,
+	rs_endsound,
+	rs_data
 } recordstate;
 
 //***************************************************************************
@@ -31,7 +32,7 @@ typedef enum {
 //
 //***************************************************************************
 
-void SD_StartIncomingSound ( void );
+void SD_StartIncomingSound(void);
 
 //***************************************************************************
 //
@@ -39,7 +40,7 @@ void SD_StartIncomingSound ( void );
 //
 //***************************************************************************
 
-void SD_StopIncomingSound ( void );
+void SD_StopIncomingSound(void);
 
 //***************************************************************************
 //
@@ -47,7 +48,7 @@ void SD_StopIncomingSound ( void );
 //
 //***************************************************************************
 
-void SD_UpdateIncomingSound ( byte * data, word length );
+void SD_UpdateIncomingSound(byte* data, word length);
 
 //***************************************************************************
 //
@@ -60,7 +61,7 @@ void SD_UpdateIncomingSound ( byte * data, word length );
 //
 //***************************************************************************
 
-recordstate SD_GetSoundData ( byte * data, word length );
+recordstate SD_GetSoundData(byte* data, word length);
 
 //***************************************************************************
 //
@@ -68,7 +69,7 @@ recordstate SD_GetSoundData ( byte * data, word length );
 //
 //***************************************************************************
 
-boolean SD_SoundDataReady ( void );
+boolean SD_SoundDataReady(void);
 
 //***************************************************************************
 //
@@ -76,7 +77,7 @@ boolean SD_SoundDataReady ( void );
 //
 //***************************************************************************
 
-void SD_SetRecordingActive ( void );
+void SD_SetRecordingActive(void);
 
 //***************************************************************************
 //
@@ -84,7 +85,7 @@ void SD_SetRecordingActive ( void );
 //
 //***************************************************************************
 
-void SD_ClearRecordingActive ( void );
+void SD_ClearRecordingActive(void);
 
 //***************************************************************************
 //
@@ -92,7 +93,7 @@ void SD_ClearRecordingActive ( void );
 //
 //***************************************************************************
 
-boolean SD_RecordingActive ( void );
+boolean SD_RecordingActive(void);
 
 //***************************************************************************
 //
@@ -100,13 +101,13 @@ boolean SD_RecordingActive ( void );
 //
 //***************************************************************************
 
-boolean SD_StartRecordingSound ( void );
+boolean SD_StartRecordingSound(void);
 
 //***************************************************************************
 //
 // SD_StopRecordingSound - Stop recording a sound
 //
 //***************************************************************************
-void SD_StopRecordingSound ( void );
+void SD_StopRecordingSound(void);
 
 #endif

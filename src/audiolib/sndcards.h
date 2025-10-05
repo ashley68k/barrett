@@ -32,22 +32,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define ASS_VERSION_STRING "1.12"
 
 typedef enum
-   {
-//   ASS_NoSound,
-   SoundBlaster,
-   ProAudioSpectrum,
-   SoundMan16,
-   Adlib,
-   GenMidi,
-   SoundCanvas,
-   Awe32,
-   WaveBlaster,
-   SoundScape,
-   UltraSound,
-   SoundSource,
-   TandySoundSource,
-   PC,
-   NumSoundCards
-   } soundcardnames;
+{
+	//   ASS_NoSound,
+	SoundBlaster,
+	ProAudioSpectrum,
+	SoundMan16,
+	Adlib,
+	GenMidi,
+	SoundCanvas,
+	Awe32,
+	WaveBlaster,
+	SoundScape,
+	UltraSound,
+	SoundSource,
+	TandySoundSource,
+	PC,
+	NumSoundCards
+} soundcardnames;
 
 #endif

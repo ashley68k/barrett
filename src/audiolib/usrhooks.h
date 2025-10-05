@@ -36,18 +36,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------*/
 
 enum USRHOOKS_Errors
-   {
-   USRHOOKS_Warning = -2,
-   USRHOOKS_Error   = -1,
-   USRHOOKS_Ok      = 0
-   };
-
+{
+	USRHOOKS_Warning = -2,
+	USRHOOKS_Error = -1,
+	USRHOOKS_Ok = 0
+};
 
 /*---------------------------------------------------------------------
    Function Prototypes
 ---------------------------------------------------------------------*/
 
-int USRHOOKS_GetMem( void **ptr, unsigned long size );
-int USRHOOKS_FreeMem( void *ptr );
+int USRHOOKS_GetMem(void** ptr, unsigned long size);
+int USRHOOKS_FreeMem(void* ptr);
 
 #endif

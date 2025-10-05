@@ -24,9 +24,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_sc_a_public
 #define _rt_sc_a_public
 
-void R_DrawColumn (byte * buf);
-void R_DrawSolidColumn (int color, byte * buf);
-void R_TransColumn (byte * buf);
-void R_DrawClippedColumn (byte * buf);
+void R_DrawColumn(byte* buf);
+void R_DrawSolidColumn(int color, byte* buf);
+void R_TransColumn(byte* buf);
+void R_DrawClippedColumn(byte* buf);
 
 #endif

@@ -25,9 +25,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //***************************************************************************
 #include "cin_glob.h"
 
-void GrabMovieScript (char const *basename, boolean uselumpy);
-void PlayMovie (char * name, boolean uselumpy);
-void GetCinematicTics ( void );
+void GrabMovieScript(char const* basename, boolean uselumpy);
+void PlayMovie(char* name, boolean uselumpy);
+void GetCinematicTics(void);
 
 extern boolean cinematicdone;
 

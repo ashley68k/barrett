@@ -25,6 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define _rt_map_public
 
 void DoMap(int x, int y);
-void CheatMap( void );
+void CheatMap(void);
 
 #endif

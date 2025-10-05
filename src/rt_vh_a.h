@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
-void VH_UpdateScreen (void);
-void JoyStick_Vals (void);
+void VH_UpdateScreen(void);
+void JoyStick_Vals(void);
 
 #endif

@@ -20,15 +20,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "develop.h"
 
-void  InitializeRNG ( void );
-int   GetRandomSeed ( void );
+void InitializeRNG(void);
+int GetRandomSeed(void);
 
-int   GameRNG ( void );
-#define GameRandomNumber(string,val)   GameRNG()
+int GameRNG(void);
+#define GameRandomNumber(string, val) GameRNG()
 
-int   RNG ( void );
-#define RandomNumber(string,val)   RNG()
+int RNG(void);
+#define RandomNumber(string, val) RNG()
 
-void  SetRNGindex ( int i );
-int   GetRNGindex ( void );
+void SetRNGindex(int i);
+int GetRNGindex(void);
 #endif

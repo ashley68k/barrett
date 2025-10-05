@@ -18,6 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_msg_private
 #define _rt_msg_private
 
-#define MESSAGETIME (35*6)
+#define MESSAGETIME (35 * 6)
 
 #endif
