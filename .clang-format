@@ -1,5 +1,5 @@
 BasedOnStyle: Microsoft
-Language: C
+Language: Cpp
 
 IndentWidth: 4
 UseTab: Never
