@@ -1,0 +1,36 @@
+BasedOnStyle: Microsoft
+Language: C
+
+IndentWidth: 4
+UseTab: Never
+
+IndentCaseLabels: false
+
+AlignConsecutiveAssignments:
+  AlignCompound: true
+
+AlignTrailingComments:
+  Kind: Always
+
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+
+AllowShortEnumsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortCaseExpressionOnASingleLine: true
+
+AllowShortIfStatementsOnASingleLine:
+  ShortIfStyle: SIS_WithoutElse
+
+ColumnLimit: 80
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterStruct: true
+  AfterUnion: true
+  IndentBraces: true
+
+DerivePointerAlignment: false
+PointerAlignment: Left
