@@ -26,7 +26,7 @@ CPPFLAGS += -DPLATFORM_UNIX=1
 CPPFLAGS += -D_GNU_SOURCE
 CPPFLAGS += $(EXTRACPPFLAGS)
 
-LDFLAGS += $(EXTRALDFLAGS) -fsanitize=address -static-libasan
+LDFLAGS += $(EXTRALDFLAGS) -fsanitize=address
 
 LDLIBS += $(shell sdl2-config --libs)
 LDLIBS += -lSDL2_mixer
