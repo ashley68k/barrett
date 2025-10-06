@@ -38,13 +38,13 @@ typedef struct
 	int clocktime;
 	int delta;
 	byte data[SYNCPACKETSIZE];
-} sync_packet_type;
+} sync_packet_t;
 
 typedef struct
 {
 	int sendtime;
 	int deltatime;
-	sync_packet_type pkt;
-} sync_type;
+	sync_packet_t pkt;
+} sync_t;
 
 #endif

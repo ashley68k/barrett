@@ -96,7 +96,7 @@ typedef enum
 {
 	loop_yes,
 	loop_no
-} en_loop;
+} e_loop;
 
 typedef struct
 {

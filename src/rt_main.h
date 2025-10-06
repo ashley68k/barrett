@@ -54,7 +54,7 @@ typedef enum
 	ROTT_REGISTERED,
 	ROTT_SUPERCD,
 	ROTT_SITELICENSE
-} version_type;
+} version_t;
 
 typedef struct
 {
@@ -82,7 +82,7 @@ typedef struct
 {
 	unsigned Version;
 	// Variable for which version of the game can be played
-	version_type Product;
+	version_t Product;
 
 	int TimeCount;
 	int frame;
@@ -107,7 +107,7 @@ typedef struct
 	int autorun;
 
 	// Battle Options
-	battle_cfg_type BattleOptions;
+	battle_cfg_t BattleOptions;
 
 	boolean SpawnCollectItems;
 	boolean SpawnEluder;

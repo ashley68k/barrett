@@ -451,7 +451,7 @@ statobj_t* GetStaticForIndex(int index)
 void SaveActors(byte** buffer, int* size)
 {
 	objtype *temp, *tact;
-	saved_actor_type dummy;
+	saved_actor_t dummy;
 	byte* tptr;
 	int actorcount;
 
@@ -459,7 +459,7 @@ void SaveActors(byte** buffer, int* size)
 		temp->whichactor = actorcount++;
 
 	*size = sizeof(int) + sizeof(numplayers) + sizeof(actor_misc_flags) +
-			objcount * sizeof(saved_actor_type);
+			objcount * sizeof(saved_actor_t);
 	*buffer = (byte*)SafeMalloc(*size);
 	tptr = *buffer;
 
@@ -546,15 +546,15 @@ void SaveActors(byte** buffer, int* size)
 		else
 			dummy.targetindex = -1;
 
-		memcpy(tptr, &(dummy.x), sizeof(saved_actor_type));
-		tptr += sizeof(saved_actor_type);
+		memcpy(tptr, &(dummy.x), sizeof(saved_actor_t));
+		tptr += sizeof(saved_actor_t);
 	}
 }
 
 void LoadActors(byte* buffer, int size)
 {
 	int numactors, i, playerindex;
-	saved_actor_type dummy;
+	saved_actor_t dummy;
 	objtype* temp;
 	short *targetindices, *whateverindices;
 
@@ -570,7 +570,7 @@ void LoadActors(byte* buffer, int size)
 	buffer += sizeof(playerindex);
 
 	size -= (sizeof(actor_misc_flags) + sizeof(numplayers) + sizeof(playerindex));
-	numactors = size / sizeof(saved_actor_type);
+	numactors = size / sizeof(saved_actor_t);
 
 	objlist = (objtype**)SafeMalloc(numactors * sizeof(objtype*));
 	targetindices = (short*)SafeMalloc(numactors * sizeof(short));
@@ -594,7 +594,7 @@ void LoadActors(byte* buffer, int size)
 				player = new;
 		}
 
-		memcpy(&(dummy.x), buffer, sizeof(saved_actor_type));
+		memcpy(&(dummy.x), buffer, sizeof(saved_actor_t));
 
 		// new->x = dummy.x;
 		// new->y = dummy.y;
@@ -657,7 +657,7 @@ void LoadActors(byte* buffer, int size)
 			actorat[new->tilex][new->tiley] = new;
 
 		PreCacheActor(new->obclass, -1);
-		buffer += sizeof(saved_actor_type);
+		buffer += sizeof(saved_actor_t);
 	}
 
 	// find unique links between actors,

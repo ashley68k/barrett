@@ -75,21 +75,21 @@ typedef enum
 	scfp_gameready,
 	scfp_data,
 	scfp_done
-} en_packetstate;
+} e_packetstate;
 
 typedef enum
 {
 	cs_ready,
 	cs_notarrived,
 	cs_fixing
-} en_commandstatus;
+} e_commandstatus;
 
 typedef enum
 {
 	player_ingame,
 	player_quitgame,
 	player_leftgame
-} en_playerstatus;
+} e_playerstatus;
 
 void PreparePacket(MoveType* pkt);
 int GetPacketSize(void* pkt);

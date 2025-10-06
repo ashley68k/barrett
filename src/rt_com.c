@@ -315,11 +315,11 @@ void WritePacket(void* buffer, int len, int destination)
 =
 =============
 */
-boolean ValidSyncPacket(sync_type* sync)
+boolean ValidSyncPacket(sync_t* sync)
 {
 	if (ReadPacket() && (badpacket == 0))
 	{
-		if (((sync_packet_type*)&(ROTTpacket[0]))->type == COM_SYNC)
+		if (((sync_packet_t*)&(ROTTpacket[0]))->type == COM_SYNC)
 		{
 			memcpy(&(sync->pkt), &(ROTTpacket[0]), sizeof(sync->pkt));
 			return true;
@@ -335,11 +335,11 @@ boolean ValidSyncPacket(sync_type* sync)
 =
 =============
 */
-void SendSyncPacket(sync_type* sync, int dest)
+void SendSyncPacket(sync_t* sync, int dest)
 {
 	sync->pkt.type = COM_SYNC;
 	sync->sendtime = GetTicCount();
-	WritePacket(&(sync->pkt.type), sizeof(sync_packet_type), dest);
+	WritePacket(&(sync->pkt.type), sizeof(sync_packet_t), dest);
 }
 
 /*
@@ -350,7 +350,7 @@ void SendSyncPacket(sync_type* sync, int dest)
 =============
 */
 
-boolean SlavePhaseHandler(sync_type* sync)
+boolean SlavePhaseHandler(sync_t* sync)
 {
 	boolean done;
 
@@ -387,7 +387,7 @@ boolean SlavePhaseHandler(sync_type* sync)
 =============
 */
 
-boolean MasterPhaseHandler(sync_type* sync)
+boolean MasterPhaseHandler(sync_t* sync)
 {
 	boolean done;
 
@@ -430,10 +430,10 @@ boolean MasterPhaseHandler(sync_type* sync)
 void ComSetTime(void)
 {
 	int i;
-	sync_packet_type* syncpacket;
+	sync_packet_t* syncpacket;
 	boolean done = false;
 
-	syncpacket = (sync_packet_type*)SafeMalloc(sizeof(sync_packet_type));
+	syncpacket = (sync_packet_t*)SafeMalloc(sizeof(sync_packet_t));
 
 	// Sync clocks
 
@@ -484,7 +484,7 @@ void ComSetTime(void)
 
 		for (i = 0; i < nump; i++)
 		{
-			WritePacket(&(syncpacket->type), sizeof(sync_packet_type), i);
+			WritePacket(&(syncpacket->type), sizeof(sync_packet_t), i);
 		}
 
 		while (GetTicCount() < time + (VBLCOUNTER / 4))
@@ -492,7 +492,7 @@ void ComSetTime(void)
 
 		for (i = 0; i < nump; i++)
 		{
-			WritePacket(&(syncpacket->type), sizeof(sync_packet_type), i);
+			WritePacket(&(syncpacket->type), sizeof(sync_packet_t), i);
 		}
 
 		if (standalone == true)
@@ -506,7 +506,7 @@ void ComSetTime(void)
 
 			if (ReadPacket() && (badpacket == 0))
 			{
-				memcpy(syncpacket, &(ROTTpacket[0]), sizeof(sync_packet_type));
+				memcpy(syncpacket, &(ROTTpacket[0]), sizeof(sync_packet_t));
 				if (syncpacket->type == COM_START)
 				{
 					controlsynctime = syncpacket->clocktime;
@@ -538,7 +538,7 @@ void ComSetTime(void)
 =
 =============
 */
-void InitialMasterSync(sync_type* sync, int client)
+void InitialMasterSync(sync_t* sync, int client)
 {
 	boolean done = false;
 	int i;
@@ -594,7 +594,7 @@ void InitialMasterSync(sync_type* sync, int client)
 =
 =============
 */
-void InitialSlaveSync(sync_type* sync)
+void InitialSlaveSync(sync_t* sync)
 {
 	boolean done = false;
 
@@ -642,9 +642,9 @@ void SyncTime(int client)
 	int dtime[NUMSYNCPHASES];
 	boolean done;
 	int i;
-	sync_type* sync;
+	sync_t* sync;
 
-	sync = (sync_type*)SafeMalloc(sizeof(sync_type));
+	sync = (sync_t*)SafeMalloc(sizeof(sync_t));
 
 	if (((networkgame == true) && (IsServer == true)) ||
 		((networkgame == false) && (consoleplayer == 0)))

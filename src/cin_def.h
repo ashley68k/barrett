@@ -39,24 +39,24 @@ typedef enum
 	cinematicend,
 	blankscreen,
 	clearbuffer
-} en_cinefxevent_t;
+} e_cinefxevent_t;
 
-typedef struct en_cinefxevent_node_t
+typedef struct e_cinefxevent_node_t
 {
 	int time;
-	en_cinefxevent_t effecttype;
+	e_cinefxevent_t effecttype;
 	void* effect;
-	struct en_cinefxevent_node_t* next;
-	struct en_cinefxevent_node_t* prev;
-} en_cinefxevent_node_t;
+	struct e_cinefxevent_node_t* next;
+	struct e_cinefxevent_node_t* prev;
+} e_cinefxevent_node_t;
 
-typedef struct cineactor_type
+typedef struct cineactor_t
 {
-	en_cinefxevent_t effecttype;
+	e_cinefxevent_t effecttype;
 	void* effect;
-	struct cineactor_type* next;
-	struct cineactor_type* prev;
-} cineactor_type;
+	struct cineactor_t* next;
+	struct cineactor_t* prev;
+} cineactor_t;
 
 typedef struct
 {

@@ -50,6 +50,6 @@ typedef struct sas
 	short int whichstat;
 	byte numanims;
 	int linked_to;
-} saved_stat_type;
+} saved_stat_t;
 
 #endif

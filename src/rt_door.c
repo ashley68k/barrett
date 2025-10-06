@@ -288,11 +288,11 @@ void SaveTouchPlates(byte** buffer, int* size)
 	int i, k;
 	byte* tptr;
 	touchplatetype* temp;
-	saved_touch_type dummy;
+	saved_touch_t dummy;
 
 	*size = sizeof(TRIGGER);
 	*size += sizeof(numactions);
-	*size += sizeof(saved_touch_type) * totalactions;
+	*size += sizeof(saved_touch_t) * totalactions;
 
 	*buffer = (byte*)SafeMalloc(*size);
 	tptr = *buffer;
@@ -343,8 +343,8 @@ void SaveTouchPlates(byte** buffer, int* size)
 			else
 				dummy.whichobj = temp->whichobj;
 
-			memcpy(tptr, &dummy, sizeof(saved_touch_type));
-			tptr += sizeof(saved_touch_type);
+			memcpy(tptr, &dummy, sizeof(saved_touch_t));
+			tptr += sizeof(saved_touch_t);
 		}
 	}
 }
@@ -365,10 +365,10 @@ void LoadTouchPlates(byte* buffer, int size)
 {
 	touchplatetype* temp;
 	int i, savedactions, loadedactions, index = 0;
-	saved_touch_type dummy;
+	saved_touch_t dummy;
 
 	savedactions = (size - sizeof(TRIGGER) - sizeof(numactions)) /
-				   sizeof(saved_touch_type);
+				   sizeof(saved_touch_t);
 	memset(touchplate, 0, sizeof(touchplate));
 	memset(lastaction, 0, sizeof(lastaction));
 	memset(numactions, 0, sizeof(numactions));
@@ -382,7 +382,7 @@ void LoadTouchPlates(byte* buffer, int size)
 
 	for (loadedactions = 0, index = 0, i = 0; i < savedactions; i++)
 	{
-		memcpy(&dummy, buffer, sizeof(saved_touch_type));
+		memcpy(&dummy, buffer, sizeof(saved_touch_t));
 		temp = (touchplatetype*)Z_LevelMalloc(sizeof(touchplatetype),
 											  PU_LEVELSTRUCT, NULL);
 		if (!temp)
@@ -415,7 +415,7 @@ void LoadTouchPlates(byte* buffer, int size)
 		else
 			temp->swapaction = NULL;
 
-		buffer += sizeof(saved_touch_type);
+		buffer += sizeof(saved_touch_t);
 
 		while (!numactions[index])
 			index++;

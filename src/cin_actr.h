@@ -21,16 +21,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_glob.h"
 #include "cin_def.h"
 
-extern cineactor_type* firstcinematicactor;
-extern cineactor_type* lastcinematicactor;
+extern cineactor_t* firstcinematicactor;
+extern cineactor_t* lastcinematicactor;
 
-void AddCinematicActor(cineactor_type* actor);
-void DeleteCinematicActor(cineactor_type* actor);
+void AddCinematicActor(cineactor_t* actor);
+void DeleteCinematicActor(cineactor_t* actor);
 
-cineactor_type* GetNewCinematicActor(void);
+cineactor_t* GetNewCinematicActor(void);
 void StartupCinematicActors(void);
 void ShutdownCinematicActors(void);
-void SpawnCinematicActor(en_cinefxevent_t type, void* effect);
+void SpawnCinematicActor(e_cinefxevent_t type, void* effect);
 void DrawCinematicActors(void);
 void UpdateCinematicActors(void);
 

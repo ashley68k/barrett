@@ -38,11 +38,11 @@ void DrawPalette(cine_palevent* event);
 void DrawCinematicSprite(cinespr_event* sprite);
 void DrawClearBuffer(void);
 void DrawBlankScreen(void);
-boolean DrawCinematicEffect(en_cinefxevent_t type, void* effect);
+boolean DrawCinematicEffect(e_cinefxevent_t type, void* effect);
 boolean UpdateCinematicBack(cine_bgevent* back);
 boolean UpdateCinematicSprite(cinespr_event* sprite);
-boolean UpdateCinematicEffect(en_cinefxevent_t type, void* effect);
-void PrecacheCinematicEffect(en_cinefxevent_t type, void* effect);
+boolean UpdateCinematicEffect(e_cinefxevent_t type, void* effect);
+void PrecacheCinematicEffect(e_cinefxevent_t type, void* effect);
 void ProfileDisplay(void);
 void DrawPostPic(int lumpnum);
 
