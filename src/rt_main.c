@@ -1697,7 +1697,7 @@ void UpdateGameObjects(void)
 	int j;
 	volatile int atime;
 	objtype *ob, *temp;
-	battle_status BattleStatus;
+	battle_state BattleStatus;
 
 	if (controlupdatestarted == 0)
 	{

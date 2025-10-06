@@ -45,7 +45,7 @@ typedef enum
 	ev_mtd, // moving to destination
 	// door at elevator location open
 	ev_doorclosing // door at elevator location closed
-} estate;
+} elevator_state;
 
 typedef enum
 {

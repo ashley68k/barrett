@@ -107,7 +107,7 @@ typedef struct
 	int autorun;
 
 	// Battle Options
-	battle_type BattleOptions;
+	battle_cfg_type BattleOptions;
 
 	boolean SpawnCollectItems;
 	boolean SpawnEluder;

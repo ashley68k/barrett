@@ -59,8 +59,8 @@ static VOLUME16* MV_ReverbTable = NULL;
 // static signed short MV_VolumeTable[ MV_MaxVolume + 1 ][ 256 ];
 static signed short MV_VolumeTable[63 + 1][256];
 
-// static Pan MV_PanTable[ MV_NumPanPositions ][ MV_MaxVolume + 1 ];
-static Pan MV_PanTable[MV_NumPanPositions][63 + 1];
+// static AudioPan MV_PanTable[ MV_NumPanPositions ][ MV_MaxVolume + 1 ];
+static AudioPan MV_PanTable[MV_NumPanPositions][63 + 1];
 
 static int MV_Installed = FALSE;
 static int MV_SoundCard = SoundBlaster;
@@ -556,7 +556,7 @@ static __inline unsigned int get_le16(void* p0)
 	return ((unsigned int)(BUILDSWAP_INTEL16(val)));
 }
 
-playbackstatus MV_GetNextVOCBlock(VoiceNode* voice)
+snd_playstate MV_GetNextVOCBlock(VoiceNode* voice)
 
 {
 	unsigned char* ptr;
@@ -831,7 +831,7 @@ playbackstatus MV_GetNextVOCBlock(VoiceNode* voice)
    Controls playback of demand fed data.
 ---------------------------------------------------------------------*/
 
-playbackstatus MV_GetNextDemandFeedBlock(VoiceNode* voice)
+snd_playstate MV_GetNextDemandFeedBlock(VoiceNode* voice)
 
 {
 	if (voice->BlockLength > 0)
@@ -869,7 +869,7 @@ playbackstatus MV_GetNextDemandFeedBlock(VoiceNode* voice)
    Controls playback of demand fed data.
 ---------------------------------------------------------------------*/
 
-playbackstatus MV_GetNextRawBlock(VoiceNode* voice)
+snd_playstate MV_GetNextRawBlock(VoiceNode* voice)
 
 {
 	if (voice->BlockLength <= 0)
@@ -906,7 +906,7 @@ playbackstatus MV_GetNextRawBlock(VoiceNode* voice)
    Controls playback of demand fed data.
 ---------------------------------------------------------------------*/
 
-playbackstatus MV_GetNextWAVBlock(VoiceNode* voice)
+snd_playstate MV_GetNextWAVBlock(VoiceNode* voice)
 
 {
 	if (voice->BlockLength <= 0)

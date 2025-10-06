@@ -241,7 +241,7 @@ typedef struct
 	unsigned Version;
 	boolean teamplay;
 	specials SpecialsTimes;
-	battle_type options;
+	battle_cfg_type options;
 	char battlefilename[20];
 	int randomseed;
 	boolean ludicrousgibs;

@@ -22,8 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_efct.h"
 #include "modexlib.h"
 
-actortype* firstcinematicactor;
-actortype* lastcinematicactor;
+cineactor_type* firstcinematicactor;
+cineactor_type* lastcinematicactor;
 
 // LOCALS
 
@@ -38,7 +38,7 @@ static int numcinematicactors;
 ===============
 */
 
-void AddCinematicActor(actortype* actor)
+void AddCinematicActor(cineactor_type* actor)
 {
 	if (!firstcinematicactor)
 	{
@@ -60,7 +60,7 @@ void AddCinematicActor(actortype* actor)
 ===============
 */
 
-void DeleteCinematicActor(actortype* actor)
+void DeleteCinematicActor(cineactor_type* actor)
 {
 	if (actor == lastcinematicactor)
 	{
@@ -96,16 +96,16 @@ void DeleteCinematicActor(actortype* actor)
 ===============
 */
 
-actortype* GetNewCinematicActor(void)
+cineactor_type* GetNewCinematicActor(void)
 {
-	actortype* actor;
+	cineactor_type* actor;
 
 	numcinematicactors++;
 
 	if (numcinematicactors > MAXCINEMATICACTORS)
 		Error("Too many Cinematic actors\n");
 
-	actor = SafeMalloc(sizeof(actortype));
+	actor = SafeMalloc(sizeof(cineactor_type));
 
 	actor->next = NULL;
 	actor->prev = NULL;
@@ -144,7 +144,7 @@ void StartupCinematicActors(void)
 
 void ShutdownCinematicActors(void)
 {
-	actortype* actor;
+	cineactor_type* actor;
 	if (cinematicactorsystemstarted == false)
 		return;
 	cinematicactorsystemstarted = false;
@@ -152,7 +152,7 @@ void ShutdownCinematicActors(void)
 	actor = firstcinematicactor;
 	while (actor != NULL)
 	{
-		actortype* nextactor;
+		cineactor_type* nextactor;
 
 		nextactor = actor->next;
 		DeleteCinematicActor(actor);
@@ -168,9 +168,9 @@ void ShutdownCinematicActors(void)
 ===============
 */
 
-void SpawnCinematicActor(enum_eventtype type, void* effect)
+void SpawnCinematicActor(en_cinefxevent_t type, void* effect)
 {
-	actortype* actor;
+	cineactor_type* actor;
 
 	actor = GetNewCinematicActor();
 	actor->effecttype = type;
@@ -186,13 +186,13 @@ void SpawnCinematicActor(enum_eventtype type, void* effect)
 */
 void UpdateCinematicActors(void)
 {
-	actortype* actor;
+	cineactor_type* actor;
 
 	for (actor = firstcinematicactor; actor != NULL;)
 	{
 		if (UpdateCinematicEffect(actor->effecttype, actor->effect) == false)
 		{
-			actortype* nextactor;
+			cineactor_type* nextactor;
 
 			nextactor = actor->next;
 			DeleteCinematicActor(actor);
@@ -219,14 +219,14 @@ typedef enum
 	foregroundsprites,
 	palettefunctions,
 	numdrawphases
-} enum_drawphases;
+} en_drawcinephases;
 
 void DrawCinematicActors(void)
 {
-	actortype* actor;
-	actortype* nextactor;
+	cineactor_type* actor;
+	cineactor_type* nextactor;
 	boolean draw;
-	enum_drawphases sequence;
+	en_drawcinephases sequence;
 #if DUMP
 	int numactors = 0;
 #endif

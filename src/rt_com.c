@@ -39,7 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // GLOBAL VARIABLES
 
 // Same as in real mode
-rottcom_t* rottcom;
+rottcom_info_t* rottcom;
 int badpacket;
 int consoleplayer;
 byte ROTTpacket[MAXCOMBUFFERSIZE];
@@ -99,8 +99,8 @@ void InitROTTNET(void)
 	-port: select a non-default port to connect to
 	*/
 
-	rottcom = (rottcom_t*)malloc(sizeof(rottcom_t));
-	memset(rottcom, 0, sizeof(rottcom_t));
+	rottcom = (rottcom_info_t*)malloc(sizeof(rottcom_info_t));
+	memset(rottcom, 0, sizeof(rottcom_info_t));
 
 	rottcom->ticstep = 1;
 	rottcom->gametype = 1;
@@ -315,11 +315,11 @@ void WritePacket(void* buffer, int len, int destination)
 =
 =============
 */
-boolean ValidSyncPacket(synctype* sync)
+boolean ValidSyncPacket(sync_type* sync)
 {
 	if (ReadPacket() && (badpacket == 0))
 	{
-		if (((syncpackettype*)&(ROTTpacket[0]))->type == COM_SYNC)
+		if (((sync_packet_type*)&(ROTTpacket[0]))->type == COM_SYNC)
 		{
 			memcpy(&(sync->pkt), &(ROTTpacket[0]), sizeof(sync->pkt));
 			return true;
@@ -335,11 +335,11 @@ boolean ValidSyncPacket(synctype* sync)
 =
 =============
 */
-void SendSyncPacket(synctype* sync, int dest)
+void SendSyncPacket(sync_type* sync, int dest)
 {
 	sync->pkt.type = COM_SYNC;
 	sync->sendtime = GetTicCount();
-	WritePacket(&(sync->pkt.type), sizeof(syncpackettype), dest);
+	WritePacket(&(sync->pkt.type), sizeof(sync_packet_type), dest);
 }
 
 /*
@@ -350,7 +350,7 @@ void SendSyncPacket(synctype* sync, int dest)
 =============
 */
 
-boolean SlavePhaseHandler(synctype* sync)
+boolean SlavePhaseHandler(sync_type* sync)
 {
 	boolean done;
 
@@ -387,7 +387,7 @@ boolean SlavePhaseHandler(synctype* sync)
 =============
 */
 
-boolean MasterPhaseHandler(synctype* sync)
+boolean MasterPhaseHandler(sync_type* sync)
 {
 	boolean done;
 
@@ -430,10 +430,10 @@ boolean MasterPhaseHandler(synctype* sync)
 void ComSetTime(void)
 {
 	int i;
-	syncpackettype* syncpacket;
+	sync_packet_type* syncpacket;
 	boolean done = false;
 
-	syncpacket = (syncpackettype*)SafeMalloc(sizeof(syncpackettype));
+	syncpacket = (sync_packet_type*)SafeMalloc(sizeof(sync_packet_type));
 
 	// Sync clocks
 
@@ -484,7 +484,7 @@ void ComSetTime(void)
 
 		for (i = 0; i < nump; i++)
 		{
-			WritePacket(&(syncpacket->type), sizeof(syncpackettype), i);
+			WritePacket(&(syncpacket->type), sizeof(sync_packet_type), i);
 		}
 
 		while (GetTicCount() < time + (VBLCOUNTER / 4))
@@ -492,7 +492,7 @@ void ComSetTime(void)
 
 		for (i = 0; i < nump; i++)
 		{
-			WritePacket(&(syncpacket->type), sizeof(syncpackettype), i);
+			WritePacket(&(syncpacket->type), sizeof(sync_packet_type), i);
 		}
 
 		if (standalone == true)
@@ -506,7 +506,7 @@ void ComSetTime(void)
 
 			if (ReadPacket() && (badpacket == 0))
 			{
-				memcpy(syncpacket, &(ROTTpacket[0]), sizeof(syncpackettype));
+				memcpy(syncpacket, &(ROTTpacket[0]), sizeof(sync_packet_type));
 				if (syncpacket->type == COM_START)
 				{
 					controlsynctime = syncpacket->clocktime;
@@ -538,7 +538,7 @@ void ComSetTime(void)
 =
 =============
 */
-void InitialMasterSync(synctype* sync, int client)
+void InitialMasterSync(sync_type* sync, int client)
 {
 	boolean done = false;
 	int i;
@@ -594,7 +594,7 @@ void InitialMasterSync(synctype* sync, int client)
 =
 =============
 */
-void InitialSlaveSync(synctype* sync)
+void InitialSlaveSync(sync_type* sync)
 {
 	boolean done = false;
 
@@ -642,9 +642,9 @@ void SyncTime(int client)
 	int dtime[NUMSYNCPHASES];
 	boolean done;
 	int i;
-	synctype* sync;
+	sync_type* sync;
 
-	sync = (synctype*)SafeMalloc(sizeof(synctype));
+	sync = (sync_type*)SafeMalloc(sizeof(sync_type));
 
 	if (((networkgame == true) && (IsServer == true)) ||
 		((networkgame == false) && (consoleplayer == 0)))

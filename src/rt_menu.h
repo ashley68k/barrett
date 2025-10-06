@@ -146,7 +146,7 @@ typedef enum
 	viewscores,
 	backtodemo,
 	quit
-} menuitems;
+} menu_items;
 
 //****************************************************************************
 //
@@ -166,7 +166,7 @@ void FreeSavedScreenPtr(void);
 void CleanUpControlPanel(void);
 void SetUpControlPanel(void);
 void ControlPanel(byte scancode);
-menuitems CP_MainMenu(void);
+menu_items CP_MainMenu(void);
 int getASCII(void);
 void DoMainMenu(void);
 boolean CP_CheckQuick(byte scancode);

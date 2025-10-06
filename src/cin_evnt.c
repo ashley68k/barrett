@@ -27,8 +27,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "z_zone.h"
 #include <string.h>
 
-eventtype* firstevent;
-eventtype* lastevent;
+en_cinefxevent_node_t* firstevent;
+en_cinefxevent_node_t* lastevent;
 
 // LOCALS
 
@@ -43,7 +43,7 @@ static boolean eventsystemstarted = false;
 ===============
 */
 
-void AddEvent(eventtype* event)
+void AddEvent(en_cinefxevent_node_t* event)
 {
 	if (!firstevent)
 		firstevent = event;
@@ -63,7 +63,7 @@ void AddEvent(eventtype* event)
 ===============
 */
 
-void DeleteEvent(eventtype* event)
+void DeleteEvent(en_cinefxevent_node_t* event)
 {
 	if (event == lastevent)
 		lastevent = event->prev;
@@ -89,16 +89,16 @@ void DeleteEvent(eventtype* event)
 ===============
 */
 
-eventtype* GetNewEvent(void)
+en_cinefxevent_node_t* GetNewEvent(void)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	numevents++;
 
 	if (numevents > MAXCINEMATICEVENTS)
 		Error("Too many Cinematic events\n");
 
-	event = SafeMalloc(sizeof(eventtype));
+	event = SafeMalloc(sizeof(en_cinefxevent_node_t));
 
 	event->next = NULL;
 	event->prev = NULL;
@@ -135,7 +135,7 @@ void StartupEvents(void)
 
 void ShutdownEvents(void)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	if (eventsystemstarted == false)
 		return;
@@ -144,7 +144,7 @@ void ShutdownEvents(void)
 	event = firstevent;
 	while (event != NULL)
 	{
-		eventtype* nextevent;
+		en_cinefxevent_node_t* nextevent;
 
 		nextevent = event->next;
 		DeleteEvent(event);
@@ -159,9 +159,9 @@ void ShutdownEvents(void)
 =
 ===============
 */
-eventtype* CreateEvent(int time, int type)
+en_cinefxevent_node_t* CreateEvent(int time, int type)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	event = GetNewEvent();
 
@@ -183,7 +183,7 @@ eventtype* CreateEvent(int time, int type)
 =
 ===============
 */
-enum_eventtype GetEventType(void)
+en_cinefxevent_t GetEventType(void)
 {
 	// Get Event Token
 
@@ -271,7 +271,7 @@ enum_eventtype GetEventType(void)
 =
 ===============
 */
-void ParseBack(eventtype* event)
+void ParseBack(en_cinefxevent_node_t* event)
 {
 	char name1[10];
 	char name2[10];
@@ -337,7 +337,7 @@ void ParseBack(eventtype* event)
 =
 ===============
 */
-void ParseSprite(eventtype* event)
+void ParseSprite(en_cinefxevent_node_t* event)
 {
 	char name1[10];
 	int duration;
@@ -378,7 +378,7 @@ void ParseSprite(eventtype* event)
 =
 ===============
 */
-void ParseFlic(eventtype* event)
+void ParseFlic(en_cinefxevent_node_t* event)
 {
 	char name1[10];
 	boolean loop;
@@ -421,7 +421,7 @@ void ParseFlic(eventtype* event)
 =
 ===============
 */
-void ParsePalette(eventtype* event)
+void ParsePalette(en_cinefxevent_node_t* event)
 {
 	char name1[10];
 
@@ -440,7 +440,7 @@ void ParsePalette(eventtype* event)
 */
 void ParseEvent(int time)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	event = CreateEvent(time, GetEventType());
 
@@ -480,13 +480,13 @@ void ParseEvent(int time)
 */
 void UpdateCinematicEvents(int time)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	for (event = firstevent; event != NULL;)
 	{
 		if (event->time == time)
 		{
-			eventtype* nextevent;
+			en_cinefxevent_node_t* nextevent;
 
 			nextevent = event->next;
 			SpawnCinematicActor(event->effecttype, event->effect);
@@ -509,7 +509,7 @@ void UpdateCinematicEvents(int time)
 */
 void PrecacheCinematic(void)
 {
-	eventtype* event;
+	en_cinefxevent_node_t* event;
 
 	for (event = firstevent; event != NULL;)
 	{

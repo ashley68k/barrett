@@ -118,7 +118,7 @@ font_t* tinyfont;
 
 boolean loadedgame = false;
 
-battle_type BATTLE_Options[battle_NumBattleModes];
+battle_cfg_type BATTLE_Options[battle_NumBattleModes];
 
 int quicksaveslot = -1;
 
@@ -1445,7 +1445,7 @@ void ControlPanel(byte scancode)
 // CP_MainMenu
 //
 //******************************************************************************
-menuitems CP_MainMenu(void)
+menu_items CP_MainMenu(void)
 
 {
 	int which;
@@ -7838,8 +7838,8 @@ void ShowBattleOption(boolean inmenu, int PosX, int PosY, int column, int Line,
 void ShowBattleOptions(boolean inmenu, int PosX, int PosY)
 
 {
-	battle_type* options;
-	battle_type BatOps;
+	battle_cfg_type* options;
+	battle_cfg_type BatOps;
 	char* string;
 	char text[80];
 	int width;

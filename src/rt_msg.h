@@ -47,9 +47,9 @@ typedef struct msgt
 	byte flags;
 	int tictime;
 	char* text;
-} messagetype;
+} message_type;
 
-extern messagetype Messages[MAXMSGS];
+extern message_type Messages[MAXMSGS];
 
 extern boolean MessagesEnabled;
 

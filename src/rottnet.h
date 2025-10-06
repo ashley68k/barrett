@@ -58,13 +58,13 @@ typedef struct
 
 	// packet data to be sent
 	char data[MAXPACKETSIZE];
-} rottcom_t;
+} rottcom_info_t;
 
 #define MODEM_GAME	 0
 #define NETWORK_GAME 1
 
 #define ROTTLAUNCHER ("ROTT.EXE")
 
-extern rottcom_t* rottcom;
+extern rottcom_info_t* rottcom;
 
 #endif

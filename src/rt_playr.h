@@ -144,7 +144,7 @@ typedef struct
 	int hitpoints;
 	int accuracy;
 	int height;
-} ROTTCHARS;
+} character_stat;
 
 #define M_LINKSTATE(x, y)                                                      \
 	{                                                                          \
@@ -161,7 +161,7 @@ extern objtype* PLAYER[MAXPLAYERS];
 extern objtype* player;
 extern playertype PLAYERSTATE[MAXPLAYERS], *locplayerstate;
 
-extern ROTTCHARS characters[5];
+extern character_stat characters[5];
 
 extern weaponinfo FREE;
 extern statetype s_player;
