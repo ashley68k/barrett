@@ -65,7 +65,7 @@ enum FX_ERRORS
 	FX_DPMI_Error
 };
 
-enum fx_BLASTER_ts
+enum fx_BLASTER_Types
 {
 	fx_SB = 1,
 	fx_SBPro = 2,
