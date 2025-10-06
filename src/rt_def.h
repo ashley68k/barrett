@@ -140,7 +140,7 @@ long filelength(int handle);
 
 #define STUB_FUNCTION                                                          \
 	fprintf(stderr, "STUB: %s at " __FILE__ ", line %d, thread %d\n",          \
-			__FUNCTION__, __LINE__, getpid())
+			__func__, __LINE__, getpid())
 
 #define far
 #define cdecl

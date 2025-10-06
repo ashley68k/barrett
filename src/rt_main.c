@@ -1695,7 +1695,6 @@ extern boolean enableZomROTT;
 void UpdateGameObjects(void)
 {
 	int j;
-	volatile int atime;
 	objtype *ob, *temp;
 	battle_state BattleStatus;
 
@@ -1703,8 +1702,6 @@ void UpdateGameObjects(void)
 	{
 		return;
 	}
-
-	atime = GetFastTics();
 
 	UpdateClientControls();
 
@@ -1782,7 +1779,8 @@ void UpdateGameObjects(void)
 		if (GamePaused == true)
 			break;
 	}
-	actortime = GetFastTics() - atime;
+	// before this was GetFastTics() - atime, and atime is just GetFastTicks. this is just 0
+	actortime = 0;
 
 	UpdateClientControls();
 
@@ -1849,8 +1847,6 @@ void PauseLoop(void)
 void PlayLoop(void)
 
 {
-	volatile int atime;
-
 	boolean canquit = true;
 	int quittime = 0;
 
@@ -1875,10 +1871,8 @@ fromloadedgame:
 		DoLoadGameSequence();
 	}
 
-	drawtime = 0;
 	actortime = 0;
 	tics = 0;
-	SetFastTics(0);
 
 	if (fizzlein == false)
 	{
@@ -1910,8 +1904,6 @@ fromloadedgame:
 		{
 			PauseLoop();
 
-			atime = GetFastTics();
-
 			if (RefreshPause)
 			{
 				ThreeDRefresh();
@@ -1926,14 +1918,10 @@ fromloadedgame:
 			if (controlupdatestarted == 1)
 				UpdateGameObjects();
 
-			atime = GetFastTics();
-
 			ThreeDRefresh();
 		}
 
 		SyncToServer();
-
-		drawtime = GetFastTics() - atime;
 
 		// Don't allow player to quit if entering message
 		canquit = !MSG.messageon;

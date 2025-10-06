@@ -138,7 +138,6 @@ int hp_srcstep;
 int levelheight;
 
 int actortime = 0;
-int drawtime = 0;
 
 visobj_t vislist[MAXVISIBLE], *visptr, *visstep, *farthest;
 
@@ -3040,20 +3039,11 @@ extern boolean skipRotate;
 void RotateBuffer(int startangle, int endangle, int startscale, int endscale,
 				  int time)
 {
-	int savetics;
-
-	// save off fastcounter
-
-	savetics = GetFastTics();
-
 	StartupRotateBuffer(0);
 
 	ScaleAndRotateBuffer(startangle, endangle, startscale, endscale, time);
 
 	ShutdownRotateBuffer();
-
-	// restore fast counter
-	SetFastTics(savetics);
 }
 
 const SDL_Renderer* GetRenderer(void);

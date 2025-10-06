@@ -81,7 +81,7 @@ void DrawCenterAim();
 /* rt_def.h isn't included, so I just put this here... */
 #define STUB_FUNCTION                                                          \
 	fprintf(stderr, "STUB: %s at " __FILE__ ", line %d, thread %d\n",          \
-			__FUNCTION__, __LINE__, getpid())
+			__func__, __LINE__, getpid())
 
 #endif
 
