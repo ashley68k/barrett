@@ -35,7 +35,7 @@ typedef struct
 	int lump;
 	int cachelevel;
 	int type; // To make precaching possible on big endian machines
-} cache_type;
+} cache_t;
 
 //========================================
 
@@ -44,7 +44,7 @@ typedef struct
 	short RLEWtag;
 	int headeroffsets[100];
 	byte tileinfo[1];
-} map_file_type;
+} map_file_t;
 
 typedef struct
 {
@@ -52,7 +52,7 @@ typedef struct
 	word planelength[3];
 	word width, height;
 	char name[16];
-} map_type;
+} map_t;
 
 #define ActorIsPushWall(xx, yy)                                                \
 	((actorat[xx][yy]) && (((objtype*)actorat[xx][yy])->which == PWALL))

@@ -187,7 +187,7 @@ typedef struct
 	int DangerDamage;
 	unsigned TimeLimit;
 	unsigned RespawnTime;
-} battle_cfg_type;
+} battle_cfg_t;
 
 #define bo_normal_respawn_time 30
 
@@ -206,12 +206,12 @@ extern int BATTLE_NumberOfTeams;
 extern boolean UpdateKills;
 
 // Located in RT_MENU.C
-extern battle_cfg_type BATTLE_Options[battle_NumBattleModes];
+extern battle_cfg_t BATTLE_Options[battle_NumBattleModes];
 
 void BATTLE_Init(int battlemode, int numplayers);
 void BATTLE_GetSpecials(void);
-void BATTLE_SetOptions(battle_cfg_type* options);
-void BATTLE_GetOptions(battle_cfg_type* options);
+void BATTLE_SetOptions(battle_cfg_t* options);
+void BATTLE_GetOptions(battle_cfg_t* options);
 battle_state BATTLE_CheckGameStatus(battle_event reason, int player);
 void BATTLE_SortPlayerRanks(void);
 battle_state BATTLE_PlayerKilledPlayer(battle_event reason, int killer,

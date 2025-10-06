@@ -30,7 +30,7 @@ typedef struct tp
 	byte triggered;
 	byte complete;
 	byte done;
-} saved_touch_type;
+} saved_touch_t;
 
 #define NUMTOUCHPLATEACTIONS 8
 

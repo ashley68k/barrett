@@ -668,7 +668,7 @@ void SetupAnimatedWall(int which)
 void SaveStatics(byte** buffer, int* size)
 {
 	statobj_t* temp;
-	saved_stat_type dummy;
+	saved_stat_t dummy;
 	byte* tptr;
 	int count;
 
@@ -678,7 +678,7 @@ void SaveStatics(byte** buffer, int* size)
 		*buffer = SafeMalloc(16);
 		return;
 	}
-	*size = statcount * sizeof(saved_stat_type);
+	*size = statcount * sizeof(saved_stat_t);
 	*buffer = (byte*)SafeMalloc(*size);
 	tptr = *buffer;
 
@@ -700,8 +700,8 @@ void SaveStatics(byte** buffer, int* size)
 		dummy.whichstat = count++;
 		dummy.linked_to = temp->linked_to;
 
-		memcpy(tptr, &(dummy.x), sizeof(saved_stat_type));
-		tptr += sizeof(saved_stat_type);
+		memcpy(tptr, &(dummy.x), sizeof(saved_stat_t));
+		tptr += sizeof(saved_stat_t);
 	}
 }
 
@@ -1008,11 +1008,11 @@ void PreCacheStaticFrames(statobj_t* temp)
 
 void LoadStatics(byte* buffer, int size)
 {
-	saved_stat_type dummy;
+	saved_stat_t dummy;
 	int stcount, i;
 	statobj_t* temp;
 
-	stcount = size / sizeof(saved_stat_type);
+	stcount = size / sizeof(saved_stat_t);
 	InitStaticList();
 
 	for (i = 0; i < stcount; i++)
@@ -1023,7 +1023,7 @@ void LoadStatics(byte* buffer, int size)
 			Error("LoadStatics: Failed on allocation of static %d of %d", i,
 				  stcount);
 		memset(temp, 0, sizeof(*temp));
-		memcpy(&(dummy.x), buffer, sizeof(saved_stat_type));
+		memcpy(&(dummy.x), buffer, sizeof(saved_stat_t));
 		temp->whichstat = statcount++;
 		temp->x = dummy.x;
 		temp->y = dummy.y;
@@ -1076,7 +1076,7 @@ void LoadStatics(byte* buffer, int size)
 		}
 		PreCacheStaticSounds(temp->itemnumber);
 
-		buffer += sizeof(saved_stat_type);
+		buffer += sizeof(saved_stat_t);
 	}
 }
 

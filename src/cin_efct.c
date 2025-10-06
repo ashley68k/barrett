@@ -683,7 +683,7 @@ boolean UpdateCinematicSprite(cinespr_event* sprite)
 =
 =================
 */
-boolean UpdateCinematicEffect(en_cinefxevent_t type, void* effect)
+boolean UpdateCinematicEffect(e_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{
@@ -721,7 +721,7 @@ boolean UpdateCinematicEffect(en_cinefxevent_t type, void* effect)
 =
 =================
 */
-boolean DrawCinematicEffect(en_cinefxevent_t type, void* effect)
+boolean DrawCinematicEffect(e_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{
@@ -778,7 +778,7 @@ boolean DrawCinematicEffect(en_cinefxevent_t type, void* effect)
 =
 =================
 */
-void PrecacheCinematicEffect(en_cinefxevent_t type, void* effect)
+void PrecacheCinematicEffect(e_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{

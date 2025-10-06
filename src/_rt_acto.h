@@ -246,7 +246,7 @@ typedef struct sat
 	signed char door_to_open;
 	signed char dir;
 
-} saved_actor_type;
+} saved_actor_t;
 
 typedef struct
 {

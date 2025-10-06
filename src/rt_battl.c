@@ -61,7 +61,7 @@ boolean UpdateKills;
 
 static boolean SwapFlag;
 
-static battle_cfg_type BattleOptions;
+static battle_cfg_t BattleOptions;
 
 specials BattleSpecialsTimes = {
 	60,					  // god
@@ -396,10 +396,10 @@ void BATTLE_GetSpecials(void)
 	Set the battle options.
 ---------------------------------------------------------------------*/
 
-void BATTLE_SetOptions(battle_cfg_type* options)
+void BATTLE_SetOptions(battle_cfg_t* options)
 
 {
-	memcpy(&BattleOptions, options, sizeof(battle_cfg_type));
+	memcpy(&BattleOptions, options, sizeof(battle_cfg_t));
 }
 
 /*---------------------------------------------------------------------
@@ -408,10 +408,10 @@ void BATTLE_SetOptions(battle_cfg_type* options)
    Returns the battle options.
 ---------------------------------------------------------------------*/
 
-void BATTLE_GetOptions(battle_cfg_type* options)
+void BATTLE_GetOptions(battle_cfg_t* options)
 
 {
-	memcpy(options, &BattleOptions, sizeof(battle_cfg_type));
+	memcpy(options, &BattleOptions, sizeof(battle_cfg_t));
 }
 
 /*---------------------------------------------------------------------
