@@ -111,20 +111,6 @@ void ISR_SetTime(int settime)
 	ticbase = settime;
 }
 
-/* developer-only */
-
-int GetFastTics(void)
-{
-	/* STUB_FUNCTION; */
-
-	return 0;
-}
-
-void SetFastTics(int settime)
-{
-	/* STUB_FUNCTION; */
-}
-
 /*
 ================
 =

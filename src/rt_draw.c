@@ -137,9 +137,6 @@ int hp_srcstep;
 
 int levelheight;
 
-int actortime = 0;
-int drawtime = 0;
-
 visobj_t vislist[MAXVISIBLE], *visptr, *visstep, *farthest;
 
 int firstcoloffset = 0;
@@ -156,8 +153,6 @@ static int nonbobpheight;
 static visobj_t* sortedvislist[MAXVISIBLE];
 
 static const fixed mindist = 0x1000;
-
-static int walltime = 0;
 
 static int weaponbobx, weaponboby;
 
@@ -2018,14 +2013,12 @@ void TransformPushWalls(void)
 
 void WallRefresh(void)
 {
-	volatile int dtime;
 	int mag;
 	int yzangle;
 
 	whereami = 16;
 	firstcoloffset = (firstcoloffset + (tics << 8)) & 65535;
 
-	dtime = GetFastTics();
 	if (missobj)
 	{
 		viewangle = missobj->angle;
@@ -2135,7 +2128,6 @@ void WallRefresh(void)
 	UpdateClientControls();
 	DrawWalls();
 	UpdateClientControls();
-	walltime = GetFastTics() - dtime;
 }
 
 /*
@@ -3040,20 +3032,11 @@ extern boolean skipRotate;
 void RotateBuffer(int startangle, int endangle, int startscale, int endscale,
 				  int time)
 {
-	int savetics;
-
-	// save off fastcounter
-
-	savetics = GetFastTics();
-
 	StartupRotateBuffer(0);
 
 	ScaleAndRotateBuffer(startangle, endangle, startscale, endscale, time);
 
 	ShutdownRotateBuffer();
-
-	// restore fast counter
-	SetFastTics(savetics);
 }
 
 const SDL_Renderer* GetRenderer(void);

@@ -49,9 +49,6 @@ extern volatile int Keyboard[MAXKEYBOARDSCAN]; // Keyboard status array
 extern volatile int Keystate[MAXKEYBOARDSCAN]; // Keyboard state array
 
 int GetTicCount(void);
-int GetFastTics(void);
-
-void SetFastTics(int);
 
 extern int KeyboardStarted;
 

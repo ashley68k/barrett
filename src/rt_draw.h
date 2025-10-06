@@ -83,8 +83,6 @@ extern int levelheight;
 extern int maxheight;
 extern int nominalheight;
 
-extern int actortime;
-extern int drawtime;
 extern int c_startx;
 extern int c_starty;
 
