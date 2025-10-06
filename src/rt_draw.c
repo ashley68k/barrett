@@ -137,8 +137,6 @@ int hp_srcstep;
 
 int levelheight;
 
-int actortime = 0;
-
 visobj_t vislist[MAXVISIBLE], *visptr, *visstep, *farthest;
 
 int firstcoloffset = 0;
@@ -2017,14 +2015,12 @@ void TransformPushWalls(void)
 
 void WallRefresh(void)
 {
-	volatile int dtime;
 	int mag;
 	int yzangle;
 
 	whereami = 16;
 	firstcoloffset = (firstcoloffset + (tics << 8)) & 65535;
 
-	dtime = GetFastTics();
 	if (missobj)
 	{
 		viewangle = missobj->angle;
@@ -2134,7 +2130,6 @@ void WallRefresh(void)
 	UpdateClientControls();
 	DrawWalls();
 	UpdateClientControls();
-	walltime = GetFastTics() - dtime;
 }
 
 /*

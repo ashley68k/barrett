@@ -1779,8 +1779,6 @@ void UpdateGameObjects(void)
 		if (GamePaused == true)
 			break;
 	}
-	// before this was GetFastTics() - atime, and atime is just GetFastTicks. this is just 0
-	actortime = 0;
 
 	UpdateClientControls();
 
@@ -1871,7 +1869,6 @@ fromloadedgame:
 		DoLoadGameSequence();
 	}
 
-	actortime = 0;
 	tics = 0;
 
 	if (fizzlein == false)

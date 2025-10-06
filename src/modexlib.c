@@ -274,18 +274,18 @@ void VL_ClearVideo(byte color)
 		   iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT);
 }
 
-void RescaleAreaOfTexture(SDL_Renderer* renderer, SDL_Texture* source,
+void RescaleAreaOfTexture(SDL_Renderer* render, SDL_Texture* source,
 						  SDL_Rect src, SDL_Rect dest)
 {
 	SDL_Texture* sourceToResize =
-		SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+		SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888,
 						  SDL_TEXTUREACCESS_TARGET, src.w, src.h);
-	SDL_SetRenderTarget(renderer, sourceToResize);
-	SDL_RenderCopy(renderer, source, &src, NULL);
+	SDL_SetRenderTarget(render, sourceToResize);
+	SDL_RenderCopy(render, source, &src, NULL);
 	// the folowing line should reset the target to default(the screen)
-	SDL_SetRenderTarget(renderer, NULL);
+	SDL_SetRenderTarget(render, NULL);
 
-	SDL_RenderCopy(renderer, sourceToResize, NULL, &dest);
+	SDL_RenderCopy(render, sourceToResize, NULL, &dest);
 	SDL_DestroyTexture(sourceToResize);
 }
 
@@ -384,8 +384,8 @@ void EnableScreenStretch(void)
 								 iGLOBAL_SCREENHEIGHT, 8, 0, 0, 0, 0);
 	}
 
-	displayofs = unstretch_sdl_surface->pixels +
-				 (displayofs - (byte*)sdl_surface->pixels);
+	displayofs = (byte *)unstretch_sdl_surface->pixels +
+					(displayofs - (byte*)sdl_surface->pixels);
 	bufferofs = unstretch_sdl_surface->pixels;
 	page1start = unstretch_sdl_surface->pixels;
 	page2start = unstretch_sdl_surface->pixels;
@@ -398,7 +398,7 @@ void DisableScreenStretch(void)
 	if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen)
 		return;
 
-	displayofs = sdl_surface->pixels +
+	displayofs = (byte*)sdl_surface->pixels +
 				 (displayofs - (byte*)unstretch_sdl_surface->pixels);
 	bufferofs = sdl_surface->pixels;
 	page1start = sdl_surface->pixels;
@@ -554,16 +554,16 @@ void sdl_handle_window_events(void)
 // scale, int masked)
 
 void DoScreenRotateScale(int w, int h, SDL_Texture* tex, float angle,
-						 float scale)
+						 float scrScale)
 {
 
 	SDL_RenderClear(renderer);
 
 	SDL_Rect output;
 
-	output.w = abs((int)((float)w * scale));
+	output.w = abs((int)((float)w * scrScale));
 
-	output.h = abs((int)((float)h * scale));
+	output.h = abs((int)((float)h * scrScale));
 
 	// if (output.w < MinScreenWidth)
 	// output.w = MinScreenWidth;
