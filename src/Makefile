@@ -14,7 +14,7 @@ BARRETT ?= build/barrett
 
 # Regular build flags and rules
 
-CC ?= clang
+CC = clang
 
 CFLAGS ?= -std=c17 -g -Og
 CFLAGS += -Wall -Wextra -Wshadow -Wpedantic
@@ -97,7 +97,7 @@ $(AUDIOLIB):
 	$(MAKE) -C audiolib
 
 tidy: 
-	$(RM) $(OBJS) $(ROTT) $(ROTT).exe
+	$(RM) $(OBJS) $(BARRETT) $(BARRETT).exe
 
 clean: tidy
 	$(MAKE) -C audiolib $@
