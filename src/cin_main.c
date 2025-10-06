@@ -195,12 +195,12 @@ void GetCinematicTics(void)
 	cinematictics = profiletics;
 }
 
-void PlayMovie(char* name, boolean uselumpy)
+void PlayMovie(char* movie_name, boolean uselumpy)
 {
 	int i;
 
 	StartupCinematic();
-	GrabCinematicScript(name, uselumpy);
+	GrabCinematicScript(movie_name, uselumpy);
 
 	PrecacheCinematic();
 	GetCinematicTics();
