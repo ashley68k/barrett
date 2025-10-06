@@ -77,7 +77,7 @@ specials CurrentSpecialsTimes = {
 
 int GRAVITY = NORMAL_GRAVITY;
 
-ROTTCHARS characters[5] = {{0x2100, 0x4800, 100, 2, 25},  // Taradino Cassatt
+character_stat characters[5] = {{0x2100, 0x4800, 100, 2, 25},  // Taradino Cassatt
 						   {0x2200, 0x5200, 85, 3, 32},	  // Thi Barrett
 						   {0x1f00, 0x4000, 150, 3, 20},  // Doug Wendt
 						   {0x2300, 0x5500, 70, 2, 33},	  // Lorelei Ni

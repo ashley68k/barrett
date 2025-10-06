@@ -97,7 +97,7 @@ char LevelName[80];
 // LOCAL VARIABLES
 //========================================
 
-static cachetype* cachelist;
+static cache_type* cachelist;
 static word cacheindex;
 static boolean CachingStarted = false;
 static char* ROTTMAPS = STANDARDGAMELEVELS;
@@ -166,7 +166,7 @@ int GetLumpForTile(int tile);
 
 /*--------------------------------------------------------------------------*/
 int CompareTags(s1p, s2p)
-cachetype *s1p, *s2p;
+cache_type *s1p, *s2p;
 {
 	// Sort according to lump
 	if (DoPanicMapping() == true)
@@ -176,9 +176,9 @@ cachetype *s1p, *s2p;
 		return SGN(s1p->lump - s2p->lump);
 }
 
-void SwitchCacheEntries(s1p, s2p) cachetype *s1p, *s2p;
+void SwitchCacheEntries(s1p, s2p) cache_type *s1p, *s2p;
 {
-	cachetype temp;
+	cache_type temp;
 
 	temp = *s1p;
 	*s1p = *s2p;
@@ -187,7 +187,7 @@ void SwitchCacheEntries(s1p, s2p) cachetype *s1p, *s2p;
 
 void SortPreCache(void)
 {
-	hsort((char*)cachelist, cacheindex, sizeof(cachetype), &CompareTags,
+	hsort((char*)cachelist, cacheindex, sizeof(cache_type), &CompareTags,
 		  &SwitchCacheEntries);
 }
 
@@ -206,7 +206,7 @@ void SetupPreCache(void)
 
 	CachingStarted = true;
 	cacheindex = 0;
-	cachelist = (cachetype*)SafeMalloc(MAXPRECACHE * (sizeof(cachetype)));
+	cachelist = (cache_type*)SafeMalloc(MAXPRECACHE * (sizeof(cache_type)));
 	DrawPreCache();
 }
 
@@ -1669,9 +1669,9 @@ void LoadTedMap(const char* extension, int mapnum)
 	int i;
 	int maphandle;
 	byte* buffer;
-	maptype mapheader;
+	map_type mapheader;
 	char name[200];
-	mapfiletype* tinf;
+	map_file_type* tinf;
 
 	//
 	// load maphead.ext (offsets and tileinfo for map file)
@@ -1707,7 +1707,7 @@ void LoadTedMap(const char* extension, int mapnum)
 	}
 
 	lseek(maphandle, pos, SEEK_SET);
-	SafeRead(maphandle, &mapheader, sizeof(maptype));
+	SafeRead(maphandle, &mapheader, sizeof(map_type));
 
 	for (i = 0; i < 3; i++)
 	{

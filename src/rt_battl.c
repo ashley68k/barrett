@@ -46,7 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #define INFINITE -1
 
-static battle_status BATTLE_StartRound(void);
+static battle_state BATTLE_StartRound(void);
 
 static int Timer;
 static int TimeLimit;
@@ -61,7 +61,7 @@ boolean UpdateKills;
 
 static boolean SwapFlag;
 
-static battle_type BattleOptions;
+static battle_cfg_type BattleOptions;
 
 specials BattleSpecialsTimes = {
 	60,					  // god
@@ -396,10 +396,10 @@ void BATTLE_GetSpecials(void)
 	Set the battle options.
 ---------------------------------------------------------------------*/
 
-void BATTLE_SetOptions(battle_type* options)
+void BATTLE_SetOptions(battle_cfg_type* options)
 
 {
-	memcpy(&BattleOptions, options, sizeof(battle_type));
+	memcpy(&BattleOptions, options, sizeof(battle_cfg_type));
 }
 
 /*---------------------------------------------------------------------
@@ -408,10 +408,10 @@ void BATTLE_SetOptions(battle_type* options)
    Returns the battle options.
 ---------------------------------------------------------------------*/
 
-void BATTLE_GetOptions(battle_type* options)
+void BATTLE_GetOptions(battle_cfg_type* options)
 
 {
-	memcpy(options, &BattleOptions, sizeof(battle_type));
+	memcpy(options, &BattleOptions, sizeof(battle_cfg_type));
 }
 
 /*---------------------------------------------------------------------
@@ -466,7 +466,7 @@ void BATTLE_Shutdown(void)
 	Begins a round of battle.
 ---------------------------------------------------------------------*/
 
-static battle_status BATTLE_StartRound(void)
+static battle_state BATTLE_StartRound(void)
 
 {
 	int index;
@@ -531,10 +531,10 @@ static battle_status BATTLE_StartRound(void)
 	determines the appropriate response.
 ---------------------------------------------------------------------*/
 
-battle_status BATTLE_CheckGameStatus(battle_event reason, int player)
+battle_state BATTLE_CheckGameStatus(battle_event reason, int player)
 
 {
-	battle_status status;
+	battle_state status;
 	int team;
 
 	if ((player < 0) || (player >= MAXPLAYERS))
@@ -780,7 +780,7 @@ void BATTLE_SortPlayerRanks(void)
    Increases the number of kills a player has.
 ---------------------------------------------------------------------*/
 
-battle_status BATTLE_PlayerKilledPlayer(battle_event reason, int killer,
+battle_state BATTLE_PlayerKilledPlayer(battle_event reason, int killer,
 										int victim)
 
 {

@@ -62,7 +62,7 @@ int fxnums[11] = {-1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1};
 
 int MUSIC_GetPosition(void)
 {
-	songposition pos;
+	songtic pos;
 
 	MUSIC_GetSongPosition(&pos);
 	return pos.milliseconds;

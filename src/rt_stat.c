@@ -235,7 +235,7 @@ Local Variables GLOBAL VARIABLES
 
 =============================================================================
 */
-static awallinfo_t animwallsinfo[MAXANIMWALLS] = {
+static animwallinfo_t animwallsinfo[MAXANIMWALLS] = {
 	{3, 4, "FPLACE1\0"},   // lava wall
 	{3, 6, "ANIMY1\0"},	   // anim red
 	{3, 6, "ANIMR1\0"},	   // anim yellow

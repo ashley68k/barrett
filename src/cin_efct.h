@@ -21,28 +21,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_glob.h"
 #include "cin_def.h"
 
-flicevent* SpawnCinematicFlic(char* name, boolean loop, boolean usefile);
-spriteevent* SpawnCinematicSprite(char* name, int duration, int numframes,
+cine_event* SpawnCinematicFlic(char* name, boolean loop, boolean usefile);
+cinespr_event* SpawnCinematicSprite(char* name, int duration, int numframes,
 								  int framedelay, int x, int y, int scale,
 								  int endx, int endy, int endscale);
-backevent* SpawnCinematicBack(char* name, int duration, int width, int startx,
+cine_bgevent* SpawnCinematicBack(char* name, int duration, int width, int startx,
 							  int endx, int yoffset);
 
-backevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
+cine_bgevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
 								   int startx, int endx, int yoffset);
-paletteevent* SpawnCinematicPalette(char* name);
-void DrawFlic(flicevent* flic);
-void DrawCinematicBackdrop(backevent* back);
-void DrawCinematicBackground(backevent* back);
-void DrawPalette(paletteevent* event);
-void DrawCinematicSprite(spriteevent* sprite);
+cine_palevent* SpawnCinematicPalette(char* name);
+void DrawFlic(cine_event* flic);
+void DrawCinematicBackdrop(cine_bgevent* back);
+void DrawCinematicBackground(cine_bgevent* back);
+void DrawPalette(cine_palevent* event);
+void DrawCinematicSprite(cinespr_event* sprite);
 void DrawClearBuffer(void);
 void DrawBlankScreen(void);
-boolean DrawCinematicEffect(enum_eventtype type, void* effect);
-boolean UpdateCinematicBack(backevent* back);
-boolean UpdateCinematicSprite(spriteevent* sprite);
-boolean UpdateCinematicEffect(enum_eventtype type, void* effect);
-void PrecacheCinematicEffect(enum_eventtype type, void* effect);
+boolean DrawCinematicEffect(en_cinefxevent_t type, void* effect);
+boolean UpdateCinematicBack(cine_bgevent* back);
+boolean UpdateCinematicSprite(cinespr_event* sprite);
+boolean UpdateCinematicEffect(en_cinefxevent_t type, void* effect);
+void PrecacheCinematicEffect(en_cinefxevent_t type, void* effect);
 void ProfileDisplay(void);
 void DrawPostPic(int lumpnum);
 

@@ -75,14 +75,14 @@ typedef enum
 	scfp_gameready,
 	scfp_data,
 	scfp_done
-} setupcheckforpacketstate;
+} en_packetstate;
 
 typedef enum
 {
 	cs_ready,
 	cs_notarrived,
 	cs_fixing
-} en_CommandStatus;
+} en_commandstatus;
 
 typedef enum
 {

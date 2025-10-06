@@ -421,12 +421,12 @@ void MUSIC_SetSongPosition(int measure, int beat, int tick)
 	musdebug("STUB ... MUSIC_SetSongPosition().\n");
 } // MUSIC_SetSongPosition
 
-void MUSIC_GetSongPosition(songposition* pos)
+void MUSIC_GetSongPosition(songtic* pos)
 {
 	musdebug("STUB ... MUSIC_GetSongPosition().\n");
 } // MUSIC_GetSongPosition
 
-void MUSIC_GetSongLength(songposition* pos)
+void MUSIC_GetSongLength(songtic* pos)
 {
 	musdebug("STUB ... MUSIC_GetSongLength().\n");
 } // MUSIC_GetSongLength

@@ -44,11 +44,11 @@ void DrawClearBuffer(void);
 ===============
 */
 
-flicevent* SpawnCinematicFlic(char* name, boolean loop, boolean usefile)
+cine_event* SpawnCinematicFlic(char* name, boolean loop, boolean usefile)
 {
-	flicevent* f;
+	cine_event* f;
 
-	f = SafeMalloc(sizeof(flicevent));
+	f = SafeMalloc(sizeof(cine_event));
 
 	// copy name of flic
 
@@ -69,13 +69,13 @@ flicevent* SpawnCinematicFlic(char* name, boolean loop, boolean usefile)
 ===============
 */
 
-spriteevent* SpawnCinematicSprite(char* name, int duration, int numframes,
+cinespr_event* SpawnCinematicSprite(char* name, int duration, int numframes,
 								  int framedelay, int x, int y, int scale,
 								  int endx, int endy, int endscale)
 {
-	spriteevent* sprite;
+	cinespr_event* sprite;
 
-	sprite = SafeMalloc(sizeof(spriteevent));
+	sprite = SafeMalloc(sizeof(cinespr_event));
 
 	// copy name of sprite
 
@@ -110,12 +110,12 @@ spriteevent* SpawnCinematicSprite(char* name, int duration, int numframes,
 ===============
 */
 
-backevent* SpawnCinematicBack(char* name, int duration, int width, int startx,
+cine_bgevent* SpawnCinematicBack(char* name, int duration, int width, int startx,
 							  int endx, int yoffset)
 {
-	backevent* back;
+	cine_bgevent* back;
 
-	back = SafeMalloc(sizeof(backevent));
+	back = SafeMalloc(sizeof(cine_bgevent));
 
 	// copy name of back
 
@@ -140,17 +140,17 @@ backevent* SpawnCinematicBack(char* name, int duration, int width, int startx,
 ===============
 */
 
-backevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
+cine_bgevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
 								   int startx, int endx, int yoffset)
 {
-	backevent* back;
+	cine_bgevent* back;
 	lpic_t* pic1;
 	lpic_t* pic2;
 
 	pic1 = (lpic_t*)W_CacheLumpName(name, PU_CACHE, Cvt_lpic_t, 1);
 	pic2 = (lpic_t*)W_CacheLumpName(name2, PU_CACHE, Cvt_lpic_t, 1);
 
-	back = SafeMalloc(sizeof(backevent));
+	back = SafeMalloc(sizeof(cine_bgevent));
 
 	// copy name of back
 
@@ -185,11 +185,11 @@ backevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
 ===============
 */
 
-paletteevent* SpawnCinematicPalette(char* name)
+cine_palevent* SpawnCinematicPalette(char* name)
 {
-	paletteevent* p;
+	cine_palevent* p;
 
-	p = SafeMalloc(sizeof(paletteevent));
+	p = SafeMalloc(sizeof(cine_palevent));
 
 	// copy name of palette
 
@@ -241,7 +241,7 @@ void ScaleFilmPost(byte* src, byte* buf)
 =
 =================
 */
-void DrawFlic(flicevent* f)
+void DrawFlic(cine_event* f)
 {
 	byte* curpal;
 	char flicname[40];
@@ -287,7 +287,7 @@ void DrawFlic(flicevent* f)
 =================
 */
 
-void PrecacheFlic(flicevent* f)
+void PrecacheFlic(cine_event* f)
 {
 	if (f->usefile == false)
 	{
@@ -303,7 +303,7 @@ void PrecacheFlic(flicevent* f)
 ===============
 */
 
-void DrawCinematicBackground(backevent* back)
+void DrawCinematicBackground(cine_bgevent* back)
 {
 	byte* src;
 	byte* buf;
@@ -351,7 +351,7 @@ void DrawCinematicBackground(backevent* back)
 ===============
 */
 
-void DrawCinematicMultiBackground(backevent* back)
+void DrawCinematicMultiBackground(cine_bgevent* back)
 {
 	byte* src;
 	byte* buf;
@@ -396,7 +396,7 @@ void DrawCinematicMultiBackground(backevent* back)
 ===============
 */
 
-void DrawCinematicBackdrop(backevent* back)
+void DrawCinematicBackdrop(cine_bgevent* back)
 {
 	byte* src;
 	byte* shape;
@@ -449,7 +449,7 @@ void DrawCinematicBackdrop(backevent* back)
 =
 =================
 */
-void PrecacheBack(backevent* back)
+void PrecacheBack(cine_bgevent* back)
 {
 	W_CacheLumpName(back->name, PU_CACHE, CvtNull, 1);
 }
@@ -461,7 +461,7 @@ void PrecacheBack(backevent* back)
 =
 =================
 */
-void DrawCinematicSprite(spriteevent* sprite)
+void DrawCinematicSprite(cinespr_event* sprite)
 {
 	byte* shape;
 	int frac;
@@ -529,7 +529,7 @@ void DrawCinematicSprite(spriteevent* sprite)
 =
 =================
 */
-void PrecacheCinematicSprite(spriteevent* sprite)
+void PrecacheCinematicSprite(cinespr_event* sprite)
 {
 	int i;
 
@@ -548,7 +548,7 @@ void PrecacheCinematicSprite(spriteevent* sprite)
 =================
 */
 
-void DrawPalette(paletteevent* event)
+void DrawPalette(cine_palevent* event)
 {
 	byte* pal;
 
@@ -565,7 +565,7 @@ void DrawPalette(paletteevent* event)
 =================
 */
 
-void PrecachePalette(paletteevent* event)
+void PrecachePalette(cine_palevent* event)
 {
 	W_CacheLumpName(event->name, PU_CACHE, CvtNull, 1);
 }
@@ -633,7 +633,7 @@ void DrawClearBuffer(void)
 ===============
 */
 
-boolean UpdateCinematicBack(backevent* back)
+boolean UpdateCinematicBack(cine_bgevent* back)
 {
 	back->duration--;
 
@@ -652,7 +652,7 @@ boolean UpdateCinematicBack(backevent* back)
 =
 =================
 */
-boolean UpdateCinematicSprite(spriteevent* sprite)
+boolean UpdateCinematicSprite(cinespr_event* sprite)
 {
 	sprite->duration--;
 
@@ -683,7 +683,7 @@ boolean UpdateCinematicSprite(spriteevent* sprite)
 =
 =================
 */
-boolean UpdateCinematicEffect(enum_eventtype type, void* effect)
+boolean UpdateCinematicEffect(en_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{
@@ -692,11 +692,11 @@ boolean UpdateCinematicEffect(enum_eventtype type, void* effect)
 	case backdrop_scrolling:
 	case backdrop_noscrolling:
 	case background_multi:
-		return UpdateCinematicBack((backevent*)effect);
+		return UpdateCinematicBack((cine_bgevent*)effect);
 		break;
 	case sprite_background:
 	case sprite_foreground:
-		return UpdateCinematicSprite((spriteevent*)effect);
+		return UpdateCinematicSprite((cinespr_event*)effect);
 		break;
 	case flic:
 		return true;
@@ -721,35 +721,35 @@ boolean UpdateCinematicEffect(enum_eventtype type, void* effect)
 =
 =================
 */
-boolean DrawCinematicEffect(enum_eventtype type, void* effect)
+boolean DrawCinematicEffect(en_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{
 	case background_noscrolling:
 	case background_scrolling:
-		DrawCinematicBackground((backevent*)effect);
+		DrawCinematicBackground((cine_bgevent*)effect);
 		return true;
 		break;
 	case background_multi:
-		DrawCinematicMultiBackground((backevent*)effect);
+		DrawCinematicMultiBackground((cine_bgevent*)effect);
 		return true;
 		break;
 	case backdrop_scrolling:
 	case backdrop_noscrolling:
-		DrawCinematicBackdrop((backevent*)effect);
+		DrawCinematicBackdrop((cine_bgevent*)effect);
 		return true;
 		break;
 	case sprite_background:
 	case sprite_foreground:
-		DrawCinematicSprite((spriteevent*)effect);
+		DrawCinematicSprite((cinespr_event*)effect);
 		return true;
 		break;
 	case flic:
-		DrawFlic((flicevent*)effect);
+		DrawFlic((cine_event*)effect);
 		return false;
 		break;
 	case palette:
-		DrawPalette((paletteevent*)effect);
+		DrawPalette((cine_palevent*)effect);
 		return false;
 		break;
 	case fadeout:
@@ -778,7 +778,7 @@ boolean DrawCinematicEffect(enum_eventtype type, void* effect)
 =
 =================
 */
-void PrecacheCinematicEffect(enum_eventtype type, void* effect)
+void PrecacheCinematicEffect(en_cinefxevent_t type, void* effect)
 {
 	switch (type)
 	{
@@ -786,17 +786,17 @@ void PrecacheCinematicEffect(enum_eventtype type, void* effect)
 	case background_scrolling:
 	case backdrop_scrolling:
 	case backdrop_noscrolling:
-		PrecacheBack((backevent*)effect);
+		PrecacheBack((cine_bgevent*)effect);
 		break;
 	case sprite_background:
 	case sprite_foreground:
-		PrecacheCinematicSprite((spriteevent*)effect);
+		PrecacheCinematicSprite((cinespr_event*)effect);
 		break;
 	case palette:
-		PrecachePalette((paletteevent*)effect);
+		PrecachePalette((cine_palevent*)effect);
 		break;
 	case flic:
-		PrecacheFlic((flicevent*)effect);
+		PrecacheFlic((cine_event*)effect);
 		break;
 	default:;
 	}

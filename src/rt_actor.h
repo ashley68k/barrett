@@ -270,7 +270,7 @@ typedef struct b_struct
 	boolean randgibspeed;
 	int numgibs;
 	boolean elevatormusicon;
-} misc_stuff;
+} actor_misc_flags;
 
 extern boolean ludicrousgibs;
 extern objtype* PLAYER0MISSILE;
@@ -280,7 +280,7 @@ extern objtype *FIRSTACTOR, *LASTACTOR;
 extern objtype *FIRSTRAIN, *LASTRAIN;
 extern objtype* SCREENEYE;
 extern objtype *firstareaactor[NUMAREAS + 1], *lastareaactor[NUMAREAS + 1];
-extern misc_stuff mstruct, *MISCVARS;
+extern actor_misc_flags mstruct, *MISCVARS;
 extern int actorstart, actorstop;
 extern exit_t playstate;
 extern objtype *lastactive, *firstactive;

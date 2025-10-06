@@ -55,7 +55,7 @@ typedef struct
 	unsigned int measure;
 	unsigned int beat;
 	unsigned int tick;
-} songposition;
+} songtic;
 
 #define MUSIC_LoopSong (1 == 1)
 #define MUSIC_PlayOnce (!MUSIC_LoopSong)
@@ -83,8 +83,8 @@ int MUSIC_GetContext(void);
 void MUSIC_SetSongTick(unsigned long PositionInTicks);
 void MUSIC_SetSongTime(unsigned long milliseconds);
 void MUSIC_SetSongPosition(int measure, int beat, int tick);
-void MUSIC_GetSongPosition(songposition* pos);
-void MUSIC_GetSongLength(songposition* pos);
+void MUSIC_GetSongPosition(songtic* pos);
+void MUSIC_GetSongLength(songtic* pos);
 int MUSIC_FadeVolume(int tovolume, int milliseconds);
 int MUSIC_FadeActive(void);
 void MUSIC_StopFade(void);

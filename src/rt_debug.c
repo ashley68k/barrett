@@ -53,7 +53,7 @@ typedef struct
 {
 	char code[15];
 	byte length;
-} CodeStruct;
+} cheatcode_t;
 
 enum
 {
@@ -164,7 +164,7 @@ enum
 	MAXCODES
 };
 
-CodeStruct Codes[MAXCODES + 6] = {
+cheatcode_t Codes[MAXCODES + 6] = {
 	{"TIHSHO", 6},		  // richocheting rockets LT++
 	{"SIHTTNAWTNOD", 12}, // ricocheting rockets   LT++
 	{"KCITSPID", 8},	  // enable cheats

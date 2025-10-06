@@ -40,7 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =============================================================================
 */
-messagetype Messages[MAXMSGS];
+message_type Messages[MAXMSGS];
 
 /*
 =============================================================================
@@ -216,7 +216,7 @@ void DeleteMessage(int num)
 	}
 
 	SafeFree(Messages[num].text);
-	memset(&Messages[num], 0, sizeof(messagetype));
+	memset(&Messages[num], 0, sizeof(message_type));
 
 	GetMessageOrder();
 }

@@ -83,7 +83,7 @@ typedef enum
 {
 	NoMoreData,
 	KeepPlaying
-} playbackstatus;
+} snd_playstate;
 
 typedef struct VoiceNode
 {
@@ -93,7 +93,7 @@ typedef struct VoiceNode
 	wavedata wavetype;
 	char bits;
 
-	playbackstatus (*GetSound)(struct VoiceNode* voice);
+	snd_playstate (*GetSound)(struct VoiceNode* voice);
 
 	void (*mix)(unsigned long position, unsigned long rate, const char* start,
 				unsigned long length);
@@ -131,13 +131,13 @@ typedef struct
 {
 	VoiceNode* start;
 	VoiceNode* end;
-} VList;
+} VoiceList;
 
 typedef struct
 {
 	unsigned char left;
 	unsigned char right;
-} Pan;
+} AudioPan;
 
 typedef signed short MONO16;
 typedef signed char MONO8;
@@ -199,10 +199,10 @@ static void MV_PlayVoice(VoiceNode* voice);
 static void MV_StopVoice(VoiceNode* voice);
 static void MV_ServiceVoc(void);
 
-static playbackstatus MV_GetNextVOCBlock(VoiceNode* voice);
-static playbackstatus MV_GetNextDemandFeedBlock(VoiceNode* voice);
-static playbackstatus MV_GetNextRawBlock(VoiceNode* voice);
-static playbackstatus MV_GetNextWAVBlock(VoiceNode* voice);
+static snd_playstate MV_GetNextVOCBlock(VoiceNode* voice);
+static snd_playstate MV_GetNextDemandFeedBlock(VoiceNode* voice);
+static snd_playstate MV_GetNextRawBlock(VoiceNode* voice);
+static snd_playstate MV_GetNextWAVBlock(VoiceNode* voice);
 
 static void MV_ServiceRecord(void);
 static VoiceNode* MV_GetVoice(int handle);
