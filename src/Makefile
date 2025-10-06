@@ -19,14 +19,14 @@ CC ?= gcc
 CFLAGS ?= -std=c17 -g -Og
 CFLAGS += -Wall -Wextra -Wshadow -Wpedantic
 CFLAGS += $(shell sdl2-config --cflags)
-CFLAGS += $(EXTRACFLAGS)
+CFLAGS += $(EXTRACFLAGS) -fsanitize=address
 
 CPPFLAGS += -DUSE_SDL=1
 CPPFLAGS += -DPLATFORM_UNIX=1
 CPPFLAGS += -D_GNU_SOURCE
 CPPFLAGS += $(EXTRACPPFLAGS)
 
-LDFLAGS += $(EXTRALDFLAGS)
+LDFLAGS += $(EXTRALDFLAGS) -fsanitize=address -static-libasan
 
 LDLIBS += $(shell sdl2-config --libs)
 LDLIBS += -lSDL2_mixer
