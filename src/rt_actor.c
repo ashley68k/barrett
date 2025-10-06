@@ -3974,7 +3974,7 @@ void BloodDrip(objtype* ob, int tilex, int tiley)
 		bloodScale =
 			(ob->momentumx) ? (FixedDiv2(ob->momentumy, ob->momentumx)) : (0);
 		x = (dx < 0) ? (tilex << 16) : ((tilex + 1) << 16);
-		y = FixedMul(x - ob->x, scale) + ob->y;
+		y = FixedMul(x - ob->x, bloodScale) + ob->y;
 	}
 
 	else if (!dx)
@@ -3982,7 +3982,7 @@ void BloodDrip(objtype* ob, int tilex, int tiley)
 		bloodScale =
 			(ob->momentumy) ? (FixedDiv2(ob->momentumx, ob->momentumy)) : (0);
 		y = (dy < 0) ? (tiley << 16) : ((tiley + 1) << 16);
-		x = FixedMul(y - ob->y, scale) + ob->x;
+		x = FixedMul(y - ob->y, bloodScale) + ob->x;
 	}
 
 	ob->temp2 = (GameRandomNumber("BloodDrip", 0) << 9) + 0xc000;
