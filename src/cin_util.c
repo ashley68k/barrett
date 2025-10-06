@@ -30,7 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 void CinematicGetPalette(byte* pal)
 {
-	STUB_FUNCTION;
+	(void)(pal);
 }
 
 /*
@@ -45,5 +45,5 @@ void CinematicGetPalette(byte* pal)
 
 void CinematicSetPalette(byte* pal)
 {
-	STUB_FUNCTION;
+	(void)(pal);
 }

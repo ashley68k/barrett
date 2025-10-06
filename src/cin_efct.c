@@ -46,19 +46,19 @@ void DrawClearBuffer(void);
 
 flicevent* SpawnCinematicFlic(char* name, boolean loop, boolean usefile)
 {
-	flicevent* flic;
+	flicevent* f;
 
-	flic = SafeMalloc(sizeof(flicevent));
+	f = SafeMalloc(sizeof(flicevent));
 
 	// copy name of flic
 
-	strcpy(flic->name, name);
+	strcpy(f->name, name);
 
-	flic->loop = loop;
+	f->loop = loop;
 
-	flic->usefile = usefile;
+	f->usefile = usefile;
 
-	return flic;
+	return f;
 }
 
 /*
@@ -187,15 +187,15 @@ backevent* SpawnCinematicMultiBack(char* name, char* name2, int duration,
 
 paletteevent* SpawnCinematicPalette(char* name)
 {
-	paletteevent* palette;
+	paletteevent* p;
 
-	palette = SafeMalloc(sizeof(paletteevent));
+	p = SafeMalloc(sizeof(paletteevent));
 
 	// copy name of palette
 
-	strcpy(palette->name, name);
+	strcpy(p->name, name);
 
-	return palette;
+	return p;
 }
 
 /*
@@ -241,7 +241,7 @@ void ScaleFilmPost(byte* src, byte* buf)
 =
 =================
 */
-void DrawFlic(flicevent* flic)
+void DrawFlic(flicevent* f)
 {
 	byte* curpal;
 	char flicname[40];
@@ -252,20 +252,20 @@ void DrawFlic(flicevent* flic)
 
 	DrawFadeout();
 
-	if (flic->usefile == false)
+	if (f->usefile == false)
 	{
-		strcpy(flicname, flic->name);
+		strcpy(flicname, f->name);
 	}
 	else
 	{
-		strcpy(flicname, flic->name);
+		strcpy(flicname, f->name);
 		strcat(flicname, ".fli");
 	}
 
 	// med
 	//   PlayFlic ( flicname, buf, flic->usefile, flic->loop);
 
-	if (flic->loop == true)
+	if (f->loop == true)
 		ClearCinematicAbort();
 
 	DrawFadeout();
@@ -287,11 +287,11 @@ void DrawFlic(flicevent* flic)
 =================
 */
 
-void PrecacheFlic(flicevent* flic)
+void PrecacheFlic(flicevent* f)
 {
-	if (flic->usefile == false)
+	if (f->usefile == false)
 	{
-		W_CacheLumpName(flic->name, PU_CACHE, CvtNull, 1);
+		W_CacheLumpName(f->name, PU_CACHE, CvtNull, 1);
 	}
 }
 
@@ -581,19 +581,19 @@ void PrecachePalette(paletteevent* event)
 
 void DrawFadeout(void)
 {
-	byte origpal[768];
-	byte newpal[768];
+	byte opal[768];
+	byte npal[768];
 	int i, j;
 
-	CinematicGetPalette(&origpal[0]);
+	CinematicGetPalette(&opal[0]);
 	for (j = 0; j < FADEOUTTIME; j++)
 	{
 		for (i = 0; i < 768; i++)
 		{
-			newpal[i] = (origpal[i] * (FADEOUTTIME - j - 1)) / FADEOUTTIME;
+			npal[i] = (opal[i] * (FADEOUTTIME - j - 1)) / FADEOUTTIME;
 		}
 		WaitVBL();
-		CinematicSetPalette(&newpal[0]);
+		CinematicSetPalette(&npal[0]);
 		CinematicDelay();
 	}
 	VL_ClearVideo(0);
