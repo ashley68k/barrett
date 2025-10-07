@@ -99,8 +99,8 @@ void FixMapSeen(void)
 	int i;
 	int j;
 
-	for (j = 0; j < MAPSIZE; j++)
-		for (i = 0; i < MAPSIZE; i++)
+	for (j = 1; j < MAPSIZE - 1; j++)
+		for (i = 1; i < MAPSIZE - 1; i++)
 			if (!mapseen[i][j])
 			{
 				if (i == 0 &&
