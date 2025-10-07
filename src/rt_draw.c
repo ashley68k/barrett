@@ -154,8 +154,6 @@ static visobj_t* sortedvislist[MAXVISIBLE];
 
 static const fixed mindist = 0x1000;
 
-static int walltime = 0;
-
 static int weaponbobx, weaponboby;
 
 static int pretics[3];
