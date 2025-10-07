@@ -67,3 +67,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 stderr.log
+
+# clangd
+*.idx
+src/compile_commands.json
