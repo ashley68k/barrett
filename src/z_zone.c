@@ -130,7 +130,7 @@ void Z_Init(int size, int min)
 	maxsize = ((int)(Z_AvailHeap()) - size - levelzonesize);
 	if (maxsize < min)
 	{
-		UL_DisplayMemoryError(min - maxsize);
+		exit(0);
 	}
 	if (maxsize > MAXMEMORYSIZE)
 		maxsize = (MAXMEMORYSIZE - levelzonesize);

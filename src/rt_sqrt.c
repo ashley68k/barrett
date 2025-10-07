@@ -2,22 +2,6 @@
 
 #include "rt_sqrt.h"
 
-/*
-  C version of fixed-point Square Root functions
- */
-
-long FixedSqrtLP(long n) // Low  Precision (8.8)
-{
-	/*
-	   Not used, so unimplemented.
-	   If it matters, just copy the first half of the HP version,
-	   and multiply the answer by 256.
-	 */
-	STUB_FUNCTION;
-
-	return 0;
-}
-
 long FixedSqrtHP(long n) // High Precision (8.16)
 {
 	/* This is more or less a direct C transliteration of the asm code.

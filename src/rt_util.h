@@ -91,8 +91,6 @@ void MapDebug(char* error, ...) __attribute__((format(printf, 1, 2)));
 void OpenMapDebug(void);
 void UL_ColorBox(int x, int y, int w, int h, int color);
 
-void UL_DisplayMemoryError(int memneeded);
-
 int SideOfLine(int x1, int y1, int x2, int y2, int x3, int y3);
 
 void hsort(char* base, int nel, int width, int (*compare)(),
