@@ -439,7 +439,7 @@ static void StretchMemPicture()
 	dest.h = iGLOBAL_SCREENHEIGHT;
 	SDL_SoftStretch(unstretch_sdl_surface, &src, sdl_surface, &dest);
 	SDL_RenderSetLogicalSize(renderer, 320,
-							 200); // help keep aspect ratio of menus so that
+							 240); // help keep aspect ratio of menus so that
 								   // the game doesn't look stretched
 }
 
