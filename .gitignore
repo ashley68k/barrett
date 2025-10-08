@@ -73,5 +73,10 @@ stderr.log
 src/compile_commands.json
 
 # cmake
+CMakeFiles/
 cmake-build*/
 build*/
+compile_commands.json
+CMakeCache.txt
+Makefile
+cmake_install.cmake
