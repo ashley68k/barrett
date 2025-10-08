@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Barrett CI
 
 on:
   push:
@@ -17,6 +17,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev
-    - name: make
-      run: make
-      working-directory: ./src
+    - name: Create build target
+      run: cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.
+    - name: Build
+      run: cmake --build cmake-build-barrett
+

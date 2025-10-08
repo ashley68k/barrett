@@ -71,3 +71,7 @@ stderr.log
 # clangd
 *.idx
 src/compile_commands.json
+
+# cmake
+cmake-build*/
+build*/
