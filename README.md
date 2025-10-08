@@ -1,17 +1,6 @@
 # barrett
 
-A Rise of the Triad source port based on [ROTTEXPR](https://github.com/LTCHIPS/rottexpr) focused on QoL, moddability/ease of programming, and better support for modern hardware.
-
-New gameplay options inherited from ROTTEXPR:
-
-* Blitzguards being outfitted with any weapon from the missile/magic weapon
-  arsenal! Yes, that means Blitzguards can use excalibats too!
-* You can now pick up ammo from dropped missile weapons!
-* A special respawning enemy game mode called ZomROTT, where you have to gib
-  your enemies to keep them from coming back!
-* Toggleable Auto Aim
-* Auto Aim for Missile Weapons
-* ...and more
+A Rise of the Triad source port based on [ROTTEXPR](https://github.com/LTCHIPS/rottexpr) focused on QoL for players and developers, expanded compatibility, new features, and better support for modern hardware.
 
 ## Requirements
 
@@ -56,8 +45,39 @@ To build the project, you'll need the SDL2.0 development libraries
 libaries (https://www.libsdl.org/projects/SDL_mixer/, under Binary).
 
 For Linux users, install the respective SDL2 dependencies through your distro's package manager.
+Barrett can be compiled with either GCC or Clang. On Windows, use something such as MinGW's GCC.
 
-Before running make on the project, double check the first few lines of the
-`Makefile` and make sure you build the right version.
+This project currently uses CMake. You can create a build target with the command
 
-On Windows, use MinGW with gcc to build the project.
+`cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.`
+`cmake --build cmake-build-barrett`
+
+For CMAKE_BUILD_TYPE, please refer to the [CMake docs](https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html)
+You could alternatively create different build targets for registered, shareware etc.
+
+Please review the CMakeLists.txt file to customize your build options.
+
+# License
+
+Barrett is licensed under the terms of the GNU GPLv2 license.
+
+Copyright (C) 1994-1995 Apogee Software, Ltd.
+Copyright (C) 2002-2015 icculus.org, GNU/Linux port
+Copyright (C) 2017-2018 Steven LeVesque
+Copyright (C) 2025 lunarmeadow (she/her)
+Copyright (C) 2025 erysdren (it/its)
+
+The full license text for the GPLv2 can be found within `COPYING` in the root directory of this project.
+The full license text for Rise of the Triad: Dark War can be found within `ROTTLICENSE` in the root directory of this project.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
