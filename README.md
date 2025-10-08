@@ -1,4 +1,4 @@
-# barrett
+# Barrett
 
 A Rise of the Triad source port based on [ROTTEXPR](https://github.com/LTCHIPS/rottexpr) focused on QoL for players and developers, expanded compatibility, new features, and better support for modern hardware.
 
@@ -40,19 +40,21 @@ Place all those files in the same directory as the barrett executable.
 
 ## Building
 
-To build the project, you'll need the SDL2.0 development libraries
-(https://www.libsdl.org/download-2.0.php) as well as the SDL_mixer developement
+To build the project, you'll need the SDL2.0 development libraries  
+(https://www.libsdl.org/download-2.0.php) as well as the SDL_mixer developement  
 libaries (https://www.libsdl.org/projects/SDL_mixer/, under Binary).
 
-For Linux users, install the respective SDL2 dependencies through your distro's package manager.
+For Linux users, install the respective SDL2 dependencies through your distro's package manager.  
 Barrett can be compiled with either GCC or Clang. On Windows, use something such as MinGW's GCC.
 
-This project currently uses CMake. You can create a build target with the command
+This project currently uses CMake. You can create a build target and then build with the commands
 
-`cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.`
-`cmake --build cmake-build-barrett`
+```sh
+cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.
+cmake --build cmake-build-barrett
+```
 
-For CMAKE_BUILD_TYPE, please refer to the [CMake docs](https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html)
+For CMAKE_BUILD_TYPE, please refer to the [CMake docs](https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html).  
 You could alternatively create different build targets for registered, shareware etc.
 
 Please review the CMakeLists.txt file to customize your build options.
@@ -61,13 +63,13 @@ Please review the CMakeLists.txt file to customize your build options.
 
 Barrett is licensed under the terms of the GNU GPLv2 license.
 
-Copyright (C) 1994-1995 Apogee Software, Ltd.
-Copyright (C) 2002-2015 icculus.org, GNU/Linux port
-Copyright (C) 2017-2018 Steven LeVesque
-Copyright (C) 2025 lunarmeadow (she/her)
-Copyright (C) 2025 erysdren (it/its)
+Copyright (C) 1994-1995 Apogee Software, Ltd.  
+Copyright (C) 2002-2015 icculus.org, GNU/Linux port  
+Copyright (C) 2017-2018 Steven LeVesque  
+Copyright (C) 2025 lunarmeadow (she/her)  
+Copyright (C) 2025 erysdren (it/its)  
 
-The full license text for the GPLv2 can be found within `COPYING` in the root directory of this project.
+The full license text for the GPLv2 can be found within `COPYING` in the root directory of this project.  
 The full license text for Rise of the Triad: Dark War can be found within `ROTTLICENSE` in the root directory of this project.
 
 This program is free software; you can redistribute it and/or
