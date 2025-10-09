@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "watcom.h"
 // double dTopYZANGLELIMIT; in winrott.c
 #define TopYZANGLELIMIT (44 * FINEANGLES / 360) // bna added
-#define YZANGLELIMIT	(80 * FINEANGLES / 360) // bna--(30*FINEANGLES/360)
+#define YZANGLELIMIT	(30 * FINEANGLES / 360) // bna--(30*FINEANGLES/360)
 /*
 //bna++ had to limit this or the sky would fuck up
 #define TopYZANGLELIMIT  (6*FINEANGLES/360)//bna added
@@ -32,9 +32,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 TopYZANGLELIMIT
 */
 
-#define YZTILTSPEED		20 * 4	//*2 = bna added
-#define SNAPBACKSPEED	10 * 15 //*2 = bna added
-#define YZHORIZONSPEED	4 * 5	//*2 = bna added
+#define YZTILTSPEED		20
+#define SNAPBACKSPEED	10
+#define YZHORIZONSPEED	4
 #define HORIZONYZOFFSET (FINEANGLES / 4)
 #define SetPlayerHorizon(ps, hlevel)                                           \
 	{                                                                          \
