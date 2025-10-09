@@ -7,6 +7,8 @@ project(barrett
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(Math)
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
 # only ONE of these may be active at a time (or none for the default registered version)
 option(BARRETT_SHAREWARE "Shareware" OFF)
 option(BARRETT_SUPERROTT "SuperROTT" OFF)
@@ -87,7 +89,10 @@ add_library(lua STATIC
 	${lua_SOURCE_DIR}/src/linit.c
 )
 
+find_package(Math)
+
 target_include_directories(lua PUBLIC ${lua_SOURCE_DIR}/src)
+target_link_libraries(lua PUBLIC $<TARGET_NAME_IF_EXISTS:Math::Math>)
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
