@@ -554,19 +554,44 @@ typedef struct
 {
 	int width;
 	int height;
-	char* extraMenuText;
+	float aspect;
+	const char* extraMenuText;
 	int hudScale;
 } ValidResolution;
 
+#define VALID_RESOLUTION_4x3(w, h, t, s) {w, h, (320.0f/240.0f), t, s}
+#define VALID_RESOLUTION_WxH(w, h, t, s) {w, h, (float)w/(float)h, t, s}
+
 ValidResolution AvailableResolutions[] = {
-	{320, 200, NULL, 1},   {640, 400, NULL, 2},	  {640, 480, NULL, 2},
-	{800, 600, NULL, 2},   {1024, 768, NULL, 2},  {1152, 864, NULL, 2},
-	{1280, 720, NULL, 2},  {1280, 768, NULL, 2},  {1280, 800, NULL, 2},
-	{1280, 960, NULL, 2},  {1280, 1024, NULL, 2}, {1400, 1050, NULL, 2},
-	{1440, 900, NULL, 2},  {1600, 900, NULL, 2},  {1680, 1050, NULL, 2},
-	{1920, 1080, NULL, 2}, {2560, 1080, NULL, 2}, {2560, 1440, NULL, 2},
-	{3840, 2160, NULL, 2},
+	VALID_RESOLUTION_4x3(320, 200, "4:3 stretched", 1),
+	VALID_RESOLUTION_4x3(640, 400, "4:3 stretched", 1),
+
+	VALID_RESOLUTION_WxH(640, 480, "4:3", 2),
+	VALID_RESOLUTION_WxH(800, 600, "4:3", 2),
+	VALID_RESOLUTION_WxH(1024, 768, "4:3", 2),
+	VALID_RESOLUTION_WxH(1152, 864, "4:3", 2),
+	VALID_RESOLUTION_WxH(1280, 960, "4:3", 2),
+	VALID_RESOLUTION_WxH(1400, 1050, "4:3", 2),
+	VALID_RESOLUTION_WxH(1600, 1200, "4:3", 3),
+
+	VALID_RESOLUTION_WxH(1280, 768, "5:3", 2),
+	VALID_RESOLUTION_WxH(1280, 1024, "5:4", 2),
+
+	VALID_RESOLUTION_WxH(1280, 800, "8:5", 2),
+	VALID_RESOLUTION_WxH(1440, 900, "8:5", 2),
+	VALID_RESOLUTION_WxH(1680, 1050, "8:5", 2),
+
+	VALID_RESOLUTION_WxH(1280, 720, "16:9", 2),
+	VALID_RESOLUTION_WxH(1600, 900, "16:9", 2),
+	VALID_RESOLUTION_WxH(1920, 1080, "16:9", 2),
+	VALID_RESOLUTION_WxH(2560, 1440, "16:9", 2),
+	VALID_RESOLUTION_WxH(3840, 2160, "16:9", 2),
+
+	VALID_RESOLUTION_WxH(2560, 1080, "Ultrawide", 2)
 };
+
+#undef VALID_RESOLUTION_4x3
+#undef VALID_RESOLUTION_WxH
 
 CP_MenuNames* ScreenResolutions = NULL;
 
