@@ -72,10 +72,10 @@ void W_AddFile(char* _filename)
 {
 	wadinfo_t header;
 	lumpinfo_t* lump_p;
-	filelump_t *fileinfo, singleinfo;
 	unsigned i;
 	int handle, length;
 	int startlump;
+	filelump_t *fileinfo, singleinfo;
 
 	char filename[MAX_PATH];
 	char buf[MAX_PATH + 100]; // bna++
@@ -126,7 +126,7 @@ void W_AddFile(char* _filename)
 		header.numlumps = IntelLong(LONG(header.numlumps));
 		header.infotableofs = IntelLong(LONG(header.infotableofs));
 		length = header.numlumps * sizeof(filelump_t);
-		fileinfo = malloc(length);
+		fileinfo = alloca(length);
 		if (!fileinfo)
 			Error("Wad file could not allocate header info on stack");
 		lseek(handle, header.infotableofs, SEEK_SET);
@@ -154,8 +154,6 @@ void W_AddFile(char* _filename)
 		lump_p->size = LONG(fileinfo->size);
 		strncpy(lump_p->name, fileinfo->name, 8);
 	}
-	
-	free(fileinfo);
 }
 
 /*
