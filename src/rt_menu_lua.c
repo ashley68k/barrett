@@ -43,6 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rt_def.h"
 #include "rt_menu.h"
+#include "rt_menu_lua.h"
 #include "rt_sound.h"
 #include "fx_man.h"
 #include "rt_build.h"
@@ -72,3 +73,51 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rt_battl.h"
 #include "develop.h"
+
+static lua_State *MENU_LUA_STATE = NULL;
+
+static int L_rott_echo(lua_State *L)
+{
+	int i;
+	static char msg[256];
+	char *ptr = msg;
+	char *end = ptr + sizeof(msg);
+
+	for (i = 1; i <= lua_gettop(L); i++)
+	{
+		ptr += SDL_snprintf(ptr, end - ptr, "%s ", lua_tostring(L, i));
+	}
+
+	SDL_Log("%.*s", (int)sizeof(msg), msg);
+
+	return 0;
+}
+
+static luaL_Reg L_rott_reg[] = {
+	{"echo", L_rott_echo},
+	{"print", L_rott_echo},
+	{NULL, NULL}
+};
+
+int luaopen_rott(lua_State *L)
+{
+	luaL_newlib(L, L_rott_reg);
+	return 1;
+}
+
+void LCP_Init(void)
+{
+	MENU_LUA_STATE = luaL_newstate();
+	if (!MENU_LUA_STATE)
+		return;
+
+	luaopen_math(MENU_LUA_STATE);
+	luaopen_rott(MENU_LUA_STATE);
+}
+
+void LCP_Quit(void)
+{
+	if (MENU_LUA_STATE)
+		lua_close(MENU_LUA_STATE);
+	MENU_LUA_STATE = NULL;
+}
