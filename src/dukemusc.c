@@ -190,6 +190,8 @@ int MUSIC_Init(int SoundCard, int Address)
 	// add soundfonts
     const char *soundfonts = Mix_GetSoundFonts();
 
+	SDL_SetHint("SDL_HINT_AUDIO_RESAMPLING_MODE", "best");
+
     if (soundfonts)
     {
         snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts);

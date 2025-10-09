@@ -219,7 +219,7 @@ int SD_Startup(boolean bombonerror)
 		bits = 8;
 	}
 
-	status = FX_Init(card, voices, channels, bits, 11025);
+	status = FX_Init(card, voices, channels, bits, 44100);
 
 	if (status != FX_Ok)
 	{
