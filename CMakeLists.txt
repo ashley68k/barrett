@@ -27,6 +27,8 @@ else()
 	message(STATUS "Building Registered version")
 endif()
 
+cmake_policy(SET CMP0135 NEW)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -42,7 +44,50 @@ FetchContent_Declare(
 	EXCLUDE_FROM_ALL
 )
 
-FetchContent_MakeAvailable(adlmidi inih)
+FetchContent_Declare(
+	lua
+	URL https://www.lua.org/ftp/lua-5.4.8.tar.gz
+	URL_HASH MD5=81cf5265b8634967d8a7480d238168ce
+)
+
+FetchContent_MakeAvailable(adlmidi inih lua)
+
+add_library(lua STATIC
+	${lua_SOURCE_DIR}/src/lapi.c
+	${lua_SOURCE_DIR}/src/lcode.c
+	${lua_SOURCE_DIR}/src/lctype.c
+	${lua_SOURCE_DIR}/src/ldebug.c
+	${lua_SOURCE_DIR}/src/ldo.c
+	${lua_SOURCE_DIR}/src/ldump.c
+	${lua_SOURCE_DIR}/src/lfunc.c
+	${lua_SOURCE_DIR}/src/lgc.c
+	${lua_SOURCE_DIR}/src/llex.c
+	${lua_SOURCE_DIR}/src/lmem.c
+	${lua_SOURCE_DIR}/src/lobject.c
+	${lua_SOURCE_DIR}/src/lopcodes.c
+	${lua_SOURCE_DIR}/src/lparser.c
+	${lua_SOURCE_DIR}/src/lstate.c
+	${lua_SOURCE_DIR}/src/lstring.c
+	${lua_SOURCE_DIR}/src/ltable.c
+	${lua_SOURCE_DIR}/src/ltm.c
+	${lua_SOURCE_DIR}/src/lundump.c
+	${lua_SOURCE_DIR}/src/lvm.c
+	${lua_SOURCE_DIR}/src/lzio.c
+	${lua_SOURCE_DIR}/src/lauxlib.c
+	${lua_SOURCE_DIR}/src/lbaselib.c
+	${lua_SOURCE_DIR}/src/lcorolib.c
+	${lua_SOURCE_DIR}/src/ldblib.c
+	${lua_SOURCE_DIR}/src/liolib.c
+	${lua_SOURCE_DIR}/src/lmathlib.c
+	${lua_SOURCE_DIR}/src/loadlib.c
+	${lua_SOURCE_DIR}/src/loslib.c
+	${lua_SOURCE_DIR}/src/lstrlib.c
+	${lua_SOURCE_DIR}/src/ltablib.c
+	${lua_SOURCE_DIR}/src/lutf8lib.c
+	${lua_SOURCE_DIR}/src/linit.c
+)
+
+target_include_directories(lua PUBLIC ${lua_SOURCE_DIR}/src)
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
@@ -101,6 +146,7 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/rt_main.c
 	${PROJECT_SOURCE_DIR}/src/rt_map.c
 	${PROJECT_SOURCE_DIR}/src/rt_menu.c
+	${PROJECT_SOURCE_DIR}/src/rt_menu_lua.c
 	${PROJECT_SOURCE_DIR}/src/rt_msg.c
 	${PROJECT_SOURCE_DIR}/src/rt_net.c
 	${PROJECT_SOURCE_DIR}/src/rt_playr.c
@@ -129,7 +175,7 @@ set(BARRETT_SOURCES
 
 add_executable(barrett ${BARRETT_SOURCES})
 target_include_directories(barrett PRIVATE ${inih_SOURCE_DIR})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math> lua)
 target_link_libraries(barrett PRIVATE audiolib)
 target_link_libraries(barrett PUBLIC $<$<BOOL:${BARRETT_USEASAN}>:ASAN::ASAN>)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
