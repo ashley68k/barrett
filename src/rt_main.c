@@ -1651,6 +1651,8 @@ void QuitGame(void)
 
 	ClearScanCodes();
 
+	W_FreeLumps();
+
 	exit(0);
 }
 

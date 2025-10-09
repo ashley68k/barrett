@@ -48,6 +48,8 @@ void** lumpcache;
 
 static lumpinfo_t* lumpinfo; // location of each lump on disk
 
+filelump_t *fileinfo, singleinfo;
+
 /*
 ============================================================================
 
@@ -75,7 +77,6 @@ void W_AddFile(char* _filename)
 	unsigned i;
 	int handle, length;
 	int startlump;
-	filelump_t *fileinfo, singleinfo;
 
 	char filename[MAX_PATH];
 	char buf[MAX_PATH + 100]; // bna++
@@ -126,7 +127,7 @@ void W_AddFile(char* _filename)
 		header.numlumps = IntelLong(LONG(header.numlumps));
 		header.infotableofs = IntelLong(LONG(header.infotableofs));
 		length = header.numlumps * sizeof(filelump_t);
-		fileinfo = alloca(length);
+		fileinfo = malloc(length);
 		if (!fileinfo)
 			Error("Wad file could not allocate header info on stack");
 		lseek(handle, header.infotableofs, SEEK_SET);
@@ -154,6 +155,11 @@ void W_AddFile(char* _filename)
 		lump_p->size = LONG(fileinfo->size);
 		strncpy(lump_p->name, fileinfo->name, 8);
 	}
+}
+
+void W_FreeLumps(void)
+{
+	free(lumpinfo);
 }
 
 /*
