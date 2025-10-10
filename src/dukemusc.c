@@ -52,8 +52,10 @@ static int initialized_debugging = 0;
 
 static size_t music_songdatasize = 0;
 
+extern char ApogeePath[256];
+
 static char MUSIC_SoundFonts[2048];
-static const char soundfonts_fallback[] = "/usr/share/soundfonts/default.sf2;/usr/share/sounds/sf2/default-GM.sf2;/usr/share/sounds/sf2/FluidR3_GM.sf2";
+static char soundfonts_fallback[] = "/usr/share/soundfonts/default.sf2;/usr/share/sounds/sf2/default-GM.sf2;/usr/share/sounds/sf2/FluidR3_GM.sf2";
 
 // This gets called all over the place for information and debugging messages.
 //  If the user set the DUKESND_DEBUG environment variable, the messages
@@ -172,6 +174,10 @@ int MUSIC_Init(int SoundCard, int Address)
 {
 	init_debugging();
 
+	char localsf2[256];
+
+	GetPathFromEnvironment(localsf2, ApogeePath, "barrett.sf2");
+
 	musdebug("INIT! card=>%d, address=>%d...", SoundCard, Address);
 
 	if (music_initialized)
@@ -198,7 +204,7 @@ int MUSIC_Init(int SoundCard, int Address)
     }
     else
     {
-        snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts_fallback);
+        snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s;%s", soundfonts_fallback, localsf2);
     }
 
     printf("Using soundfonts path string \"%s\"\n", MUSIC_SoundFonts);
@@ -317,8 +323,6 @@ int MUSIC_PlaySong(char* song, int size, int loopflag)
 
 	return (MUSIC_Ok);
 } // MUSIC_PlaySong
-
-extern char ApogeePath[256];
 
 void MUSIC_SetContext(int context)
 {
