@@ -26,7 +26,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //******************************************************************************
 
-
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 
 //******************************************************************************
 //
@@ -49,6 +51,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // PROTOTYPES
 //
 //****************************************************************************
+
+#define LUA_ROTTLIBNAME "rott"
+
+int luaopen_rott(lua_State *L);
 
 void LCP_Init(void);
 void LCP_Quit(void);

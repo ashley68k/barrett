@@ -34,10 +34,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <unistd.h>
 #include "SDL2/SDL.h"
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -80,8 +76,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //=============================================================================
 
-#define LUA_ROTTLIBNAME "rott"
-
 static int L_rott_echo(lua_State *L)
 {
 	int i;
@@ -99,9 +93,16 @@ static int L_rott_echo(lua_State *L)
 	return 0;
 }
 
+static int L_rott_quit(lua_State *L)
+{
+	(void)(L);
+	return 0;
+}
+
 static luaL_Reg L_rott_reg[] = {
 	{"echo", L_rott_echo},
 	{"print", L_rott_echo},
+	{"quit", L_rott_quit},
 	{NULL, NULL}
 };
 
