@@ -13,10 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install SDL2 + mixer dev libraries
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-mixer-dev
+    - uses: libsdl-org/setup-sdl@main
+        id: sdl
+        with:
+          install-linux-dependencies: true
+          version: 2-latest
+          version-sdl-image: 2-latest
+
     - name: Create build target
       run: cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.
     - name: Build
