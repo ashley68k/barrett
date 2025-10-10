@@ -18,7 +18,7 @@ jobs:
       with:
         install-linux-dependencies: true
         version: 2-latest
-        version-sdl-image: 2-latest
+        version-sdl-mixer: 2-latest
 
     - name: Create build target
       run: cmake -Bcmake-build-barrett -DCMAKE_BUILD_TYPE=Release -S.
