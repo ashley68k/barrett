@@ -35,6 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_stat.h"
 #include "rt_vid.h"
 #include "rt_menu.h"
+#include "rt_menu_lua.h"
 #include "rt_sound.h"
 #include "watcom.h"
 #include "scriplib.h"
@@ -251,6 +252,8 @@ int main(int argc, char* argv[])
 	}
 
 	SetRottScreenRes(iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+
+	LCP_Init();
 
 	//   if (modemgame==true)
 	//      {
@@ -1214,6 +1217,7 @@ void GameLoop(void)
 				}
 				NoWait = false;
 				SwitchPalette(origpal, 35);
+				LCP_MainMenu();
 				CP_MainMenu();
 			}
 			break;
@@ -1636,6 +1640,8 @@ void ShutDown(void)
 
 void QuitGame(void)
 {
+	LCP_Quit();
+
 	MU_FadeOut(200);
 	while (MU_FadeActive())
 	{
