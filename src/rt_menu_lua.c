@@ -74,7 +74,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_battl.h"
 #include "develop.h"
 
-static lua_State *MENU_LUA_STATE = NULL;
+//=============================================================================
+//
+// Lua ROTT Game Library
+//
+//=============================================================================
+
+#define LUA_ROTTLIBNAME "rott"
 
 static int L_rott_echo(lua_State *L)
 {
@@ -105,14 +111,37 @@ int luaopen_rott(lua_State *L)
 	return 1;
 }
 
+//=============================================================================
+//
+// Lua Control Panel (LCP)
+//
+//=============================================================================
+
+static lua_State *MENU_LUA_STATE = NULL;
+
+static const luaL_Reg MENU_LUA_LIBS[] = {
+	{LUA_GNAME, luaopen_base},
+	{LUA_TABLIBNAME, luaopen_table},
+	{LUA_STRLIBNAME, luaopen_string},
+	{LUA_MATHLIBNAME, luaopen_math},
+	{LUA_UTF8LIBNAME, luaopen_utf8},
+	{LUA_ROTTLIBNAME, luaopen_rott},
+	{NULL, NULL}
+};
+
 void LCP_Init(void)
 {
+	const luaL_Reg *lib;
+
 	MENU_LUA_STATE = luaL_newstate();
 	if (!MENU_LUA_STATE)
 		return;
 
-	luaopen_math(MENU_LUA_STATE);
-	luaopen_rott(MENU_LUA_STATE);
+	for (lib = MENU_LUA_LIBS; lib->func; lib++)
+	{
+		luaL_requiref(MENU_LUA_STATE, lib->name, lib->func, 1);
+		lua_pop(MENU_LUA_STATE, 1);
+	}
 }
 
 void LCP_Quit(void)
