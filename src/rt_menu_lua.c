@@ -179,8 +179,17 @@ static void iterate_menu_table(lua_State *L, int index)
 		lua_pushvalue(L, -2);
 		// stack now contains: -1 => key; -2 => value; -3 => key; -4 => table
 		const char *key = lua_tostring(L, -1);
-		const char *value = lua_tostring(L, -2);
-		printf("%s => %s\n", key, value);
+		if (strcmp(key, "items") == 0)
+		{
+			printf("%s => {\n", key);
+			iterate_menu_table(L, -2);
+			printf("}\n");
+		}
+		else
+		{
+			const char *value = lua_tostring(L, -2);
+			printf("%s => %s\n", key, value);
+		}
 		// pop value + copy of key, leaving original key
 		lua_pop(L, 2);
 		// stack now contains: -1 => key; -2 => table
