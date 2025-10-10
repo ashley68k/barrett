@@ -96,6 +96,7 @@ static int L_rott_echo(lua_State *L)
 static int L_rott_quit(lua_State *L)
 {
 	(void)(L);
+	QuitGame();
 	return 0;
 }
 
@@ -118,6 +119,7 @@ int luaopen_rott(lua_State *L)
 //
 //=============================================================================
 
+static boolean MENU_LUA_INITIALIZED = false;
 static lua_State *MENU_LUA_STATE = NULL;
 
 static const luaL_Reg MENU_LUA_LIBS[] = {
@@ -134,6 +136,9 @@ void LCP_Init(void)
 {
 	const luaL_Reg *lib;
 
+	if (MENU_LUA_INITIALIZED)
+		return;
+
 	MENU_LUA_STATE = luaL_newstate();
 	if (!MENU_LUA_STATE)
 		return;
@@ -143,11 +148,72 @@ void LCP_Init(void)
 		luaL_requiref(MENU_LUA_STATE, lib->name, lib->func, 1);
 		lua_pop(MENU_LUA_STATE, 1);
 	}
+
+	MENU_LUA_INITIALIZED = true;
 }
 
 void LCP_Quit(void)
 {
+	if (!MENU_LUA_INITIALIZED)
+		return;
 	if (MENU_LUA_STATE)
 		lua_close(MENU_LUA_STATE);
 	MENU_LUA_STATE = NULL;
+	MENU_LUA_INITIALIZED = false;
+}
+
+// https://stackoverflow.com/a/6142700
+static void iterate_menu_table(lua_State *L, int index)
+{
+	// Push another reference to the table on top of the stack (so we know
+	// where it is, and this function can work for negative, positive and
+	// pseudo indices
+	lua_pushvalue(L, index);
+	// stack now contains: -1 => table
+	lua_pushnil(L);
+	// stack now contains: -1 => nil; -2 => table
+	while (lua_next(L, -2))
+	{
+		// stack now contains: -1 => value; -2 => key; -3 => table
+		// copy the key so that lua_tostring does not modify the original
+		lua_pushvalue(L, -2);
+		// stack now contains: -1 => key; -2 => value; -3 => key; -4 => table
+		const char *key = lua_tostring(L, -1);
+		const char *value = lua_tostring(L, -2);
+		printf("%s => %s\n", key, value);
+		// pop value + copy of key, leaving original key
+		lua_pop(L, 2);
+		// stack now contains: -1 => key; -2 => table
+	}
+	// stack now contains: -1 => table (when lua_next returns 0 it pops the key
+	// but does not push anything.)
+	// Pop table
+	lua_pop(L, 1);
+	// Stack is now the same as it was on entry to this function
+}
+
+void LCP_MainMenu(void)
+{
+	// setup menu
+	SetupMenuBuf();
+	SetUpControlPanel();
+
+	// load main menu script
+	if (luaL_dofile(MENU_LUA_STATE, "res/menus/main.lua") != LUA_OK)
+		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
+
+	// TEMP
+	iterate_menu_table(MENU_LUA_STATE, -1);
+
+#if 0
+	// run menu loop
+	while (1)
+	{
+		IN_ClearKeysDown();
+	}
+#endif
+
+	// cleanup menu
+	CleanUpControlPanel();
+	ShutdownMenuBuf();
 }

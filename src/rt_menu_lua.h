@@ -58,5 +58,6 @@ int luaopen_rott(lua_State *L);
 
 void LCP_Init(void);
 void LCP_Quit(void);
+void LCP_MainMenu(void);
 
 #endif
