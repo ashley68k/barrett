@@ -122,8 +122,11 @@ void W_AddFile(char* _filename)
 		if (!quiet)
 			printf("    Adding %s.\n", filename);
 		read(handle, &header, sizeof(header));
-		if (strncmp(header.identification, "IWAD", 4))
-			Error("Wad file %s doesn't have IWAD id\n", filename);
+
+		if (strncmp(header.identification, "IWAD", 4) &&
+			strncmp(header.identification, "PWAD", 4))
+			Error("Input file %s doesn't have WAD magic!\n", filename);
+
 		header.numlumps = IntelLong(LONG(header.numlumps));
 		header.infotableofs = IntelLong(LONG(header.infotableofs));
 		length = header.numlumps * sizeof(filelump_t);
