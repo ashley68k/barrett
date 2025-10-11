@@ -4920,14 +4920,15 @@ void DrawExtOptionsMenu(void)
 	FlipMenuBuf();
 }
 
-static char* ExtOptionsDesc[7] = {
+static char* ExtOptionsDesc[8] = {
 	"Allow mouse look.",
 	"Invert the mouse.",
 	"Move forward and backward using mouse.",
 	"Enable Crosshairs.",
 	"Allow Jumping (may completely break levels)",
 	"Missile weapons are auto aimed after 1st shot.",
-	"Allow auto aim."};
+	"Allow auto aim.",
+	"Use OPL emulation for MIDI playback."};
 
 void DrawExtOptionDescription(int w)
 {
