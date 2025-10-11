@@ -75,6 +75,7 @@ int FXvolume = 196;
 
 boolean mouseenabled = 1;
 boolean usemouselook = 0;
+boolean useoplmusic = 0;
 int inverse_mouse = 1; // set  to -1 to invert mouse
 boolean usejump = 0;
 boolean sdl_fullscreen = 1;
@@ -435,6 +436,9 @@ boolean ParseConfigFile(void)
 
 		// Read in UseMouseLook
 		ReadBoolean("UseMouseLook", &usemouselook);
+
+		// Read in UseOPLMusic
+		ReadBoolean("Use", &useoplmusic);
 
 		ReadInt("InverseMouse", &inverse_mouse);
 
@@ -1656,6 +1660,13 @@ void WriteConfig(void)
 	SafeWriteString(file, "; 1 - UseMouseLook Enabled\n");
 	SafeWriteString(file, "; 0 - UseMouseLook Disabled\n");
 	WriteParameter(file, "UseMouseLook     ", usemouselook);
+
+	// Write out UseOPLMusic
+	SafeWriteString(file, "\n;\n");
+	SafeWriteString(file, "; 1 - UseOPLMusic Enabled\n");
+	SafeWriteString(file, "; 0 - UseOPLMusic Disabled\n");
+	WriteParameter(file, "UseOPLMusic      ", useoplmusic);
+
 
 	// Write out InverseMouse
 	SafeWriteString(file, "\n;\n");
