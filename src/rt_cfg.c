@@ -438,7 +438,7 @@ boolean ParseConfigFile(void)
 		ReadBoolean("UseMouseLook", &usemouselook);
 
 		// Read in UseOPLMusic
-		ReadBoolean("Use", &useoplmusic);
+		ReadBoolean("UseOPLMusic", &useoplmusic);
 
 		ReadInt("InverseMouse", &inverse_mouse);
 
