@@ -28,7 +28,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <stdio.h>
 #include "rt_def.h"
-#include "task_man.h"
 #include "isr.h"
 #include "rt_in.h"
 #include "rt_util.h"
