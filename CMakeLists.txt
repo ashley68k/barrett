@@ -43,8 +43,8 @@ set(AUDIOLIB_SOURCES
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
-if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "CLANG")
-	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wshadow -Wpedantic)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 set(BARRETT_SOURCES
