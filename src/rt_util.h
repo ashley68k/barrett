@@ -34,6 +34,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "develop.h"
 
+enum COLORS
+{
+	BLACK,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	LIGHTGRAY,
+	DARKGRAY,
+	LIGHTBLUE,
+	LIGHTGREEN,
+	LIGHTCYAN,
+	LIGHTRED,
+	LIGHTMAGENTA,
+	YELLOW,
+	WHITE
+};
+
 extern int egacolor[16];
 extern byte* origpal;
 extern int _argc;

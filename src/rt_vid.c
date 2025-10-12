@@ -34,7 +34,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_main.h"
 #include "z_zone.h"
 #include "lumpy.h"
-#include "rt_vh_a.h"
 #include "isr.h"
 #include "rt_view.h"
 #include "cin_efct.h"

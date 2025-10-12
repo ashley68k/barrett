@@ -34,7 +34,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "_rt_in.h"
 #include "isr.h"
 #include "rt_util.h"
-#include "rt_vh_a.h"
 #include "rt_cfg.h"
 #include "rt_msg.h"
 #include "rt_playr.h"
@@ -438,10 +437,6 @@ void IN_GetJoyAbs(word joy, word* xp, word* yp)
 
 	*xp = Joy_x;
 	*yp = Joy_y;
-}
-
-void JoyStick_Vals(void)
-{
 }
 
 //******************************************************************************
