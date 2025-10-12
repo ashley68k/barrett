@@ -90,4 +90,6 @@ void VL_DrawLine(int x1, int y1, int x2, int y2, byte color);
 
 void DrawXYPic(int x, int y, int shapenum);
 
+void VH_UpdateScreen(void);
+
 #endif
