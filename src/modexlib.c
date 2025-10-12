@@ -30,7 +30,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "modexlib.h"
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
-#include "myprint.h"
 #include "rt_view.h"
 #include "queue.h"
 #include "lumpy.h"

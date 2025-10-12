@@ -40,7 +40,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_rand.h"
 #include "rt_game.h"
 #include "rt_draw.h"
-#include "myprint.h"
 #include "rt_debug.h"
 #include "rt_view.h"
 #include "rt_battl.h"
