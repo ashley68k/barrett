@@ -42,6 +42,13 @@ set(AUDIOLIB_SOURCES
 )
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})
+
+add_library(adlmidi INTERFACE)
+
+target_include_directories(adlmidi INTERFACE ${SDL2_MIXER_INCLUDE_DIRS})
+target_include_directories(adlmidi INTERFACE ${SDL2_INCLUDE_DIRS})
+target_link_libraries(adlmidi INTERFACE SDL2::SDL2)
+
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wpedantic)
