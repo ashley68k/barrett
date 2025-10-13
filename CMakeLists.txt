@@ -24,6 +24,17 @@ else()
 	message(STATUS "Building Registered version")
 endif()
 
+include(FetchContent)
+
+FetchContent_Declare(
+	adlmidi
+	GIT_REPOSITORY https://github.com/Wohlstand/libADLMIDI.git
+	GIT_TAG v1.6.1
+	EXCLUDE_FROM_ALL
+)
+
+FetchContent_MakeAvailable(adlmidi)
+
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
@@ -42,12 +53,6 @@ set(AUDIOLIB_SOURCES
 )
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})
-
-add_library(adlmidi INTERFACE)
-
-target_include_directories(adlmidi INTERFACE ${SDL2_MIXER_INCLUDE_DIRS})
-target_include_directories(adlmidi INTERFACE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(adlmidi INTERFACE SDL2::SDL2)
 
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
@@ -108,7 +113,7 @@ set(BARRETT_SOURCES
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI)
 target_link_libraries(barrett PRIVATE audiolib)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)
