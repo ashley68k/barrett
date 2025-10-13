@@ -163,8 +163,10 @@ void LCP_Quit(void)
 }
 
 // https://stackoverflow.com/a/6142700
-static void iterate_menu_table(lua_State *L, int index)
+static void iterate_menu_table(lua_State *L, int index, int (*callback)(const char *key, const char *value, void *user), void *user)
 {
+	const char *key = NULL, *value = NULL;
+	boolean done = false;
 	// Push another reference to the table on top of the stack (so we know
 	// where it is, and this function can work for negative, positive and
 	// pseudo indices
@@ -178,21 +180,23 @@ static void iterate_menu_table(lua_State *L, int index)
 		// copy the key so that lua_tostring does not modify the original
 		lua_pushvalue(L, -2);
 		// stack now contains: -1 => key; -2 => value; -3 => key; -4 => table
-		const char *key = lua_tostring(L, -1);
-		if (strcmp(key, "items") == 0)
+		key = lua_tostring(L, -1);
+		if (lua_istable(L, -2))
 		{
-			printf("%s => {\n", key);
-			iterate_menu_table(L, -2);
-			printf("}\n");
+			iterate_menu_table(L, -2, callback, user);
 		}
 		else
 		{
-			const char *value = lua_tostring(L, -2);
-			printf("%s => %s\n", key, value);
+			value = lua_tostring(L, -2);
+			if (callback)
+				if (callback(key, value, user))
+					done = true;
 		}
 		// pop value + copy of key, leaving original key
 		lua_pop(L, 2);
 		// stack now contains: -1 => key; -2 => table
+		if (done)
+			break;
 	}
 	// stack now contains: -1 => table (when lua_next returns 0 it pops the key
 	// but does not push anything.)
@@ -201,8 +205,21 @@ static void iterate_menu_table(lua_State *L, int index)
 	// Stack is now the same as it was on entry to this function
 }
 
+static int find_title(const char *key, const char *value, void *user)
+{
+	if (strcmp(key, "title") == 0)
+	{
+		strncpy((char *)user, value, 64);
+		return 1;
+	}
+
+	return 0;
+}
+
 void LCP_MainMenu(void)
 {
+	char title[64];
+
 	// setup menu
 	SetupMenuBuf();
 	SetUpControlPanel();
@@ -212,15 +229,23 @@ void LCP_MainMenu(void)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
 	// TEMP
-	iterate_menu_table(MENU_LUA_STATE, -1);
+	iterate_menu_table(MENU_LUA_STATE, -1, find_title, (void *)title);
 
-#if 0
 	// run menu loop
 	while (1)
 	{
 		IN_ClearKeysDown();
+
+		EnableScreenStretch();
+		SetAlternateMenuBuf();
+		ClearMenuBuf();
+
+		SetMenuTitle(title);
+
+		DisplayInfo(0);
+
+		FlipMenuBuf();
 	}
-#endif
 
 	// cleanup menu
 	CleanUpControlPanel();
