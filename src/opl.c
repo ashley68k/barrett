@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
-static Uint32 is_playing = 0;
+static boolean isPlaying = 0;
 
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
@@ -50,11 +50,12 @@ void OPL_Init()
     }
 
     adl_switchEmulator(midi_player, ADLMIDI_EMU_DOSBOX);
-    adl_setNumChips(midi_player, 1);
+    adl_setNumChips(midi_player, 2);
     
+    adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
+
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
-    adl_setBank(midi_player, 70); // ROTT bank
-    adl_setLoopEnabled(midi_player, 1);
+    adl_setBank(midi_player, 72); // ROTT bank
 
     Mix_HookMusic(OPLcallback, midi_player);
 
@@ -102,33 +103,35 @@ void OPL_Play(char* buffer, int size)
         fprintf(stderr, "Couldn't open music file: %s\n", adl_errorInfo(midi_player));
     }
 
-    is_playing = 1;
+    isPlaying = true;
     SDL_PauseAudio(0);
 }
 
 void OPL_Stop()
 {
-    is_playing = 0;
-    stopsig = true;
+    isPlaying = false;
 }
 
 void OPL_Pause()
 {
-    is_playing = 0;
+    isPlaying = false;
+}
+
+int OPL_IsPlaying()
+{
+    return isPlaying;
+}
+
+void OPL_SetLoop(int loopFlag)
+{
+    adl_setLoopEnabled(midi_player, loopFlag);
 }
 
 void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 {
-    if (!is_playing)
+    if (!isPlaying)
       return;
 
-    if(stopsig)
-    {
-        stopsig = false;
-        SDL_memset(stream, 0, len);
-    }
-
-    /* Convert bytes length into total count of samples in all channels */
     int samples_count = len / s_audioFormat.containerSize;
 
     samples_count = adl_playFormat(cbFunc, samples_count,
@@ -138,7 +141,7 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 
     if(samples_count <= 0)
     {
-        is_playing = 0;
+        isPlaying = false;
         SDL_memset(stream, 0, len);
     }
 }

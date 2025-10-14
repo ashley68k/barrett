@@ -25,5 +25,7 @@ void OPL_Init();
 void OPL_Play(char* buffer, int size);
 void OPL_Stop();
 void OPL_Pause();
+void OPL_SetLoop(int loopFlag);
+int OPL_IsPlaying();
 
 #endif

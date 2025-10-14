@@ -271,7 +271,10 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
-	return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
+	if(useoplmusic)
+		return OPL_IsPlaying();
+	else
+		return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
 } // MUSIC_SongPlaying
 
 void MUSIC_Continue(void)
@@ -313,7 +316,10 @@ int MUSIC_StopSong(void)
 int MUSIC_PlaySong(char* song, int size, int loopflag)
 {
 	if(useoplmusic)
+	{
+		OPL_SetLoop(loopflag);
 		OPL_Play(song, size);
+	}
 	else
 	{
 		MUSIC_StopSong();
