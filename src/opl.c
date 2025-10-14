@@ -29,7 +29,7 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
 static boolean isPlaying = 0;
 
-double volume = 5;
+double volume = 2;
 
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
@@ -55,7 +55,7 @@ void OPL_Init()
     adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
 
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
-    adl_setBank(midi_player, 72); // ROTT bank
+    adl_setBank(midi_player, 70); // ROTT bank
 
     Mix_HookMusic(OPLcallback, midi_player);
 
