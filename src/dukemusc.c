@@ -246,7 +246,10 @@ void MUSIC_SetMaxFMMidiChannel(int channel)
 
 void MUSIC_SetVolume(int volume)
 {
-	Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
+	if(useoplmusic)
+		OPL_SetVolume(volume >> 1);
+	else
+		Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
 } // MUSIC_SetVolume
 
 void MUSIC_SetMidiChannelVolume(int channel, int volume)

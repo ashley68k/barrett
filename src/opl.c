@@ -29,7 +29,7 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
 static boolean isPlaying = 0;
 
-double volume = 2;
+double volume = 0;
 
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
@@ -101,10 +101,25 @@ void OPL_Play(char* buffer, int size)
     if(adl_openData(midi_player, buffer, size) < 0)
     {
         fprintf(stderr, "Couldn't open music file: %s\n", adl_errorInfo(midi_player));
-    }
+    }   
 
     isPlaying = true;
     SDL_PauseAudio(0);
+}
+
+void OPL_SetVolume(double newVol)
+{
+    // newvol/127 = normalize to 0.0-1.0
+    // y = 10 * (newVol / 127) ^ 3
+    // essentially, 0.0-10.0f scaled to cube of volumescale
+    double volumescale = newVol / 127;
+    volume = 10 * pow(volumescale, 2);
+
+    // bottom out at 1, unless completely mute
+    if(volume < 1 && volume)
+        volume = 1;
+
+    printf("new volume: %f\n", volume);
 }
 
 void OPL_Stop()
@@ -141,16 +156,15 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 
     // assuming signed 16-bit due to that being used for Mix_OpenAudio
     int16_t* sampleBuf = (int16_t*)stream;
-    double realVol = volume * volume;
 
     for(int i = 0; i < samples_count; i++)
     {
-        double clampVal = (double)sampleBuf[i] * realVol;
+        double clampVal = (double)sampleBuf[i] * volume;
 
         clampVal = clampVal > INT16_MAX ? INT16_MAX : 
                    clampVal < INT16_MIN ? INT16_MIN 
                    : clampVal;
-
+        
         sampleBuf[i] = (int16_t)clampVal;
     }
 
