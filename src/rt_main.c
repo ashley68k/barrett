@@ -26,10 +26,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include <signal.h>
 
-#if USE_SDL
 /* Need to redefine main to SDL_main on some platforms... */
 #include "SDL2/SDL.h"
-#endif
 
 #include "rt_actor.h"
 #include "rt_stat.h"
@@ -2417,7 +2415,6 @@ void PollKeyboard(void)
 		}
 #endif
 	}
-#ifdef USE_SDL
 	/* SDL doesn't send proper release events for these */
 	if (Keystate[sc_CapsLock])
 	{
@@ -2431,7 +2428,6 @@ void PollKeyboard(void)
 		if (Keystate[0x45] == 3)
 			Keystate[0x45] = 0;
 	}
-#endif
 }
 
 #if SAVE_SCREEN

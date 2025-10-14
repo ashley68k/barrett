@@ -14,9 +14,7 @@
 
 #include "rt_def.h"
 
-#if defined(USE_SDL)
 #include "SDL2/SDL.h"
-#endif
 
 /*
   Copied over from Wolf3D Linux: http://www.icculus.org/wolf3d/
@@ -277,8 +275,6 @@ void crash_print()
 	printf("OH NO OH NO ROTT CRASHED!\n");
 	printf("Here is where:\n");
 	print_stack(1);
-#if defined(USE_SDL)
 	atexit(SDL_Quit);
-#endif
 	exit(1);
 }
