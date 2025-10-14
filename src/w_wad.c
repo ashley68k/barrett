@@ -48,8 +48,6 @@ void** lumpcache;
 
 static lumpinfo_t* lumpinfo; // location of each lump on disk
 
-filelump_t *fileinfo, singleinfo;
-
 /*
 ============================================================================
 
@@ -72,6 +70,7 @@ filelump_t *fileinfo, singleinfo;
 
 void W_AddFile(char* _filename)
 {
+	filelump_t *fileinfo = NULL, *fileinfo_ptr = NULL, singleinfo;
 	wadinfo_t header;
 	lumpinfo_t* lump_p;
 	unsigned i;
@@ -110,7 +109,7 @@ void W_AddFile(char* _filename)
 		// single lump file
 		if (!quiet)
 			printf("    Adding single file %s.\n", filename);
-		fileinfo = &singleinfo;
+		fileinfo_ptr = &singleinfo;
 		singleinfo.filepos = 0;
 		singleinfo.size = LONG(filelength(handle));
 		ExtractFileBase(filename, singleinfo.name);
@@ -130,9 +129,9 @@ void W_AddFile(char* _filename)
 		header.numlumps = IntelLong(LONG(header.numlumps));
 		header.infotableofs = IntelLong(LONG(header.infotableofs));
 		length = header.numlumps * sizeof(filelump_t);
-		fileinfo = malloc(length);
+		fileinfo_ptr = fileinfo = malloc(length);
 		if (!fileinfo)
-			Error("Wad file could not allocate header info on stack");
+			Error("Wad file could not allocate header");
 		lseek(handle, header.infotableofs, SEEK_SET);
 		read(handle, fileinfo, length);
 
@@ -149,20 +148,23 @@ void W_AddFile(char* _filename)
 	//           bytes",numlumps*sizeof(lumpinfo_t));
 	lump_p = &lumpinfo[startlump];
 
-	for (i = startlump; i < (unsigned int)numlumps; i++, lump_p++, fileinfo++)
+	for (i = startlump; i < (unsigned int)numlumps; i++, lump_p++, fileinfo_ptr++)
 	{
-		fileinfo->filepos = IntelLong(LONG(fileinfo->filepos));
-		fileinfo->size = IntelLong(LONG(fileinfo->size));
+		fileinfo_ptr->filepos = IntelLong(LONG(fileinfo_ptr->filepos));
+		fileinfo_ptr->size = IntelLong(LONG(fileinfo_ptr->size));
 		lump_p->handle = handle;
-		lump_p->position = LONG(fileinfo->filepos);
-		lump_p->size = LONG(fileinfo->size);
-		strncpy(lump_p->name, fileinfo->name, 8);
+		lump_p->position = LONG(fileinfo_ptr->filepos);
+		lump_p->size = LONG(fileinfo_ptr->size);
+		strncpy(lump_p->name, fileinfo_ptr->name, 8);
 	}
+
+	if (fileinfo)
+		free(fileinfo);
 }
 
 void W_FreeLumps(void)
 {
-	free(lumpinfo);
+
 }
 
 /*
