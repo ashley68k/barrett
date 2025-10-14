@@ -296,6 +296,9 @@ int MUSIC_StopSong(void)
 		return (MUSIC_Error);
 	} // if
 
+	if(useoplmusic)
+		OPL_Stop();
+
 	if ((Mix_PlayingMusic()) || (Mix_PausedMusic()))
 		Mix_HaltMusic();
 

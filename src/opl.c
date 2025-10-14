@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <SDL2/SDL_mixer.h>
 
 #include "opl.h"
+#include "rt_def.h"
 
 void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
@@ -32,6 +33,8 @@ static struct ADLMIDI_AudioFormat s_audioFormat;
 
 static Uint16                   obtained_format;
 static struct ADL_MIDIPlayer    *midi_player = NULL;
+
+boolean stopsig;
 
 void OPL_Init()
 {
@@ -51,6 +54,7 @@ void OPL_Init()
     
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
     adl_setBank(midi_player, 70); // ROTT bank
+    adl_setLoopEnabled(midi_player, 1);
 
     Mix_HookMusic(OPLcallback, midi_player);
 
@@ -105,6 +109,7 @@ void OPL_Play(char* buffer, int size)
 void OPL_Stop()
 {
     is_playing = 0;
+    stopsig = true;
 }
 
 void OPL_Pause()
@@ -116,6 +121,12 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 {
     if (!is_playing)
       return;
+
+    if(stopsig)
+    {
+        stopsig = false;
+        SDL_memset(stream, 0, len);
+    }
 
     /* Convert bytes length into total count of samples in all channels */
     int samples_count = len / s_audioFormat.containerSize;
