@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(barrett
 	DESCRIPTION "A Rise of the Triad source port tailored towards moddability and QoL."
 	HOMEPAGE_URL "https://github.com/lunarmeadow/barrett"
-	LANGUAGES C
+	LANGUAGES C CXX
 )
 
 # only ONE of these may be active at a time (or none for the default registered version)
@@ -110,10 +110,11 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/winrott.c
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/HashTable.c
+	${PROJECT_SOURCE_DIR}/src/oplshit.c
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI m dl)
 target_link_libraries(barrett PRIVATE audiolib)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)
