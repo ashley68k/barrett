@@ -144,13 +144,18 @@ char order[21] = {di_west,		 di_east,		 di_north,		 di_south,
 static boolean loadsavesound = false;
 static int numdone;
 
-static char* endStrings[7] = {"Press Y to reformat \nand install Windows.\0\0",
-							  "Press Y to activate \nguillotine.\0\0",
-							  "Press Y to release \nthe cyanide gas.\0\0",
-							  "Press Y to open \ntrap door.\0\0",
-							  "Press Y to drive your \ncar off the cliff.\0\0",
-							  "Press Y to pull \nyour plug.\0\0",
-							  "Press Y to activate \nelectric chair.\0\0"};
+static char* endStrings[7] = {
+#ifdef _WIN32
+	"Press Y to reformat \nand install Linux.\0\0",
+#else
+	"Press Y to reformat \nand install Windows.\0\0",
+#endif
+	"Press Y to activate \nguillotine.\0\0",
+	"Press Y to release \nthe cyanide gas.\0\0",
+	"Press Y to open \ntrap door.\0\0",
+	"Press Y to drive your \ncar off the cliff.\0\0",
+	"Press Y to pull \nyour plug.\0\0",
+	"Press Y to activate \nelectric chair.\0\0"};
 
 static char* BattleModeDescriptions[battle_NumBattleModes - 1] = {
 	"Kill your enemies!  Don't get killed!  Kill some more!",
