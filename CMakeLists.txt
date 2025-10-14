@@ -4,6 +4,8 @@ project(barrett
 	HOMEPAGE_URL "https://github.com/lunarmeadow/barrett"
 	LANGUAGES C CXX
 )
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+find_package(Math)
 
 # only ONE of these may be active at a time (or none for the default registered version)
 option(BARRETT_SHAREWARE "Shareware" OFF)
@@ -114,7 +116,7 @@ set(BARRETT_SOURCES
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI m dl)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)
