@@ -309,27 +309,29 @@ int MUSIC_StopSong(void)
 
 int MUSIC_PlaySong(char* song, int size, int loopflag)
 {
-	// MUSIC_StopSong();
+	if(useoplmusic)
+		OPL_Play(song, size);
+	else
+	{
+		MUSIC_StopSong();
 
-	// if (size < 1) {
-	// 	return MUSIC_Error;
-	// }
+		if (size < 1) {
+			return MUSIC_Error;
+		}
 
-	// SDL_RWops *rw = SDL_RWFromConstMem(song, size);
-	// if (rw == NULL) 
-	// {
-	// 	return MUSIC_Error;
-	// }
+		SDL_RWops *rw = SDL_RWFromConstMem(song, size);
+		if (rw == NULL) 
+		{
+			return MUSIC_Error;
+		}
 
-	// music_musicchunk = Mix_LoadMUS_RW(rw, SDL_TRUE);
+		music_musicchunk = Mix_LoadMUS_RW(rw, SDL_TRUE);
 
-	// music_songdata = song;
-	// music_songdatasize = size;
+		music_songdata = song;
+		music_songdatasize = size;
 
-	// Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
-	
-	OPL_Play(song, size);
-
+		Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+	}	
 	return (MUSIC_Ok);
 } // MUSIC_PlaySong
 

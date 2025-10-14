@@ -23,5 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 void OPL_Init();
 void OPL_Play(char* buffer, int size);
+void OPL_Stop();
+void OPL_Pause();
 
 #endif

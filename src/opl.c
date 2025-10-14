@@ -46,8 +46,11 @@ void OPL_Init()
         fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
     }
 
-    adl_switchEmulator(midi_player, ADLMIDI_EMU_NUKED);
+    adl_switchEmulator(midi_player, ADLMIDI_EMU_DOSBOX);
     adl_setNumChips(midi_player, 1);
+    
+    // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
+    adl_setBank(midi_player, 70); // ROTT bank
 
     Mix_HookMusic(OPLcallback, midi_player);
 
@@ -97,9 +100,17 @@ void OPL_Play(char* buffer, int size)
 
     is_playing = 1;
     SDL_PauseAudio(0);
-
 }
 
+void OPL_Stop()
+{
+    is_playing = 0;
+}
+
+void OPL_Pause()
+{
+    is_playing = 0;
+}
 
 void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 {
