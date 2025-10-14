@@ -162,11 +162,6 @@ void W_AddFile(char* _filename)
 		free(fileinfo);
 }
 
-void W_FreeLumps(void)
-{
-
-}
-
 /*
 ====================
 =
