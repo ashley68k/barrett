@@ -34,8 +34,6 @@ static struct ADLMIDI_AudioFormat s_audioFormat;
 static Uint16                   obtained_format;
 static struct ADL_MIDIPlayer    *midi_player = NULL;
 
-boolean stopsig;
-
 void OPL_Init()
 {
     midi_player = adl_init(44100);

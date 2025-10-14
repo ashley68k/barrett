@@ -4954,6 +4954,7 @@ void DrawExtOptionDescription(int w)
 extern int inverse_mouse;
 extern boolean usemouselook;
 extern boolean useoplmusic;
+extern boolean oplmusicset;
 extern boolean iG_aimCross;
 extern boolean usejump;
 extern boolean autoAimMissileWeps;
@@ -4963,7 +4964,8 @@ extern boolean allowMovementWithMouseYAxis;
 void CP_ExtOptionsMenu(void)
 {
 	int which;
-
+	
+shit:
 	DrawExtOptionsMenu();
 
 	do
@@ -5009,8 +5011,10 @@ void CP_ExtOptionsMenu(void)
 			DrawExtOptionsButtons();
 			break;
 		case 7:
-			useoplmusic ^= 1;
+			oplmusicset ^= 1;
 			DrawExtOptionsButtons();
+			CP_RestartProgramMessage();
+			goto shit;
 			break;
 		}
 
@@ -5068,7 +5072,7 @@ void DrawExtOptionsButtons(void)
 					on = 1;
 				break;
 			case 7:
-				if (useoplmusic == 1)
+				if (oplmusicset == 1)
 					on = 1;
 				break;
 			}
