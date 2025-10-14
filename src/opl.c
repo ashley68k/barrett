@@ -29,6 +29,8 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
 static boolean isPlaying = 0;
 
+double volume = 5;
+
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
 static Uint16                   obtained_format;
@@ -136,6 +138,21 @@ void OPLcallback(void *cbFunc, Uint8 *stream, int len)
                                    stream,
                                    stream + s_audioFormat.containerSize,
                                    &s_audioFormat);
+
+    // assuming signed 16-bit due to that being used for Mix_OpenAudio
+    int16_t* sampleBuf = (int16_t*)stream;
+    double realVol = volume * volume;
+
+    for(int i = 0; i < samples_count; i++)
+    {
+        double clampVal = (double)sampleBuf[i] * realVol;
+
+        clampVal = clampVal > INT16_MAX ? INT16_MAX : 
+                   clampVal < INT16_MIN ? INT16_MIN 
+                   : clampVal;
+
+        sampleBuf[i] = (int16_t)clampVal;
+    }
 
     if(samples_count <= 0)
     {

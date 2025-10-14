@@ -4953,7 +4953,6 @@ void DrawExtOptionDescription(int w)
 
 extern int inverse_mouse;
 extern boolean usemouselook;
-extern boolean useoplmusic;
 extern boolean oplmusicset;
 extern boolean iG_aimCross;
 extern boolean usejump;
