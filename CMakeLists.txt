@@ -110,7 +110,7 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/winrott.c
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/HashTable.c
-	${PROJECT_SOURCE_DIR}/src/oplshit.c
+	${PROJECT_SOURCE_DIR}/src/opl.c
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
