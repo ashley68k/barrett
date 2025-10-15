@@ -216,6 +216,16 @@ static int find_title(const char *key, const char *value, void *user)
 	return 0;
 }
 
+static int do_table(const char *key, const char *value, void *user)
+{
+	if (strcmp(key, "items") == 0)
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
 void LCP_MainMenu(void)
 {
 	char title[64];
@@ -225,10 +235,12 @@ void LCP_MainMenu(void)
 	SetUpControlPanel();
 
 	// load main menu script
-	if (luaL_dofile(MENU_LUA_STATE, "res/menus/main.lua") != LUA_OK)
+	if (luaL_loadfile(MENU_LUA_STATE, "res/menus/main.lua") != LUA_OK)
+		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
+	if (lua_pcall(MENU_LUA_STATE, 0, 1, 0) != LUA_OK)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
-	// TEMP
+	// get title string
 	iterate_menu_table(MENU_LUA_STATE, -1, find_title, (void *)title);
 
 	// run menu loop
@@ -241,6 +253,8 @@ void LCP_MainMenu(void)
 		ClearMenuBuf();
 
 		SetMenuTitle(title);
+
+		iterate_menu_table(MENU_LUA_STATE, -1, do_table, NULL);
 
 		DisplayInfo(0);
 
