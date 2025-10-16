@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 
 #include "rt_def.h"
+#include "_rt_menu.h"
 #include "rt_menu.h"
 #include "rt_menu_lua.h"
 #include "rt_sound.h"
@@ -162,6 +163,7 @@ void LCP_Quit(void)
 	MENU_LUA_INITIALIZED = false;
 }
 
+#if 0
 // https://stackoverflow.com/a/6142700
 static void iterate_menu_table(lua_State *L, int index, int (*callback)(const char *key, const char *value, void *user), void *user)
 {
@@ -204,44 +206,118 @@ static void iterate_menu_table(lua_State *L, int index, int (*callback)(const ch
 	lua_pop(L, 1);
 	// Stack is now the same as it was on entry to this function
 }
+#endif
 
-static int find_title(const char *key, const char *value, void *user)
+typedef struct rt_lua_menu {
+	char *title; ///< menu title
+	CP_iteminfo info; ///< menu info
+	CP_itemtype *items; ///< menu items
+	CP_MenuNames *names; ///< menu item names
+	int ref; ///< reference value in LUA_REGISTRYINDEX table
+} rt_lua_menu_t;
+
+static void FreeMenu(lua_State *L, rt_lua_menu_t *menu)
 {
-	if (strcmp(key, "title") == 0)
+	if (menu)
 	{
-		strncpy((char *)user, value, 64);
-		return 1;
+		luaL_unref(L, LUA_REGISTRYINDEX, menu->ref);
+		if (menu->title)
+			free(menu->title);
+		if (menu->items)
+			free(menu->items);
+		if (menu->names)
+			free(menu->names);
+		free(menu);
 	}
-
-	return 0;
 }
 
-static int do_table(const char *key, const char *value, void *user)
+// evaluate the menu table at the top of the stack
+static rt_lua_menu_t *EvaluateMenu(lua_State *L)
 {
-	if (strcmp(key, "items") == 0)
+	int i;
+	rt_lua_menu_t *menu = NULL;
+
+	// check if user returned a table
+	if (!lua_istable(L, -1))
 	{
-		return 1;
+		luaL_error(L, "returned value from menu is not a table");
+		return NULL;
 	}
 
-	return 0;
+	// allocate menu state
+	menu = calloc(1, sizeof(rt_lua_menu_t));
+
+	// register the menu table at the top of the stack
+	menu->ref = luaL_ref(L, LUA_REGISTRYINDEX);
+
+	// push the table to the stack by the reference we just made
+	lua_rawgeti(L, LUA_REGISTRYINDEX, menu->ref);
+
+	// get title string
+	if (lua_getfield(L, -1, "title") == LUA_TSTRING)
+		menu->title = strdup(lua_tostring(L, -1));
+	else
+		menu->title = strdup("Menu");
+	lua_pop(L, 1);
+
+	// initialize item info
+	menu->info.x = MENU_X;
+	menu->info.y = MENU_Y;
+	menu->info.curpos = 0;
+	menu->info.indent = 32;
+
+	// get items array
+	if (lua_getfield(L, -1, "items") == LUA_TTABLE)
+	{
+		// get number of items
+		menu->info.amount = (int)lua_rawlen(L, -1);
+		if (menu->info.amount <= 0)
+			goto no_items;
+
+		// allocate items and names
+		menu->items = calloc(menu->info.amount, sizeof(CP_itemtype));
+		menu->names = calloc(menu->info.amount, sizeof(CP_MenuNames));
+
+		// initialize items and names
+		for (i = 0; i < menu->info.amount; i++)
+		{
+			menu->items[i].active = CP_Active;
+
+			// strncpy(menu->names[i], sizeof(menu->names[i]), );
+		}
+	}
+	else
+	{
+no_items:
+		// no items in the table, just crash out
+		luaL_error(L, "no items array present in menu table");
+		FreeMenu(L, menu);
+		return NULL;
+	}
+
+	return menu;
 }
+
+#define MENU_MAIN_SCRIPT "res/menus/main.lua"
 
 void LCP_MainMenu(void)
 {
-	char title[64];
+	rt_lua_menu_t *menu = NULL;
 
 	// setup menu
 	SetupMenuBuf();
 	SetUpControlPanel();
 
 	// load main menu script
-	if (luaL_loadfile(MENU_LUA_STATE, "res/menus/main.lua") != LUA_OK)
+	if (luaL_loadfile(MENU_LUA_STATE, MENU_MAIN_SCRIPT) != LUA_OK)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 	if (lua_pcall(MENU_LUA_STATE, 0, 1, 0) != LUA_OK)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
-	// get title string
-	iterate_menu_table(MENU_LUA_STATE, -1, find_title, (void *)title);
+	// evaluate menu
+	menu = EvaluateMenu(MENU_LUA_STATE);
+	if (!menu)
+		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
 	// run menu loop
 	while (1)
@@ -252,9 +328,10 @@ void LCP_MainMenu(void)
 		SetAlternateMenuBuf();
 		ClearMenuBuf();
 
+#if 0
 		SetMenuTitle(title);
-
 		iterate_menu_table(MENU_LUA_STATE, -1, do_table, NULL);
+#endif
 
 		DisplayInfo(0);
 
