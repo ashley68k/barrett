@@ -121,6 +121,8 @@ int luaopen_rott(lua_State *L)
 //=============================================================================
 
 int HandleMenu(CP_iteminfo* item_i, CP_itemtype* items, void (*routine)(int w));
+void MN_GetCursorLocation(CP_iteminfo* item_i, CP_itemtype* items);
+extern int MenuNum;
 
 static boolean MENU_LUA_INITIALIZED = false;
 static lua_State *MENU_LUA_STATE = NULL;
@@ -342,17 +344,22 @@ void LCP_MainMenu(void)
 	if (!menu)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
+	MenuNum = 1;
+
 	// run menu loop
 	while (1)
 	{
 		IN_ClearKeysDown();
 
+		// setup menu draw state
 		EnableScreenStretch();
 		SetAlternateMenuBuf();
 		ClearMenuBuf();
 
+		// draw the menu
 		SetMenuTitle(menu->title);
 
+		MN_GetCursorLocation(&menu->info, menu->items);
 		DrawMenu(&menu->info, menu->items);
 
 		DisplayInfo(0);
