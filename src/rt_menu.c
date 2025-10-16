@@ -254,7 +254,7 @@ static int TimeLimitNums[8] = {1, 2, 5, 10, 21, 30, 99, bo_time_infinite};
 
 static int DangerNums[3] = {bo_danger_low, bo_danger_normal, bo_danger_kill};
 
-static int MenuNum = 0;
+int MenuNum = 0;
 static int handlewhich;
 static int CSTactive = 0;
 static boolean INFXSETUP = false;
