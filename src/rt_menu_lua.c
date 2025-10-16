@@ -120,6 +120,8 @@ int luaopen_rott(lua_State *L)
 //
 //=============================================================================
 
+int HandleMenu(CP_iteminfo* item_i, CP_itemtype* items, void (*routine)(int w));
+
 static boolean MENU_LUA_INITIALIZED = false;
 static lua_State *MENU_LUA_STATE = NULL;
 
@@ -212,7 +214,6 @@ typedef struct rt_lua_menu {
 	char *title; ///< menu title
 	CP_iteminfo info; ///< menu info
 	CP_itemtype *items; ///< menu items
-	CP_MenuNames *names; ///< menu item names
 	int ref; ///< reference value in LUA_REGISTRYINDEX table
 } rt_lua_menu_t;
 
@@ -225,8 +226,8 @@ static void FreeMenu(lua_State *L, rt_lua_menu_t *menu)
 			free(menu->title);
 		if (menu->items)
 			free(menu->items);
-		if (menu->names)
-			free(menu->names);
+		if (menu->info.names)
+			free(menu->info.names);
 		free(menu);
 	}
 }
@@ -265,6 +266,7 @@ static rt_lua_menu_t *EvaluateMenu(lua_State *L)
 	menu->info.y = MENU_Y;
 	menu->info.curpos = 0;
 	menu->info.indent = 32;
+	menu->info.fontsize = mn_largefont;
 
 	// get items array
 	if (lua_getfield(L, -1, "items") == LUA_TTABLE)
@@ -276,14 +278,34 @@ static rt_lua_menu_t *EvaluateMenu(lua_State *L)
 
 		// allocate items and names
 		menu->items = calloc(menu->info.amount, sizeof(CP_itemtype));
-		menu->names = calloc(menu->info.amount, sizeof(CP_MenuNames));
+		menu->info.names = calloc(menu->info.amount, sizeof(CP_MenuNames));
 
 		// initialize items and names
 		for (i = 0; i < menu->info.amount; i++)
 		{
 			menu->items[i].active = CP_Active;
 
-			// strncpy(menu->names[i], sizeof(menu->names[i]), );
+			// get table data by index
+			lua_pushinteger(L, i + 1);
+			lua_gettable(L, -2);
+
+			// check for nil sentinel
+			if (lua_type(L, -1) == LUA_TNIL)
+				break;
+
+			// get item table data
+			if (lua_type(L, -1) != LUA_TTABLE)
+				continue;
+
+			// get option label
+			if (lua_getfield(L, -1, "label") == LUA_TSTRING)
+				strncpy(menu->info.names[i], lua_tostring(L, -1), sizeof(menu->info.names[i]));
+			else
+				strncpy(menu->info.names[i], "Option", sizeof(menu->info.names[i]));
+			lua_pop(L, 1);
+
+			// pop the table off the stack
+			lua_pop(L, 1);
 		}
 	}
 	else
@@ -302,6 +324,7 @@ no_items:
 
 void LCP_MainMenu(void)
 {
+	int which;
 	rt_lua_menu_t *menu = NULL;
 
 	// setup menu
@@ -328,12 +351,13 @@ void LCP_MainMenu(void)
 		SetAlternateMenuBuf();
 		ClearMenuBuf();
 
-#if 0
-		SetMenuTitle(title);
-		iterate_menu_table(MENU_LUA_STATE, -1, do_table, NULL);
-#endif
+		SetMenuTitle(menu->title);
+
+		DrawMenu(&menu->info, menu->items);
 
 		DisplayInfo(0);
+
+		which = HandleMenu(&menu->info, menu->items, NULL);
 
 		FlipMenuBuf();
 	}
