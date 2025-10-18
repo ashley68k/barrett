@@ -54,7 +54,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "modexlib.h"
 #include "rt_rand.h"
 #include "rt_net.h"
-#include "rt_sc_a.h"
 
 extern void VH_UpdateScreen(void);
 
