@@ -49,6 +49,7 @@ DEFINE_CONVERTER(cfont_t)
 
 void CvtNull(void* lmp, int num)
 {
+	UNUSED(num);
 	Debug("No-op endian converter on %p.\n", lmp);
 }
 
