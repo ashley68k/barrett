@@ -37,7 +37,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "isr.h"
 #include "z_zone.h"
-#include "rt_dr_a.h"
 #include "rt_in.h"
 #include "rt_main.h"
 #include "scriplib.h"

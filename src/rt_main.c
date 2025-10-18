@@ -59,7 +59,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "develop.h"
 #include "version.h"
 #include "rt_menu.h"
-#include "rt_dr_a.h"
 #include "rt_msg.h"
 #include "rt_build.h"
 #include "rt_error.h"
