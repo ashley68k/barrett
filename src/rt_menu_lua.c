@@ -123,6 +123,13 @@ int luaopen_rott(lua_State *L)
 int HandleMenu(CP_iteminfo* item_i, CP_itemtype* items, void (*routine)(int w));
 void MN_GetCursorLocation(CP_iteminfo* item_i, CP_itemtype* items);
 extern int MenuNum;
+extern char* FontNames[];
+extern int FontSize[];
+extern char* SmallCursor;
+extern char* LargeCursor;
+extern char* CursorLump;
+extern int CursorNum;
+extern int CursorFrame[24];
 
 static boolean MENU_LUA_INITIALIZED = false;
 static lua_State *MENU_LUA_STATE = NULL;
@@ -219,7 +226,7 @@ typedef struct rt_lua_menu {
 	int ref; ///< reference value in LUA_REGISTRYINDEX table
 } rt_lua_menu_t;
 
-static void FreeMenu(lua_State *L, rt_lua_menu_t *menu)
+static void LCP_FreeMenu(lua_State *L, rt_lua_menu_t *menu)
 {
 	if (menu)
 	{
@@ -235,7 +242,7 @@ static void FreeMenu(lua_State *L, rt_lua_menu_t *menu)
 }
 
 // evaluate the menu table at the top of the stack
-static rt_lua_menu_t *EvaluateMenu(lua_State *L)
+static rt_lua_menu_t *LCP_EvaluateMenu(lua_State *L)
 {
 	int i;
 	rt_lua_menu_t *menu = NULL;
@@ -315,18 +322,36 @@ static rt_lua_menu_t *EvaluateMenu(lua_State *L)
 no_items:
 		// no items in the table, just crash out
 		luaL_error(L, "no items array present in menu table");
-		FreeMenu(L, menu);
+		LCP_FreeMenu(L, menu);
 		return NULL;
 	}
 
 	return menu;
 }
 
+static void LCP_DrawMenu(lua_State *L, rt_lua_menu_t *menu)
+{
+	MN_GetCursorLocation(&menu->info, menu->items);
+	SetMenuTitle(menu->title);
+	DrawMenu(&menu->info, menu->items);
+	DisplayInfo(0);
+}
+
+static void LCP_DoMenu(lua_State *L, rt_lua_menu_t *menu)
+{
+	EnableScreenStretch();
+	SetAlternateMenuBuf();
+	ClearMenuBuf();
+	LCP_DrawMenu(L, menu);
+	DrawMenuBufItem(menu->info.x, ((menu->info.curpos * 14) + (menu->info.y - 2)), W_GetNumForName(LargeCursor) + CursorFrame[CursorNum]);
+	FlipMenuBuf();
+}
+
 #define MENU_MAIN_SCRIPT "res/menus/main.lua"
 
 void LCP_MainMenu(void)
 {
-	int which;
+	int which = 0;
 	rt_lua_menu_t *menu = NULL;
 
 	// setup menu
@@ -340,36 +365,25 @@ void LCP_MainMenu(void)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
 	// evaluate menu
-	menu = EvaluateMenu(MENU_LUA_STATE);
+	menu = LCP_EvaluateMenu(MENU_LUA_STATE);
 	if (!menu)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
-	MenuNum = 1;
+	// draw menu
+	LCP_DrawMenu(MENU_LUA_STATE, menu);
 
 	// run menu loop
-	while (1)
+	while (which != -1)
 	{
 		IN_ClearKeysDown();
 
-		// setup menu draw state
-		EnableScreenStretch();
-		SetAlternateMenuBuf();
-		ClearMenuBuf();
-
-		// draw the menu
-		SetMenuTitle(menu->title);
-
-		MN_GetCursorLocation(&menu->info, menu->items);
-		DrawMenu(&menu->info, menu->items);
-
-		DisplayInfo(0);
-
 		which = HandleMenu(&menu->info, menu->items, NULL);
 
-		FlipMenuBuf();
+		LCP_DoMenu(MENU_LUA_STATE, menu);
 	}
 
 	// cleanup menu
+	LCP_FreeMenu(MENU_LUA_STATE, menu);
 	CleanUpControlPanel();
 	ShutdownMenuBuf();
 }

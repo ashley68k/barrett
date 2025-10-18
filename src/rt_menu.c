@@ -269,13 +269,13 @@ static int cursorwidth;
 static int cursorheight;
 static int yinc;
 
-static char* FontNames[] = {"itnyfont", "ifnt", "sifont", "lifont"};
-static int FontSize[] = {6, 7, 9, 14};
-static char* SmallCursor = "smallc01";
-static char* LargeCursor = "cursor01";
-static char* CursorLump = "cursor01";
-static int CursorNum = 0;
-static int CursorFrame[MAXCURSORNUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
+char* FontNames[] = {"itnyfont", "ifnt", "sifont", "lifont"};
+int FontSize[] = {6, 7, 9, 14};
+char* SmallCursor = "smallc01";
+char* LargeCursor = "cursor01";
+char* CursorLump = "cursor01";
+int CursorNum = 0;
+int CursorFrame[MAXCURSORNUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,
 										4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1};
 
 typedef enum
