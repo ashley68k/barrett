@@ -140,8 +140,6 @@ long filelength(int handle);
 #error please define for your platform.
 #endif
 
-#define far
-#define cdecl
 
 //***************************************************************************
 //
