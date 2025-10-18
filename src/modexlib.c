@@ -77,15 +77,6 @@ char* bufofsBottomLimit;
 
 void DrawCenterAim();
 
-#ifndef STUB_FUNCTION
-
-/* rt_def.h isn't included, so I just put this here... */
-#define STUB_FUNCTION                                                          \
-	fprintf(stderr, "STUB: %s at " __FILE__ ", line %d, thread %d\n",          \
-			__func__, __LINE__, getpid())
-
-#endif
-
 /*
 ====================
 =

@@ -3052,7 +3052,6 @@ void RotateScreenScaleFloat(float startAngle, float endAngle, float startScale,
 {
 	DisableScreenStretch();
 
-	// STUB_FUNCTION;
 	// printf("ROTATE SCREEN FLOAT FUNC: \n");
 	// printf("startAngle: %f \n", startAngle);
 	// printf("endAngle: %f \n", endAngle);
@@ -3126,8 +3125,6 @@ void RotateScreen(int startAngle, int endAngle, int startScale, int endScale,
 int time, int option, boolean fadeOut)
 {
 	DisableScreenStretch();
-
-	//STUB_FUNCTION;
 
 	printf("ROTATE SCREEN FUNC: \n");
 	printf("startAngle: %d \n", startAngle);
