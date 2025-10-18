@@ -35,7 +35,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "engine.h"
 #include "lumpy.h"
-#include "rt_fc_a.h"
 #include "z_zone.h"
 #include "w_wad.h"
 #include "rt_view.h"
