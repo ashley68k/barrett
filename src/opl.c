@@ -25,11 +25,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "opl.h"
 #include "rt_def.h"
 
-void OPLcallback(void *cbFunc, Uint8 *stream, int len);
+static void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
 static boolean isPlaying = 0;
 
-double volume = 0;
+static double volume = 0;
 
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
@@ -142,7 +142,7 @@ void OPL_SetLoop(int loopFlag)
     adl_setLoopEnabled(midi_player, loopFlag);
 }
 
-void OPLcallback(void *cbFunc, Uint8 *stream, int len)
+static void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 {
     if (!isPlaying)
       return;
