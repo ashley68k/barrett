@@ -224,18 +224,6 @@ void VL_CopyPlanarPage(byte* src, byte* dest)
 }
 
 /*
-=======================
-=
-= VL_CopyPlanarPageToMemory
-=
-=======================
-*/
-void VL_CopyPlanarPageToMemory(byte* src, byte* dest)
-{
-	memcpy(dest, src, screensize);
-}
-
-/*
 =================
 =
 = VL_ClearBuffer

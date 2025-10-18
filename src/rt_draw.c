@@ -2728,7 +2728,7 @@ void DoLoadGameSequence(void)
 	FlipPage();
 	FlipPage();
 
-	VL_CopyPlanarPageToMemory((byte*)bufferofs, destscreen);
+	VL_CopyPlanarPage((byte*)bufferofs, destscreen);
 
 	CalcTics();
 

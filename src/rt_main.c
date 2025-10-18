@@ -2642,9 +2642,7 @@ void SaveScreen(boolean saveLBM)
 
 	GetFileName(saveLBM);
 	GetPathFromEnvironment(filename, ApogeePath, savename);
-	//
-	memcpy(buffer, screen, iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT); // bna
-	// bna--VL_CopyPlanarPageToMemory(screen,buffer);
+	memcpy(buffer, screen, iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT);
 
 	if (saveLBM)
 	{
