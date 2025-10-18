@@ -168,7 +168,7 @@ static int music_loopflag = MUSIC_PlayOnce;
 static char* music_songdata = NULL;
 static Mix_Music* music_musicchunk = NULL;
 
-int MUSIC_Init(int SoundCard, int Address)
+int MUSIC_Init(void)
 {
 	init_debugging();
 
@@ -176,18 +176,9 @@ int MUSIC_Init(int SoundCard, int Address)
 
 	GetPathFromEnvironment(localsf2, ApogeePath, "barrett.sf2");
 
-	musdebug("INIT! card=>%d, address=>%d...", SoundCard, Address);
-
 	if (music_initialized)
 	{
 		setErrorMessage("Music system is already initialized.");
-		return (MUSIC_Error);
-	} // if
-
-	if (SoundCard != SoundScape) // We pretend there's a SoundScape installed.
-	{
-		setErrorMessage("Card not found.");
-		musdebug("We pretend to be an Ensoniq SoundScape only.");
 		return (MUSIC_Error);
 	} // if
 

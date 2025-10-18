@@ -32,8 +32,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef __FX_MAN_H
 #define __FX_MAN_H
 
-#include "sndcards.h"
-
 typedef struct
 {
 	int MaxVoices;
@@ -58,9 +56,8 @@ enum FX_ERRORS
 };
 
 char* FX_ErrorString(int ErrorNumber);
-int FX_SetupCard(int SoundCard, fx_device* device);
-int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-			unsigned mixrate);
+int FX_SetupCard(fx_device* device);
+int FX_Init(int numvoices, int numchannels, int samplebits, unsigned mixrate);
 int FX_Shutdown(void);
 int FX_SetCallBack(void (*function)(unsigned long));
 void FX_SetVolume(int volume);

@@ -58,10 +58,6 @@ static int NumBadSounds = 0;
 static int remotestart;
 static boolean SoundsRemapped = false;
 
-int musicnums[11] = {-1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1};
-
-int fxnums[11] = {-1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1};
-
 int MUSIC_GetPosition(void)
 {
 	songtic pos;
@@ -126,7 +122,6 @@ int SD_SetupFXCard(int* numvoices, int* numbits, int* numchannels)
 {
 	fx_device device;
 	int status;
-	int card;
 
 	if (SD_Started == true)
 		SD_Shutdown();
@@ -136,10 +131,7 @@ int SD_SetupFXCard(int* numvoices, int* numbits, int* numchannels)
 		return (0);
 	}
 
-	card = fxnums[FXMode];
-	if (card == -1) // Check if it is off
-		return (0);
-	status = FX_SetupCard(card, &device);
+	status = FX_SetupCard(&device);
 	if (status == FX_Ok)
 	{
 		*numvoices = device.MaxVoices;
@@ -159,7 +151,6 @@ int SD_SetupFXCard(int* numvoices, int* numbits, int* numchannels)
 int SD_Startup(boolean bombonerror)
 {
 	int status;
-	int card;
 	int voices;
 	int channels;
 	int bits;
@@ -173,20 +164,9 @@ int SD_Startup(boolean bombonerror)
 	{
 		return (0);
 	}
-	card = fxnums[FXMode];
-	if (card == -1) // Check if it is off
-		return (0);
 
-	switch (card)
-	{
-	case SoundScape:
-		soundstart = W_GetNumForName("digistrt") + 1;
-		soundtype = fx_digital;
-		break;
-	default:
-		Error("FX: Unsupported Card number %d", FXMode);
-		break;
-	}
+	soundstart = W_GetNumForName("digistrt") + 1;
+	soundtype = fx_digital;
 
 	if (soundtype == fx_digital)
 	{
@@ -219,7 +199,7 @@ int SD_Startup(boolean bombonerror)
 		bits = 8;
 	}
 
-	status = FX_Init(card, voices, channels, bits, 44100);
+	status = FX_Init(voices, channels, bits, 44100);
 
 	if (status != FX_Ok)
 	{
@@ -869,7 +849,6 @@ boolean MusicStarted(void)
 int MU_Startup(boolean bombonerror)
 {
 	int status;
-	int card;
 
 	if (MU_Started == true)
 	{
@@ -880,12 +859,8 @@ int MU_Startup(boolean bombonerror)
 	{
 		return (0);
 	}
-	card = musicnums[MusicMode];
-	if (card == -1) // Check if it is off
-		return (0);
 
-	/* Not DOS, no address config needed */
-	status = MUSIC_Init(card, 0);
+	status = MUSIC_Init();
 
 	if (status != MUSIC_Ok)
 	{
