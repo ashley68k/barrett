@@ -188,37 +188,39 @@ int main(int argc, char* argv[])
 	// Set which release version we're on
 	gamestate.Version = ROTTVERSION;
 
-#if (SHAREWARE == 1)
-	BATTMAPS = strdup(STANDARDBATTLELEVELS);
-	FixFilePath(BATTMAPS);
-	gamestate.Product = ROTT_SHAREWARE;
-#else
-
-	BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
-
-	FixFilePath(BATTMAPS);
-	if (!access(BATTMAPS, R_OK))
+	if (IS_SHAREWARE)
 	{
-		gamestate.Product = ROTT_SITELICENSE;
+		BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
+		FixFilePath(BATTMAPS);
+		gamestate.Product = ROTT_SHAREWARE;
 	}
 	else
 	{
-		free(BATTMAPS);
-		BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
+		BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
+
 		FixFilePath(BATTMAPS);
 		if (!access(BATTMAPS, R_OK))
 		{
-			gamestate.Product = ROTT_SUPERCD;
+			gamestate.Product = ROTT_SITELICENSE;
 		}
 		else
 		{
 			free(BATTMAPS);
-			BATTMAPS = strdup(STANDARDBATTLELEVELS);
+			BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
 			FixFilePath(BATTMAPS);
-			gamestate.Product = ROTT_REGISTERED;
+			if (!access(BATTMAPS, R_OK))
+			{
+				gamestate.Product = ROTT_SUPERCD;
+			}
+			else
+			{
+				free(BATTMAPS);
+				BATTMAPS = strdup(STANDARDBATTLELEVELS);
+				FixFilePath(BATTMAPS);
+				gamestate.Product = ROTT_REGISTERED;
+			}
 		}
 	}
-#endif
 
 	DrawRottTitle();
 	gamestate.randomseed = -1;
@@ -350,24 +352,22 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-#if (SHAREWARE == 0)
-		if (dopefish == true)
+		if (IS_NOT_SHAREWARE)
 		{
-			DopefishTitle();
+			if (dopefish == true)
+			{
+				DopefishTitle();
+			}
+			else if (NoWait == false)
+			{
+				ApogeeTitle();
+			}
 		}
 		else if (NoWait == false)
 		{
-			ApogeeTitle();
-		}
-#else
-		if (NoWait == false)
-		{
 			if (W_CheckNumForName("svendor") != -1)
 			{
-				lbm_t* LBM;
-
-				LBM =
-					(lbm_t*)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
+				lbm_t *LBM = (lbm_t *)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
 				VL_DecompressLBM(LBM, true);
 				I_Delay(40);
 				MenuFadeOut();
@@ -375,7 +375,6 @@ int main(int argc, char* argv[])
 			//         ParticleIntro ();
 			ApogeeTitle();
 		}
-#endif
 	}
 	// SDL_WM_GrabInput( SDL_GRAB_ON );
 	GameLoop();
@@ -503,14 +502,15 @@ void CheckCommandLineParameters(void)
 		printf("              - next param is <widthxheight>, valid "
 			   "resolutions are:\n");
 		printf("              - 320x200, 640x480 and 800x600\n");
-#if (SHAREWARE == 0)
-		printf("   FILERTL    - used to load Userlevels (RTL files)\n");
-		printf("              - next parameter is RTL filename\n");
-		printf("   FILERTC    - used to load Battlelevels (RTC files)\n");
-		printf("              - next parameter is RTC filename\n");
-		printf("   FILE       - used to load Extern WAD files\n");
-		printf("              - next parameter is WAD filename\n");
-#endif
+		if (IS_NOT_SHAREWARE)
+		{
+			printf("   FILERTL    - used to load Userlevels (RTL files)\n");
+			printf("              - next parameter is RTL filename\n");
+			printf("   FILERTC    - used to load Battlelevels (RTC files)\n");
+			printf("              - next parameter is RTC filename\n");
+			printf("   FILE       - used to load Extern WAD files\n");
+			printf("              - next parameter is WAD filename\n");
+		}
 		printf("   NOJOYS     - Disable check for joystick.\n");
 		printf("   NOMOUSE    - Disable check for mouse.\n");
 		printf("   VER        - Version number.\n");
@@ -768,7 +768,9 @@ void SetupWads(void)
 		}
 	}
 
-#if (SHAREWARE == 0)
+	if (IS_SHAREWARE)
+		goto skip_file_loading;
+
 	// Check for rtl files
 	arg = CheckParm("filertl");
 	if (arg != 0)
@@ -910,20 +912,19 @@ NoRTC:;
 		newargs[argnum++] = _argv[arg + 1];
 	}
 
-#else
-	if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) ||
-		(CheckParm("file2") > 0))
-		printf("External wads ignored.\n");
-
-#endif
-
+skip_file_loading:
 	// Normal ROTT wads
+	if (IS_SHAREWARE)
+	{
+		if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) || (CheckParm("file2") > 0))
+			printf("External wads ignored.\n");
 
-#if (SHAREWARE)
-	newargs[argnum++] = DATADIR "HUNTBGIN.WAD";
-#else
-	newargs[argnum++] = DATADIR "DARKWAR.WAD";
-#endif
+		newargs[argnum++] = DATADIR "HUNTBGIN.WAD";
+	}
+	else
+	{
+		newargs[argnum++] = DATADIR "DARKWAR.WAD";
+	}
 
 	//   newargs [argnum++] = "credits.wad";
 
@@ -1158,12 +1159,8 @@ void GameLoop(void)
 					DoCreditScreen();
 					if ((!LastScan) && (!IN_GetMouseButtons()))
 						CheckHighScore(0, 0, false);
-#if (SHAREWARE == 0)
-					if ((!LastScan) && (!IN_GetMouseButtons()))
-					{
+					if (IS_NOT_SHAREWARE && (!LastScan) && (!IN_GetMouseButtons()))
 						DoMicroStoryScreen();
-					}
-#endif
 					if ((!LastScan) && (!IN_GetMouseButtons()) &&
 						(lowmemory == 0) && (GameLevels.avail == false))
 					{
@@ -1402,8 +1399,7 @@ void GameLoop(void)
 				gamestate.frame = 0;
 			}
 			StopWind();
-#if (SHAREWARE == 0)
-			if ((playstate == ex_bossdied) && (gamestate.mapon != 30))
+			if (IS_NOT_SHAREWARE && (playstate == ex_bossdied) && (gamestate.mapon != 30))
 			{
 
 				int shape;
@@ -1474,7 +1470,6 @@ void GameLoop(void)
 					IN_UpdateKeyboard(); // Thanks again DrLex
 				LastScan = 0;
 			}
-#endif
 
 			LevelCompleted(playstate);
 
@@ -1519,7 +1514,10 @@ void GameLoop(void)
 
 		case ex_gameover:
 			StopWind();
-			DoEndCinematic();
+			if (IS_SHAREWARE)
+				DoSharewareEndCinematic();
+			else
+				DoEndCinematic();
 			if (playstate == ex_gameover)
 			{
 				CheckHighScore(gamestate.score, gamestate.mapon + 1, false);
@@ -2795,14 +2793,13 @@ int PutBytes(unsigned char* ptr, unsigned int bytes)
 
 void PlayCinematic(void)
 {
+	byte pal[768];
 
-	if ((tedlevel == true) || (turbo == true))
+	if (IS_SHAREWARE || (tedlevel == true) || (turbo == true))
 		return;
 
 	switch (gamestate.mapon)
 	{
-#if (SHAREWARE == 0)
-		byte pal[768];
 	case 0: // Start of EPISODE 1
 
 		MU_StartSong(song_cinematic1);
@@ -2890,6 +2887,5 @@ void PlayCinematic(void)
 		IN_UpdateKeyboard();
 		LastScan = 0;
 		break;
-#endif
 	}
 }

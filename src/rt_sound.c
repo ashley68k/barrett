@@ -699,9 +699,8 @@ void SD_PreCacheSoundGroup(int lo, int hi)
 		SD_PreCacheSound(i);
 }
 
-#if (SHAREWARE == 1)
-#define MAXSONGS 18
-static song_t rottsongs[MAXSONGS] = {
+#define MAXSHAREWARESONGS 18
+static song_t rottsharewaresongs[MAXSHAREWARESONGS] = {
 	{loop_no, song_apogee, "FANFARE2", "Apogee Fanfare"},
 	{loop_yes, song_title, "RISE", "Rise"},
 	{loop_yes, song_menu, "MMMENU", "MMMenu"},
@@ -719,11 +718,11 @@ static song_t rottsongs[MAXSONGS] = {
 	{loop_yes, song_level, "SPRAY", "Spray"},
 	{loop_yes, song_level, "RUNLIKE", "Run Like Smeg"},
 	{loop_yes, song_level, "SMOOTH", "Havana Smooth"},
-	{loop_yes, song_level, "CHANT", "Chant"},
+	{loop_yes, song_level, "CHANT", "Chant"}
 };
-#else
-#define MAXSONGS 34
-static song_t rottsongs[MAXSONGS] = {
+
+#define MAXREGISTEREDSONGS 34
+static song_t rottregisteredsongs[MAXREGISTEREDSONGS] = {
 	{loop_no, song_apogee, "FANFARE2", "Apogee Fanfare"},
 	{loop_yes, song_title, "RISE", "Rise"},
 	{loop_yes, song_menu, "MMMENU", "MMMenu"},
@@ -757,8 +756,11 @@ static song_t rottsongs[MAXSONGS] = {
 	{loop_yes, song_bosssee, "HELLERO", "Hellero"},
 	{loop_yes, song_cinematic1, "EVINRUDE", "Evin Rude"},
 	{loop_yes, song_youwin, "VICTORY", "Victory!"},
-	{loop_yes, song_dogend, "HERE_BOY", "Here Boy"}};
-#endif
+	{loop_yes, song_dogend, "HERE_BOY", "Here Boy"}
+};
+
+static int MAXSONGS = 0;
+static song_t *rottsongs = NULL;
 
 static char* currentsong;
 static int MU_Started = false;
@@ -870,6 +872,17 @@ int MU_Startup(boolean bombonerror)
 	MU_Started = true;
 
 	MU_SetVolume(MUvolume);
+
+	if (IS_SHAREWARE)
+	{
+		rottsongs = rottsharewaresongs;
+		MAXSONGS = MAXSHAREWARESONGS;
+	}
+	else
+	{
+		rottsongs = rottregisteredsongs;
+		MAXSONGS = MAXREGISTEREDSONGS;
+	}
 
 	return (0);
 }

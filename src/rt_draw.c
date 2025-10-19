@@ -3412,8 +3412,6 @@ apogeeexit:
 	ShutdownRotateBuffer();
 }
 
-#if (SHAREWARE == 0)
-
 void DopefishTitle(void)
 {
 	int shapenum;
@@ -3454,8 +3452,6 @@ void DopefishTitle(void)
 	SD_Play(SD_DOPEFISHSND);
 	FlipPage();
 }
-
-#endif
 
 void RotationFunSDL(void)
 {
@@ -3918,7 +3914,6 @@ void WarpString(int x, int y, int endx, int endy, int time, byte* back,
 	// FlipPage();
 }
 
-#if (SHAREWARE == 1)
 //******************************************************************************
 //
 // DoEndCinematic
@@ -4055,7 +4050,7 @@ char* EndCinematicText[NUMENDMESSAGES] = {
 char NextGameString1[] = "The Developers of Incredible Power";
 char NextGameString2[] = "shall return";
 
-void DoEndCinematic(void)
+void DoSharewareEndCinematic(void)
 {
 	int trilogo;
 	int group;
@@ -4257,7 +4252,6 @@ finalfade:
 
 	SafeFree(bkgnd);
 }
-#else
 
 // REGISTERED VERSION ======================================================
 
@@ -5206,7 +5200,6 @@ void DoInBetweenCinematic(int yoffset, int lump, int delay, char* string)
 	I_Delay(delay);
 	VL_FadeOut(0, 255, 0, 0, 0, 20);
 }
-#endif
 
 //******************************************************************************
 //

@@ -121,6 +121,7 @@ void StartupScreenSaver(void);
 void ShutdownScreenSaver(void);
 void UpdateScreenSaver(void);
 void DoEndCinematic(void);
+void DoSharewareEndCinematic(void);
 void DoCreditScreen(void);
 void DoMicroStoryScreen(void);
 void DoInBetweenCinematic(int yoffset, int lump, int delay, char* string);

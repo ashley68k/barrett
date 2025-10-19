@@ -13,6 +13,7 @@
 #include <fcntl.h>
 
 #include "rt_def.h"
+#include "rt_main.h"
 
 #include "SDL2/SDL.h"
 
@@ -74,12 +75,10 @@ int setup_homedir(void)
 	err = mkdir(ApogeePath, S_IRWXU);
 
 	/* keep the shareware and registered game data separated */
-#if (SHAREWARE == 1)
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
-#else
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/darkwar/",
-			 getenv("HOME"));
-#endif
+	if (IS_SHAREWARE)
+		snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/huntbgin/", getenv("HOME"));
+	else
+		snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/darkwar/", getenv("HOME"));
 
 	err = mkdir(ApogeePath, S_IRWXU);
 	if (err == -1 && errno != EEXIST)

@@ -102,7 +102,7 @@ char LevelName[80];
 static cache_t* cachelist;
 static word cacheindex;
 static boolean CachingStarted = false;
-static char* ROTTMAPS = STANDARDGAMELEVELS;
+static char* ROTTMAPS;
 char* BATTMAPS;
 
 static char NormalWeaponTiles[10] = {46, 48, 49, 50, 51, 52, 53, 54, 55, 56};
@@ -667,13 +667,11 @@ void PreCacheActor(int actor, int which)
 			start = W_GetNumForName("FJUP0");
 			end = W_GetNumForName("FJUP22");
 		}
-#if (SHAREWARE == 0)
-		else
+		else if (IS_NOT_SHAREWARE)
 		{
 			start = W_GetNumForName("FJDOWN0");
 			end = W_GetNumForName("FJDOWN22");
 		}
-#endif
 
 		break;
 
@@ -681,38 +679,40 @@ void PreCacheActor(int actor, int which)
 
 		SD_PreCacheSound(SD_BLADESPINSND);
 
-#if (SHAREWARE == 0)
-
-		if (which & 2)
+		if (IS_NOT_SHAREWARE)
 		{
-			if (which & 1)
+			if (which & 2)
 			{
-				start = W_GetNumForName("SPSTUP1");
-				end = W_GetNumForName("SPSTUP16");
+				if (which & 1)
+				{
+					start = W_GetNumForName("SPSTUP1");
+					end = W_GetNumForName("SPSTUP16");
+				}
+				else
+				{
+					start = W_GetNumForName("SPSTDN1");
+					end = W_GetNumForName("SPSTDN16");
+				}
 			}
 			else
 			{
-				start = W_GetNumForName("SPSTDN1");
-				end = W_GetNumForName("SPSTDN16");
+				if (which & 1)
+				{
+					start = W_GetNumForName("UBLADE1");
+					end = W_GetNumForName("UBLADE9");
+				}
+				else
+				{
+					start = W_GetNumForName("DBLADE1");
+					end = W_GetNumForName("DBLADE9");
+				}
 			}
 		}
 		else
 		{
-			if (which & 1)
-			{
-				start = W_GetNumForName("UBLADE1");
-				end = W_GetNumForName("UBLADE9");
-			}
-			else
-			{
-				start = W_GetNumForName("DBLADE1");
-				end = W_GetNumForName("DBLADE9");
-			}
+			start = W_GetNumForName("UBLADE1");
+			end = W_GetNumForName("UBLADE9");
 		}
-#else
-		start = W_GetNumForName("UBLADE1");
-		end = W_GetNumForName("UBLADE9");
-#endif
 
 		break;
 	case crushcolobj:
@@ -723,13 +723,11 @@ void PreCacheActor(int actor, int which)
 			start = W_GetNumForName("CRDOWN1");
 			end = W_GetNumForName("CRDOWN8");
 		}
-#if (SHAREWARE == 0)
-		else
+		else if (IS_NOT_SHAREWARE)
 		{
 			start = W_GetNumForName("CRUP1");
 			end = W_GetNumForName("CRUP8");
 		}
-#endif
 		break;
 
 	case boulderobj:
@@ -749,13 +747,11 @@ void PreCacheActor(int actor, int which)
 			start = W_GetNumForName("SPEARUP1");
 			end = W_GetNumForName("SPERUP16");
 		}
-#if (SHAREWARE == 0)
-		else
+		else if (IS_NOT_SHAREWARE)
 		{
 			start = W_GetNumForName("SPEARDN1");
 			end = W_GetNumForName("SPERDN16");
 		}
-#endif
 
 		break;
 
@@ -1378,17 +1374,17 @@ void ReadROTTMap(char* filename, int mapnum)
 		Error("ReadROTTMap: Tried to load a non existent map!");
 	}
 
-#if (SHAREWARE == 1)
-	if (RTLMap.RLEWtag == REGISTERED_TAG)
+	if (IS_SHAREWARE)
 	{
-		Error("Can't use maps from the registered game in shareware version.");
+		if (RTLMap.RLEWtag == REGISTERED_TAG)
+		{
+			Error("Can't use maps from the registered game in shareware version.");
+		}
+		if (RTLMap.RLEWtag != SHAREWARE_TAG)
+		{
+			Error("Can't use modified maps in shareware version.");
+		}
 	}
-
-	if (RTLMap.RLEWtag != SHAREWARE_TAG)
-	{
-		Error("Can't use modified maps in shareware version.");
-	}
-#endif
 
 	mapwidth = 128;
 	mapheight = 128;
@@ -1414,13 +1410,14 @@ void ReadROTTMap(char* filename, int mapnum)
 		//
 		// unRLEW, skipping expanded length
 		//
-#if (SHAREWARE == 1)
-		CA_RLEWexpand((word*)buffer, (word*)mapplanes[plane], expanded >> 1,
-					  SHAREWARE_TAG);
-#else
-		CA_RLEWexpand((word*)buffer, (word*)mapplanes[plane], expanded >> 1,
-					  RTLMap.RLEWtag);
-#endif
+		if (IS_SHAREWARE)
+		{
+			CA_RLEWexpand((word*)buffer, (word*)mapplanes[plane], expanded >> 1, SHAREWARE_TAG);
+		}
+		else
+		{
+			CA_RLEWexpand((word*)buffer, (word*)mapplanes[plane], expanded >> 1, RTLMap.RLEWtag);
+		}
 
 		SafeFree(buffer);
 	}
@@ -1562,6 +1559,10 @@ void GetMapFileName(char* filename)
 	}
 	else
 	{
+		if (IS_SHAREWARE)
+			ROTTMAPS = SHAREWAREGAMELEVELS;
+		else
+			ROTTMAPS = STANDARDGAMELEVELS;
 		strcpy(filename, ROTTMAPS);
 	}
 }
@@ -1790,6 +1791,11 @@ void LoadAlternateMap(AlternateInformation* info, int mapnum)
 void LoadROTTMap(int mapnum)
 
 {
+	if (IS_SHAREWARE)
+		ROTTMAPS = SHAREWAREGAMELEVELS;
+	else
+		ROTTMAPS = STANDARDGAMELEVELS;
+
 	if (tedlevel == true)
 	{
 		LoadTedMap("rot", mapnum);
@@ -4996,19 +5002,20 @@ void DoLowMemoryConversionForegroundPlane(void)
 
 				// environment dangers
 
-#if (SHAREWARE == 0)
 			case 412: // spears to firejets
-				*map = 372;
+				if (IS_NOT_SHAREWARE)
+					*map = 372;
 				break;
 
 			case 430:
-				*map = 390;
+				if (IS_NOT_SHAREWARE)
+					*map = 390;
 				break;
 
 			case 413: // cylinders down to firejets
-				*map = 372;
+				if (IS_NOT_SHAREWARE)
+					*map = 372;
 				break;
-#endif
 
 			case 156:
 			case 157:
@@ -5310,7 +5317,7 @@ void SetupGameLevel(void)
 	{
 		DoLowMemoryConversion();
 	}
-	if (gamestate.Product == ROTT_SHAREWARE)
+	if (IS_SHAREWARE)
 	{
 		DoSharewareConversion();
 	}
@@ -5498,11 +5505,7 @@ void InitializePlayerstates(void)
 	for (i = 0; i < numplayers; i++)
 	{
 		pstate = &PLAYERSTATE[i];
-		if ((pstate->missileweapon == wp_godhand)
-#if (SHAREWARE == 0)
-			|| (pstate->missileweapon == wp_dog)
-#endif
-		)
+		if ((pstate->missileweapon == wp_godhand) || (IS_NOT_SHAREWARE && pstate->missileweapon == wp_dog))
 		{
 			pstate->weapon = pstate->new_weapon = pstate->oldweapon;
 			pstate->missileweapon = pstate->oldmissileweapon;
@@ -5516,9 +5519,11 @@ void InitializePlayerstates(void)
 
 void SetupSnakePath(void)
 {
-#if (SHAREWARE == 0)
 	int i, j;
 	word *map, tile;
+
+	if (IS_SHAREWARE)
+		return;
 
 	map = mapplanes[1];
 
@@ -5533,7 +5538,6 @@ void SetupSnakePath(void)
 				whichpath++;
 			}
 		}
-#endif
 }
 
 void SetupRandomActors(void)
@@ -6108,7 +6112,7 @@ void SetupStatics(void)
 				case 54:
 				case 55:
 				case 56:
-					if (gamestate.Product == ROTT_SHAREWARE)
+					if (IS_SHAREWARE)
 					{
 						num = (GameRandomNumber("Random Weapon", 0) % 7);
 						tile = SharewareWeaponTiles[num];
@@ -6187,10 +6191,8 @@ void SetupStatics(void)
 				break;
 
 			case 46:
-#if (SHAREWARE == 1)
-				Error("\n tried to spawn excalibat at %d,%d in shareware !", i,
-					  j);
-#endif
+				if (IS_SHAREWARE)
+					Error("\n tried to spawn excalibat at %d,%d in shareware !", i, j);
 
 				SD_PreCacheSoundGroup(SD_EXCALIBOUNCESND, SD_EXCALIBLASTSND);
 
@@ -6294,10 +6296,9 @@ void SetupStatics(void)
 					gamestate.missiletotal++;
 				break;
 			case 55:
-#if (SHAREWARE == 1)
-				Error("\n tried to spawn split missile at %d,%d in shareware !",
-					  i, j);
-#endif
+				if (IS_SHAREWARE)
+					Error("\n tried to spawn split missile at %d,%d in shareware !", i, j);
+
 				SD_PreCacheSound(SD_MISSILEHITSND);
 				SD_PreCacheSound(SD_MISSILEFLYSND);
 				SD_PreCacheSound(SD_SPLITFIRESND);
@@ -6309,9 +6310,8 @@ void SetupStatics(void)
 					gamestate.missiletotal++;
 				break;
 			case 56:
-#if (SHAREWARE == 1)
-				Error("\n tried to spawn kes at %d,%d in shareware !", i, j);
-#endif
+				if (IS_SHAREWARE)
+					Error("\n tried to spawn kes at %d,%d in shareware !", i, j);
 
 				SD_PreCacheSound(SD_GRAVSND);
 				SD_PreCacheSound(SD_GRAVHITSND);
@@ -6433,9 +6433,8 @@ void SetupStatics(void)
 
 			case 253:
 
-#if (SHAREWARE == 1)
-				Error("DogMode Power up in shareware at x=%d y=%d\n", i, j);
-#endif
+				if (IS_SHAREWARE)
+					Error("DogMode Power up in shareware at x=%d y=%d\n", i, j);
 
 				SD_PreCacheSoundGroup(SD_DOGMODEPANTSND, SD_DOGMODELICKSND);
 				if ((locplayerstate->player == 1) ||
