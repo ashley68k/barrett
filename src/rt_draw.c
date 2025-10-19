@@ -2631,7 +2631,7 @@ void FlipPage(void)
 	/* TODO some shake thing */
 
 	/* just call the one in modexlib.c */
-	XFlipPage();
+	VH_UpdateScreen();
 }
 
 //******************************************************************************

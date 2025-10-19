@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
 #include "rt_view.h"
+#include "rt_vid.h"
 #include "queue.h"
 #include "lumpy.h"
 // #include "SDL2/SDL2_rotozoom.h"
@@ -208,7 +209,7 @@ void VL_SetVGAPlaneMode(void)
 
 	// start stretched
 	EnableScreenStretch();
-	XFlipPage();
+	VH_UpdateScreen();
 }
 
 /*
@@ -326,27 +327,6 @@ void VH_UpdateScreen(void)
 		DrawCenterAim();
 	}
 
-	RenderSurface();
-}
-
-/*
-=================
-=
-= XFlipPage
-=
-=================
-*/
-
-void XFlipPage(void)
-{
-	if (StretchScreen)
-	{ // bna++
-		StretchMemPicture();
-	}
-	else
-	{
-		DrawCenterAim();
-	}
 	RenderSurface();
 }
 

@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_actr.h"
 #include "cin_efct.h"
 #include "modexlib.h"
+#include "rt_vid.h"
 
 cineactor_t* firstcinematicactor;
 cineactor_t* lastcinematicactor;
@@ -294,7 +295,7 @@ void DrawCinematicActors(void)
 		}
 	}
 	if (flippage == true)
-		XFlipPage();
+		VH_UpdateScreen();
 #if DUMP
 	printf("Total actors drawn=%ld\n", numactors);
 #endif

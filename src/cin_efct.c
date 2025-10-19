@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "w_wad.h"
 #include "z_zone.h"
 #include <string.h>
+#include "rt_vid.h"
 
 #include "modexlib.h"
 
@@ -555,7 +556,7 @@ void DrawPalette(cine_palevent* event)
 	byte* pal;
 
 	pal = W_CacheLumpName(event->name, PU_CACHE, CvtNull, 1);
-	XFlipPage();
+	VH_UpdateScreen();
 	CinematicSetPalette(pal);
 }
 
