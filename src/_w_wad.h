@@ -22,24 +22,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "develop.h"
 
-#define CHECKPERIOD 20
-
-#if (SHAREWARE == 1)
-
-#if (DELUXE == 1)
-#define WADCHECKSUM (54748)
-#elif (LOWCOST == 1)
-#define WADCHECKSUM (12185)
-#else
-#define WADCHECKSUM (20567)
-#endif
-
-#else
-
-#define WADCHECKSUM (24222)
-
-#endif
-
 //===============
 //   TYPES
 //===============
