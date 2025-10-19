@@ -155,7 +155,6 @@ int SD_Startup(boolean bombonerror)
 	int channels;
 	int bits;
 	int i;
-	extern boolean IS8250;
 
 	if (SD_Started == true)
 		SD_Shutdown();
@@ -191,13 +190,6 @@ int SD_Startup(boolean bombonerror)
 	voices = NumVoices;
 	channels = NumChannels;
 	bits = NumBits;
-
-	if (IS8250)
-	{
-		voices = max(voices, 4);
-		channels = 1;
-		bits = 8;
-	}
 
 	status = FX_Init(voices, channels, bits, 44100);
 
