@@ -373,11 +373,14 @@ void LCP_MainMenu(void)
 	LCP_DrawMenu(MENU_LUA_STATE, menu);
 
 	// run menu loop
-	while (which != -1)
+	while (1)
 	{
 		IN_ClearKeysDown();
 
 		which = HandleMenu(&menu->info, menu->items, NULL);
+
+		if (which == -1)
+			break;
 
 		LCP_DoMenu(MENU_LUA_STATE, menu);
 	}
