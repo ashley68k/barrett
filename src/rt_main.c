@@ -535,7 +535,6 @@ void CheckCommandLineParameters(void)
 		printf("   MONO       - Enable mono-monitor support.\n");
 		printf("   SCREENSHOTS- Clean screen capture for shots.\n");
 		printf("   PAUSE      - Pauses startup screen information.\n");
-		printf("   ENABLEVR   - Enable VR helmet input devices\n");
 		printf("   NOECHO     - Turn off sound reverb\n");
 		printf("   DEMOEXIT   - Exit program when demo is terminated\n");
 		printf("   WARP       - Warp to specific ROTT level\n");
