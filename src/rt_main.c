@@ -188,39 +188,46 @@ int main(int argc, char* argv[])
 	// Set which release version we're on
 	gamestate.Version = ROTTVERSION;
 
-	if (IS_SHAREWARE)
+	// HACK until shareware/registered are combined better
+#if (SHAREWARE == 1)
+	BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
+	FixFilePath(BATTMAPS);
+	gamestate.Product = ROTT_SHAREWARE;
+#else
+	BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
+	FixFilePath(BATTMAPS);
+	if (!access(BATTMAPS, R_OK))
 	{
-		BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
-		FixFilePath(BATTMAPS);
-		gamestate.Product = ROTT_SHAREWARE;
+		gamestate.Product = ROTT_SITELICENSE;
 	}
 	else
 	{
-		BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
-
+		free(BATTMAPS);
+		BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
 		FixFilePath(BATTMAPS);
 		if (!access(BATTMAPS, R_OK))
 		{
-			gamestate.Product = ROTT_SITELICENSE;
+			gamestate.Product = ROTT_SUPERCD;
 		}
 		else
 		{
 			free(BATTMAPS);
-			BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
+			BATTMAPS = strdup(STANDARDBATTLELEVELS);
 			FixFilePath(BATTMAPS);
 			if (!access(BATTMAPS, R_OK))
 			{
-				gamestate.Product = ROTT_SUPERCD;
+				gamestate.Product = ROTT_REGISTERED;
 			}
 			else
 			{
 				free(BATTMAPS);
-				BATTMAPS = strdup(STANDARDBATTLELEVELS);
+				BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
 				FixFilePath(BATTMAPS);
-				gamestate.Product = ROTT_REGISTERED;
+				gamestate.Product = ROTT_SHAREWARE;
 			}
 		}
 	}
+#endif
 
 	DrawRottTitle();
 	gamestate.randomseed = -1;
