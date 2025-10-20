@@ -34,8 +34,14 @@ FetchContent_Declare(
 	GIT_TAG v1.6.1
 	EXCLUDE_FROM_ALL
 )
+FetchContent_Declare(
+	inih
+	GIT_REPOSITORY https://github.com/benhoyt/inih.git
+	GIT_TAG r62
+	EXCLUDE_FROM_ALL
+)
 
-FetchContent_MakeAvailable(adlmidi)
+FetchContent_MakeAvailable(adlmidi inih)
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
@@ -116,7 +122,7 @@ set(BARRETT_SOURCES
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI inih $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)

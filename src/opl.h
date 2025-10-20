@@ -21,6 +21,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef OPL_H_
 #define OPL_H_
 
+typedef struct opl
+{
+    int oplChipNum;
+    int bankNum;
+} oplCfg;
+
 void OPL_Init();
 void OPL_Play(char* buffer, int size);
 void OPL_Stop();

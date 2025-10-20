@@ -19,11 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <SDL2/SDL_stdinc.h>
-#include <adlmidi.h>
 #include <SDL2/SDL_mixer.h>
+
+#include <adlmidi.h>
+#include <ini.h>
 
 #include "opl.h"
 #include "rt_def.h"
+#include "rt_util.h"
+#include "rt_cfg.h"
 
 static void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
@@ -36,8 +40,67 @@ static struct ADLMIDI_AudioFormat s_audioFormat;
 static Uint16                   obtained_format;
 static struct ADL_MIDIPlayer    *midi_player = NULL;
 
+static int OPL_FetchConfig(void* user, const char* section, 
+                            const char* name, const char* value)
+{
+    oplCfg* cfg = (oplCfg*)user;
+
+    #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+    if(MATCH("chip", "bank"))
+    {
+        cfg->bankNum = atoi(value);
+    }
+    else if(MATCH("chip", "count"))
+    {
+        cfg->oplChipNum = atoi(value);
+    }
+    else
+    {
+        return 0;
+    }
+    return 1;
+}
+
+static boolean OPL_WriteDefault(const char* path)
+{
+    FILE *ini = fopen(path, "w");
+    
+    if(ini == NULL)
+    {
+        return false;
+    }
+
+    // open chip section
+    fputs("[chip]\n", ini);
+
+    // kvp for bank (70 default = rott bank)
+    fputs("; valid bank choices here\n", ini);
+    fputs("; https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini\n", ini);
+    fputs("bank=70\n", ini);
+
+    // kvp for chip count
+    fputs("count=2", ini);
+
+    return true;
+}
+
+
 void OPL_Init()
 {
+    char oplCfgPath[512];
+    oplCfg cfg;
+
+    GetPathFromEnvironment(oplCfgPath, ApogeePath, "opl.ini");
+    
+    if (ini_parse(oplCfgPath, OPL_FetchConfig, &cfg) < 0) {
+        printf("Can't load 'opl.ini'\n");
+        if(!OPL_WriteDefault(oplCfgPath))
+            printf("opl.ini creation failed.");
+        else
+            printf("opl.ini creation succeeded in %s.", ApogeePath);
+        exit(0);
+    }
+
     midi_player = adl_init(44100);
     if (!midi_player)
     {
@@ -50,12 +113,17 @@ void OPL_Init()
     }
 
     adl_switchEmulator(midi_player, ADLMIDI_EMU_DOSBOX);
-    adl_setNumChips(midi_player, 2);
+
+    // get chip count from ini - default to 2.
+    int getChips = cfg.oplChipNum ? cfg.oplChipNum : 2;
+    adl_setNumChips(midi_player, getChips);
     
     adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
 
+    // banknum if set - default to ROTT bank
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
-    adl_setBank(midi_player, 70); // ROTT bank
+    int getBank = cfg.bankNum ? cfg.bankNum : 70;
+    adl_setBank(midi_player, getBank);
 
     Mix_HookMusic(OPLcallback, midi_player);
 
@@ -110,14 +178,10 @@ void OPL_Play(char* buffer, int size)
 void OPL_SetVolume(double newVol)
 {
     // newvol/127 = normalize to 0.0-1.0
-    // y = 10 * (newVol / 127) ^ 3
-    // essentially, 0.0-10.0f scaled to cube of volumescale
+    // y = 10 * (newVol / 127) ^ 2
+    // essentially, 0.0-10.0f scaled to square of volumescale
     double volumescale = newVol / 127;
     volume = 10 * pow(volumescale, 2);
-
-    // bottom out at 1, unless completely mute
-    if(volume < 1 && volume)
-        volume = 1;
 
     printf("new volume: %f\n", volume);
 }
