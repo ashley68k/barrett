@@ -67,28 +67,24 @@ extern char ApogeePath[256];
 
 int setup_homedir(void)
 {
+	char fetchCWD[160];
+	getcwd(fetchCWD, sizeof(fetchCWD));
+
 #if PLATFORM_UNIX && !defined(__MINGW32__)
 	int err;
 
 	/* try to create the root directory */
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
+	snprintf(ApogeePath, sizeof(ApogeePath), "%s/userdata/", fetchCWD);
 	err = mkdir(ApogeePath, S_IRWXU);
 
-	/* keep the shareware and registered game data separated */
-	if (IS_SHAREWARE)
-		snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/huntbgin/", getenv("HOME"));
-	else
-		snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/darkwar/", getenv("HOME"));
-
-	err = mkdir(ApogeePath, S_IRWXU);
 	if (err == -1 && errno != EEXIST)
 	{
-		fprintf(stderr, "Couldn't create preferences directory: %s\n",
+		fprintf(stderr, "Couldn't create userdata directory: %s\n",
 				strerror(errno));
 		return -1;
 	}
 #else
-	sprintf(ApogeePath, ".%s", PATH_SEP_STR);
+	sprintf(ApogeePath, "./data/");;
 #endif
 
 	return 0;
