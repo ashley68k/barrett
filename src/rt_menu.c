@@ -144,13 +144,18 @@ char order[21] = {di_west,		 di_east,		 di_north,		 di_south,
 static boolean loadsavesound = false;
 static int numdone;
 
-static char* endStrings[7] = {"Press Y to reformat \nand install Windows.\0\0",
-							  "Press Y to activate \nguillotine.\0\0",
-							  "Press Y to release \nthe cyanide gas.\0\0",
-							  "Press Y to open \ntrap door.\0\0",
-							  "Press Y to drive your \ncar off the cliff.\0\0",
-							  "Press Y to pull \nyour plug.\0\0",
-							  "Press Y to activate \nelectric chair.\0\0"};
+static char* endStrings[7] = {
+#ifdef _WIN32
+	"Press Y to reformat \nand install Linux.\0\0",
+#else
+	"Press Y to reformat \nand install Windows.\0\0",
+#endif
+	"Press Y to activate \nguillotine.\0\0",
+	"Press Y to release \nthe cyanide gas.\0\0",
+	"Press Y to open \ntrap door.\0\0",
+	"Press Y to drive your \ncar off the cliff.\0\0",
+	"Press Y to pull \nyour plug.\0\0",
+	"Press Y to activate \nelectric chair.\0\0"};
 
 static char* BattleModeDescriptions[battle_NumBattleModes - 1] = {
 	"Kill your enemies!  Don't get killed!  Kill some more!",
@@ -2636,24 +2641,25 @@ void CP_NewGame(void)
 {
 	int which;
 
-#if (SHAREWARE == 1)
-	ToughMenuNum = 0;
-#else
-	int temp;
-
-	temp = ToughMenuNum;
-
-	while (ToughMenuNum == temp)
+	if (IS_SHAREWARE)
 	{
-		temp = ((RandomNumber("TOUGH MENU", 0)) & 3);
-		if (temp == 3)
-		{
-			temp = 1;
-		}
+		ToughMenuNum = 0;
 	}
+	else
+	{
+		int temp = ToughMenuNum;
 
-	ToughMenuNum = temp;
-#endif
+		while (ToughMenuNum == temp)
+		{
+			temp = ((RandomNumber("TOUGH MENU", 0)) & 3);
+			if (temp == 3)
+			{
+				temp = 1;
+			}
+		}
+
+		ToughMenuNum = temp;
+	}
 
 	//
 	// ALREADY IN A GAME?
@@ -4232,7 +4238,6 @@ void ReadAnyControl(ControlInfo* ci)
 	{
 		int mousey, mousex;
 
-#if USE_SDL
 		INL_GetMouseDelta(&mousex, &mousey);
 		if (mousex >= SENSITIVE)
 		{
@@ -4255,7 +4260,6 @@ void ReadAnyControl(ControlInfo* ci)
 			ci->dir = dir_North;
 			mouseactive = 1;
 		}
-#endif
 
 		buttons = IN_GetMouseButtons();
 		if (buttons)
@@ -4469,12 +4473,13 @@ void DrawPlayerMenu(void)
 
 	MN_MakeActive(&PlayerItems, &PlayerMenu[0], DefaultPlayerCharacter);
 
-#if (SHAREWARE == 1)
-	PlayerMenu[1].active = CP_SemiActive; // Thi Barrett
-	PlayerMenu[2].active = CP_SemiActive; // Doug Wendt
-	PlayerMenu[3].active = CP_SemiActive; // Lorelei Ni
-	PlayerMenu[4].active = CP_SemiActive; // Ian Paul Freeley
-#endif
+	if (IS_SHAREWARE)
+	{
+		PlayerMenu[1].active = CP_SemiActive; // Thi Barrett
+		PlayerMenu[2].active = CP_SemiActive; // Doug Wendt
+		PlayerMenu[3].active = CP_SemiActive; // Lorelei Ni
+		PlayerMenu[4].active = CP_SemiActive; // Ian Paul Freeley
+	}
 
 	if (numdone || (!ingame) || (!inmenu))
 		SetAlternateMenuBuf();
@@ -5652,8 +5657,7 @@ void MN_PlayMenuSnd(int which)
 {
 	if (INFXSETUP || (SD_Started == false))
 		return;
-#if (SHAREWARE == 0)
-	if (dopefish == true)
+	if (IS_NOT_SHAREWARE && dopefish == true)
 	{
 		switch (which)
 		{
@@ -5668,7 +5672,6 @@ void MN_PlayMenuSnd(int which)
 			break;
 		}
 	}
-#endif
 	SD_Play(which);
 }
 
@@ -5854,7 +5857,7 @@ void CP_F1Help(void)
 	}
 
 	LastScan = 0;
-#if (SHAREWARE == 1)
+	if (IS_SHAREWARE)
 	{
 		DrawOrderInfo(2);
 		while (LastScan == 0)
@@ -5864,7 +5867,6 @@ void CP_F1Help(void)
 
 		LastScan = 0;
 	}
-#endif
 }
 
 //****************************************************************************
@@ -6400,14 +6402,15 @@ void DrawBattleModes(void)
 	MN_GetActive(&ModeItems, &ModeMenu[0], gamestate.battlemode - battle_Normal,
 				 OptionNums);
 
-#if (SHAREWARE == 1)
-	TURN_OFF_BATTLE_MODE(battle_ScoreMore);
-	TURN_OFF_BATTLE_MODE(battle_Scavenger);
-	TURN_OFF_BATTLE_MODE(battle_Tag);
-	TURN_OFF_BATTLE_MODE(battle_Eluder);
-	TURN_OFF_BATTLE_MODE(battle_Deluder);
-	TURN_OFF_BATTLE_MODE(battle_CaptureTheTriad);
-#endif
+	if (IS_SHAREWARE)
+	{
+		TURN_OFF_BATTLE_MODE(battle_ScoreMore);
+		TURN_OFF_BATTLE_MODE(battle_Scavenger);
+		TURN_OFF_BATTLE_MODE(battle_Tag);
+		TURN_OFF_BATTLE_MODE(battle_Eluder);
+		TURN_OFF_BATTLE_MODE(battle_Deluder);
+		TURN_OFF_BATTLE_MODE(battle_CaptureTheTriad);
+	}
 
 	// Capture the Triad, Tag, ScoreMore, and Hunter can only be
 	// played with 2 or more players
@@ -6504,19 +6507,20 @@ void DrawBattleModeDescription(int w)
 		}
 	}
 
-#if (SHAREWARE == 1)
-	switch (w + 1)
+	if (IS_SHAREWARE)
 	{
-	case battle_ScoreMore:
-	case battle_Scavenger:
-	case battle_Tag:
-	case battle_Eluder:
-	case battle_Deluder:
-	case battle_CaptureTheTriad:
-		string = "See Ordering Info to find out how to get this game.";
-		break;
+		switch (w + 1)
+		{
+		case battle_ScoreMore:
+		case battle_Scavenger:
+		case battle_Tag:
+		case battle_Eluder:
+		case battle_Deluder:
+		case battle_CaptureTheTriad:
+			string = "See Ordering Info to find out how to get this game.";
+			break;
+		}
 	}
-#endif
 
 	VW_MeasurePropString(string, &width, &height);
 	DrawMenuBufPropString((288 - width) / 2, 4, string);
@@ -6826,26 +6830,30 @@ int CP_PlayerSelection(void)
 			return (0);
 		}
 
-#if (SHAREWARE == 1)
-		if (PlayerMenu[which].active == CP_SemiActive)
+		if (IS_SHAREWARE)
 		{
-			CP_ErrorMsg("Choose Player",
-						"Read the Ordering Info section from the Main Menu to "
-						"find out how to get the other characters.",
-						mn_smallfont);
+			if (PlayerMenu[which].active == CP_SemiActive)
+			{
+				CP_ErrorMsg("Choose Player",
+							"Read the Ordering Info section from the Main Menu to "
+							"find out how to get the other characters.",
+				mn_smallfont);
 
-			DrawPlayerMenu();
+				DrawPlayerMenu();
+			}
 		}
-#endif
 	} while (PlayerMenu[which].active == CP_SemiActive);
 
-#if (SHAREWARE == 1)
-	DefaultPlayerCharacter = 0;
-	locplayerstate->player = 0;
-#else
-	DefaultPlayerCharacter = which;
-	locplayerstate->player = which;
-#endif
+	if (IS_SHAREWARE)
+	{
+		DefaultPlayerCharacter = 0;
+		locplayerstate->player = 0;
+	}
+	else
+	{
+		DefaultPlayerCharacter = which;
+		locplayerstate->player = which;
+	}
 
 	return (1);
 }
@@ -7305,10 +7313,11 @@ void DrawSpawnControlMenu(void)
 
 	MN_MakeActive(&SpawnItems, &SpawnMenu[0], SpawnItems.curpos);
 
-#if (SHAREWARE == 1)
-	BATTLE_Options[gamestate.battlemode].SpawnMines = false;
-	SpawnMenu[3].active = CP_Inactive; // Mines
-#endif
+	if (IS_SHAREWARE)
+	{
+		BATTLE_Options[gamestate.battlemode].SpawnMines = false;
+		SpawnMenu[3].active = CP_Inactive; // Mines
+	}
 
 	switch (gamestate.battlemode)
 	{

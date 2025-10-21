@@ -20,9 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rt_def.h"
 
-#if USE_SDL
 #include "SDL2/SDL.h"
-#endif
 
 #include <stdarg.h>
 #include <fcntl.h>
@@ -39,7 +37,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "isr.h"
 #include "z_zone.h"
-#include "rt_dr_a.h"
 #include "rt_in.h"
 #include "rt_main.h"
 #include "scriplib.h"
@@ -363,9 +360,7 @@ void Error(char* error, ...)
 	ShutDown(); // DDOI - moved this so that it doesn't try to access player
 	// which is freed by this function.
 
-#if USE_SDL
 	SDL_Quit();
-#endif
 
 	exit(1);
 }

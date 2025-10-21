@@ -1214,30 +1214,28 @@ void SpawnDoor(int tilex, int tiley, int lock, int texture)
 	case 15:
 	case 16:
 	case 17:
-#if (SHAREWARE == 1)
-		lastdoorobj->sidepic = W_GetNumForName("SIDE8");
-
-#else
-		lastdoorobj->sidepic = W_GetNumForName("SIDE16");
-#endif
-
+		if (IS_SHAREWARE)
+			lastdoorobj->sidepic = W_GetNumForName("SIDE8");
+		else
+			lastdoorobj->sidepic = W_GetNumForName("SIDE16");
 		lastdoorobj->alttexture = W_GetNumForName("ABOVEW16");
 		break;
 
 	case 18:
 	case 19:
 	case 20:
-#if (SHAREWARE == 1)
-		lastdoorobj->sidepic = W_GetNumForName("SIDE8");
-		lastdoorobj->alttexture = W_GetNumForName("ABOVEW3");
-
-#else
-		lastdoorobj->sidepic = W_GetNumForName("SIDE17");
-		lastdoorobj->alttexture = W_GetNumForName("ABOVEW17");
-
-#endif
-
+		if (IS_SHAREWARE)
+		{
+			lastdoorobj->sidepic = W_GetNumForName("SIDE8");
+			lastdoorobj->alttexture = W_GetNumForName("ABOVEW3");
+		}
+		else
+		{
+			lastdoorobj->sidepic = W_GetNumForName("SIDE17");
+			lastdoorobj->alttexture = W_GetNumForName("ABOVEW17");
+		}
 		break;
+
 	default:
 		Error("Illegal door value encountered\n");
 		break;
@@ -2106,12 +2104,11 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 		side = W_GetNumForName("SIDE21");
 		above = W_GetNumForName("ABOVEM4");
 
-#if (SHAREWARE == 1)
-		middle = W_GetNumForName("ABOVEM4A");
-#else
-		middle = W_GetNumForName("ABOVEM9");
+		if (IS_SHAREWARE)
+			middle = W_GetNumForName("ABOVEM4A");
+		else
+			middle = W_GetNumForName("ABOVEM9");
 
-#endif
 		bottom = W_GetNumForName("DOGMASK");
 		break;
 

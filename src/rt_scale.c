@@ -26,7 +26,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_draw.h"
 #include "rt_scale.h"
 #include "_rt_scal.h"
-#include "rt_sc_a.h"
 #include "engine.h"
 #include "w_wad.h"
 #include "z_zone.h"

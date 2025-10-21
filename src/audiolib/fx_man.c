@@ -30,7 +30,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "sndcards.h"
 #include "multivoc.h"
 
 #include "dsl.h"
@@ -44,7 +43,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 static unsigned FX_MixRate;
 
-int FX_SoundDevice = -1;
 int FX_ErrorCode = FX_Ok;
 int FX_Installed = FALSE;
 
@@ -110,7 +108,7 @@ char* FX_ErrorString(int ErrorNumber)
    Sets the configuration of a sound device.
 ---------------------------------------------------------------------*/
 
-int FX_SetupCard(int SoundCard, fx_device* device)
+int FX_SetupCard(fx_device* device)
 
 {
 	int status;
@@ -121,8 +119,6 @@ int FX_SetupCard(int SoundCard, fx_device* device)
 		FX_SetErrorCode(FX_ASSVersion);
 		return (FX_Error);
 	}
-
-	FX_SoundDevice = SoundCard;
 
 	status = FX_Ok;
 	FX_SetErrorCode(FX_Ok);
@@ -176,9 +172,7 @@ int FX_SetupSoundBlaster(fx_blaster_config blaster, int* MaxVoices,
    Selects which sound device to use.
 ---------------------------------------------------------------------*/
 
-int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-			unsigned mixrate)
-
+int FX_Init(int numvoices, int numchannels, int samplebits, unsigned mixrate)
 {
 	int status;
 	int devicestatus;
@@ -204,28 +198,10 @@ int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
 	FX_MixRate = mixrate;
 
 	status = FX_Ok;
-	FX_SoundDevice = SoundCard;
-	switch (SoundCard)
+	devicestatus = MV_Init(FX_MixRate, numvoices, numchannels, samplebits);
+	if (devicestatus != MV_Ok)
 	{
-	case SoundBlaster:
-	case Awe32:
-	case ProAudioSpectrum:
-	case SoundMan16:
-	case SoundScape:
-	case SoundSource:
-	case TandySoundSource:
-	case UltraSound:
-		devicestatus =
-			MV_Init(SoundCard, FX_MixRate, numvoices, numchannels, samplebits);
-		if (devicestatus != MV_Ok)
-		{
-			FX_SetErrorCode(FX_MultiVocError);
-			status = FX_Error;
-		}
-		break;
-
-	default:
-		FX_SetErrorCode(FX_InvalidCard);
+		FX_SetErrorCode(FX_MultiVocError);
 		status = FX_Error;
 	}
 
@@ -257,27 +233,10 @@ int FX_Shutdown(void)
 		return (FX_Ok);
 	}
 
-	status = FX_Ok;
-	switch (FX_SoundDevice)
+	status = MV_Shutdown();
+	if (status != MV_Ok)
 	{
-	case SoundBlaster:
-	case Awe32:
-	case ProAudioSpectrum:
-	case SoundMan16:
-	case SoundScape:
-	case SoundSource:
-	case TandySoundSource:
-	case UltraSound:
-		status = MV_Shutdown();
-		if (status != MV_Ok)
-		{
-			FX_SetErrorCode(FX_MultiVocError);
-			status = FX_Error;
-		}
-		break;
-
-	default:
-		FX_SetErrorCode(FX_InvalidCard);
+		FX_SetErrorCode(FX_MultiVocError);
 		status = FX_Error;
 	}
 
@@ -300,23 +259,7 @@ int FX_SetCallBack(void (*function)(unsigned long))
 
 	status = FX_Ok;
 
-	switch (FX_SoundDevice)
-	{
-	case SoundBlaster:
-	case Awe32:
-	case ProAudioSpectrum:
-	case SoundMan16:
-	case SoundScape:
-	case SoundSource:
-	case TandySoundSource:
-	case UltraSound:
-		MV_SetCallBack(function);
-		break;
-
-	default:
-		FX_SetErrorCode(FX_InvalidCard);
-		status = FX_Error;
-	}
+	MV_SetCallBack(function);
 
 	return (status);
 }

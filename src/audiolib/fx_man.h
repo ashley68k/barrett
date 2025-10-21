@@ -31,7 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef __FX_MAN_H
 #define __FX_MAN_H
 
-#include "sndcards.h"
+#define ASS_VERSION_STRING "1.12"
 
 typedef struct
 {
@@ -77,12 +77,11 @@ enum fx_BLASTER_Types
 };
 
 char* FX_ErrorString(int ErrorNumber);
-int FX_SetupCard(int SoundCard, fx_device* device);
+int FX_SetupCard(fx_device* device);
 int FX_GetBlasterSettings(fx_blaster_config* blaster);
 int FX_SetupSoundBlaster(fx_blaster_config blaster, int* MaxVoices,
 						 int* MaxSampleBits, int* MaxChannels);
-int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-			unsigned mixrate);
+int FX_Init(int numvoices, int numchannels, int samplebits, unsigned mixrate);
 int FX_Shutdown(void);
 int FX_SetCallBack(void (*function)(unsigned long));
 void FX_SetVolume(int volume);

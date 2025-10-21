@@ -31,15 +31,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rottnet.h"
 #include "rt_battl.h"
 
-#if (SHAREWARE == 0)
 #define STANDARDGAMELEVELS		(DATADIR "DARKWAR.RTL")
 #define STANDARDBATTLELEVELS	(DATADIR "DARKWAR.RTC")
 #define SUPERROTTBATTLELEVELS	(DATADIR "ROTTCD.RTC")
 #define SITELICENSEBATTLELEVELS (DATADIR "ROTTSITE.RTC")
-#else
-#define STANDARDGAMELEVELS	 (DATADIR "HUNTBGIN.RTL")
-#define STANDARDBATTLELEVELS (DATADIR "HUNTBGIN.RTC")
-#endif
+#define SHAREWAREGAMELEVELS	 (DATADIR "HUNTBGIN.RTL")
+#define SHAREWAREBATTLELEVELS (DATADIR "HUNTBGIN.RTC")
 
 enum
 {
@@ -137,6 +134,9 @@ extern boolean quiet;
 extern gametype gamestate;
 extern boolean DebugOk;
 extern boolean newlevel;
+
+#define IS_SHAREWARE (gamestate.Product == ROTT_SHAREWARE)
+#define IS_NOT_SHAREWARE (!IS_SHAREWARE)
 
 void QuitGame(void);
 void PlayCinematic(void);

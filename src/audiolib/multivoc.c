@@ -40,7 +40,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "interrup.h"
 #include "dma.h"
 #include "linklist.h"
-#include "sndcards.h"
 
 #include "dsl.h"
 
@@ -65,7 +64,6 @@ static signed short MV_VolumeTable[63 + 1][256];
 static Pan MV_PanTable[MV_NumPanPositions][63 + 1];
 
 static int MV_Installed = FALSE;
-static int MV_SoundCard = SoundBlaster;
 static int MV_TotalVolume = MV_MaxTotalVolume;
 static int MV_MaxVoices = 1;
 static int MV_Recording;
@@ -377,11 +375,6 @@ void MV_ServiceVoc(void)
 		{
 			ClearBuffer_DW(MV_MixBuffer[MV_MixPage], MV_Silence,
 						   MV_BufferSize >> 2);
-			if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-			{
-				ClearBuffer_DW(MV_MixBuffer[MV_MixPage] + MV_RightChannelOffset,
-							   MV_Silence, MV_BufferSize >> 2);
-			}
 			MV_BufferEmpty[MV_MixPage] = TRUE;
 		}
 	}
@@ -417,23 +410,10 @@ void MV_ServiceVoc(void)
 				{
 					MV_16BitReverb(source, dest,
 								   (const VOLUME16*)MV_ReverbTable, count / 2);
-					if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-					{
-						MV_16BitReverb(source + MV_RightChannelOffset,
-									   dest + MV_RightChannelOffset,
-									   (const VOLUME16*)MV_ReverbTable,
-									   count / 2);
-					}
 				}
 				else
 				{
 					MV_16BitReverbFast(source, dest, count / 2, MV_ReverbLevel);
-					if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-					{
-						MV_16BitReverbFast(source + MV_RightChannelOffset,
-										   dest + MV_RightChannelOffset,
-										   count / 2, MV_ReverbLevel);
-					}
 				}
 			}
 			else
@@ -442,22 +422,10 @@ void MV_ServiceVoc(void)
 				{
 					MV_8BitReverb(source, dest, (const VOLUME16*)MV_ReverbTable,
 								  count);
-					if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-					{
-						MV_8BitReverb(source + MV_RightChannelOffset,
-									  dest + MV_RightChannelOffset,
-									  (const VOLUME16*)MV_ReverbTable, count);
-					}
 				}
 				else
 				{
 					MV_8BitReverbFast(source, dest, count, MV_ReverbLevel);
-					if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-					{
-						MV_8BitReverbFast(source + MV_RightChannelOffset,
-										  dest + MV_RightChannelOffset, count,
-										  MV_ReverbLevel);
-					}
 				}
 			}
 
@@ -1713,13 +1681,6 @@ int MV_SetMixMode(int numchannels, int samplebits)
 	MV_BufferLength = TotalBufferSize;
 
 	MV_RightChannelOffset = MV_SampleSize / 2;
-	if ((MV_SoundCard == UltraSound) && (MV_Channels == 2))
-	{
-		MV_SampleSize /= 2;
-		MV_BufferSize /= 2;
-		MV_RightChannelOffset = MV_BufferSize * MV_NumberOfBuffers;
-		MV_BufferLength /= 2;
-	}
 
 	return (MV_Ok);
 }
@@ -2469,9 +2430,7 @@ int MV_TestPlayback(void)
    Multivoc.
 ---------------------------------------------------------------------*/
 
-int MV_Init(int soundcard, int MixRate, int Voices, int numchannels,
-			int samplebits)
-
+int MV_Init(int MixRate, int Voices, int numchannels, int samplebits)
 {
 	char* ptr;
 	int status;
@@ -2564,7 +2523,6 @@ int MV_Init(int soundcard, int MixRate, int Voices, int numchannels,
 		return (MV_Error);
 	}
 
-	MV_SoundCard = soundcard;
 	MV_Installed = TRUE;
 	MV_CallBackFunc = NULL;
 	MV_RecordFunc = NULL;
@@ -2686,7 +2644,6 @@ void MV_UnlockMemory(void)
 	DPMI_Unlock(MV_VolumeTable);
 	DPMI_Unlock(MV_PanTable);
 	DPMI_Unlock(MV_Installed);
-	DPMI_Unlock(MV_SoundCard);
 	DPMI_Unlock(MV_TotalVolume);
 	DPMI_Unlock(MV_MaxVoices);
 	DPMI_Unlock(MV_BufferSize);
@@ -2741,7 +2698,6 @@ int MV_LockMemory(void)
 	status |= DPMI_Lock(MV_VolumeTable);
 	status |= DPMI_Lock(MV_PanTable);
 	status |= DPMI_Lock(MV_Installed);
-	status |= DPMI_Lock(MV_SoundCard);
 	status |= DPMI_Lock(MV_TotalVolume);
 	status |= DPMI_Lock(MV_MaxVoices);
 	status |= DPMI_Lock(MV_BufferSize);

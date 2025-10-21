@@ -28,8 +28,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_stat.h"
 #include "rt_draw.h"
 #include "_rt_draw.h"
-#include "rt_dr_a.h"
-#include "rt_fc_a.h"
 #include "rt_scale.h"
 #include "rt_floor.h"
 #include "rt_main.h"
@@ -56,7 +54,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "modexlib.h"
 #include "rt_rand.h"
 #include "rt_net.h"
-#include "rt_sc_a.h"
 
 extern void VH_UpdateScreen(void);
 
@@ -2399,8 +2396,8 @@ void InterpolateMaskedWall(visobj_t* plane)
 		drawbottom = false;
 	}
 
-	d1 = (1 << (16 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (16 + HEIGHTFRACTION)) / plane->h2;
+	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
+	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
 	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
 		  (1 << (DHEIGHTFRACTION - 1))) /
 		 dx;
@@ -2634,7 +2631,7 @@ void FlipPage(void)
 	/* TODO some shake thing */
 
 	/* just call the one in modexlib.c */
-	XFlipPage();
+	VH_UpdateScreen();
 }
 
 //******************************************************************************
@@ -2731,7 +2728,7 @@ void DoLoadGameSequence(void)
 	FlipPage();
 	FlipPage();
 
-	VL_CopyPlanarPageToMemory((byte*)bufferofs, destscreen);
+	VL_CopyPlanarPage((byte*)bufferofs, destscreen);
 
 	CalcTics();
 
@@ -3055,7 +3052,6 @@ void RotateScreenScaleFloat(float startAngle, float endAngle, float startScale,
 {
 	DisableScreenStretch();
 
-	// STUB_FUNCTION;
 	// printf("ROTATE SCREEN FLOAT FUNC: \n");
 	// printf("startAngle: %f \n", startAngle);
 	// printf("endAngle: %f \n", endAngle);
@@ -3129,8 +3125,6 @@ void RotateScreen(int startAngle, int endAngle, int startScale, int endScale,
 int time, int option, boolean fadeOut)
 {
 	DisableScreenStretch();
-
-	//STUB_FUNCTION;
 
 	printf("ROTATE SCREEN FUNC: \n");
 	printf("startAngle: %d \n", startAngle);
@@ -3418,8 +3412,6 @@ apogeeexit:
 	ShutdownRotateBuffer();
 }
 
-#if (SHAREWARE == 0)
-
 void DopefishTitle(void)
 {
 	int shapenum;
@@ -3460,8 +3452,6 @@ void DopefishTitle(void)
 	SD_Play(SD_DOPEFISHSND);
 	FlipPage();
 }
-
-#endif
 
 void RotationFunSDL(void)
 {
@@ -3924,7 +3914,6 @@ void WarpString(int x, int y, int endx, int endy, int time, byte* back,
 	// FlipPage();
 }
 
-#if (SHAREWARE == 1)
 //******************************************************************************
 //
 // DoEndCinematic
@@ -4061,7 +4050,7 @@ char* EndCinematicText[NUMENDMESSAGES] = {
 char NextGameString1[] = "The Developers of Incredible Power";
 char NextGameString2[] = "shall return";
 
-void DoEndCinematic(void)
+void DoSharewareEndCinematic(void)
 {
 	int trilogo;
 	int group;
@@ -4263,7 +4252,6 @@ finalfade:
 
 	SafeFree(bkgnd);
 }
-#else
 
 // REGISTERED VERSION ======================================================
 
@@ -5212,7 +5200,6 @@ void DoInBetweenCinematic(int yoffset, int lump, int delay, char* string)
 	I_Delay(delay);
 	VL_FadeOut(0, 255, 0, 0, 0, 20);
 }
-#endif
 
 //******************************************************************************
 //

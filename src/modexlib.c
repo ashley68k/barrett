@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
 #include "rt_view.h"
+#include "rt_vid.h"
 #include "queue.h"
 #include "lumpy.h"
 // #include "SDL2/SDL2_rotozoom.h"
@@ -76,15 +77,6 @@ char* bufofsTopLimit;
 char* bufofsBottomLimit;
 
 void DrawCenterAim();
-
-#ifndef STUB_FUNCTION
-
-/* rt_def.h isn't included, so I just put this here... */
-#define STUB_FUNCTION                                                          \
-	fprintf(stderr, "STUB: %s at " __FILE__ ", line %d, thread %d\n",          \
-			__func__, __LINE__, getpid())
-
-#endif
 
 /*
 ====================
@@ -217,7 +209,7 @@ void VL_SetVGAPlaneMode(void)
 
 	// start stretched
 	EnableScreenStretch();
-	XFlipPage();
+	VH_UpdateScreen();
 }
 
 /*
@@ -228,18 +220,6 @@ void VL_SetVGAPlaneMode(void)
 =======================
 */
 void VL_CopyPlanarPage(byte* src, byte* dest)
-{
-	memcpy(dest, src, screensize);
-}
-
-/*
-=======================
-=
-= VL_CopyPlanarPageToMemory
-=
-=======================
-*/
-void VL_CopyPlanarPageToMemory(byte* src, byte* dest)
 {
 	memcpy(dest, src, screensize);
 }
@@ -347,27 +327,6 @@ void VH_UpdateScreen(void)
 		DrawCenterAim();
 	}
 
-	RenderSurface();
-}
-
-/*
-=================
-=
-= XFlipPage
-=
-=================
-*/
-
-void XFlipPage(void)
-{
-	if (StretchScreen)
-	{ // bna++
-		StretchMemPicture();
-	}
-	else
-	{
-		DrawCenterAim();
-	}
 	RenderSurface();
 }
 

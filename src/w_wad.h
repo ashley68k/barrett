@@ -39,7 +39,6 @@ int W_NumLumps(void);		// Get the current number of lumps managed
 int W_LumpLength(int lump); // Get the length of the numbered lump
 void W_ReadLump(int lump, void* dest); // Read the numbered lump into a buffer
 void W_WriteLump(int lump, void* src);
-void W_FreeLumps(void);
 
 void* W_CacheLumpNum(int lump, int tag, converter_t converter, int numrecs);
 // Cache in the numbered lump with the appropriate memory tag

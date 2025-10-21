@@ -31,8 +31,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef __MUSIC_H
 #define __MUSIC_H
 
-#include "sndcards.h"
-
 extern int MUSIC_ErrorCode;
 
 enum MUSIC_ERRORS
@@ -63,7 +61,7 @@ typedef struct
 #define MUSIC_PlayOnce (!MUSIC_LoopSong)
 
 char* MUSIC_ErrorString(int ErrorNumber);
-int MUSIC_Init(int SoundCard, int Address);
+int MUSIC_Init(void);
 int MUSIC_Shutdown(void);
 void MUSIC_SetMaxFMMidiChannel(int channel);
 void MUSIC_SetVolume(int volume);

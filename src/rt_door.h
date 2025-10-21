@@ -279,4 +279,13 @@ void LinkedOpenDoor(long door);
 int IsWall(int tilex, int tiley);
 int IsDoor(int tilex, int tiley);
 int IsMaskedWall(int tilex, int tiley);
+
+void SetMode240(void);
+void RefreshClear(void);
+void DrawPost(int height, char* column, char* buf);
+void DrawHeightPost(int height, byte* src, byte* buf);
+void R_DrawWallColumn(byte* buf);
+void DrawMenuPost(int height, byte* src, byte* buf);
+void DrawMapPost(int height, byte* src, byte* buf);
+
 #endif

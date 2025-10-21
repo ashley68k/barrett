@@ -1118,28 +1118,29 @@ void SpawnStatic(int tilex, int tiley, int mtype, int zoffset)
 	statobj_t* temp;
 	boolean onetimer;
 
-#if (SHAREWARE == 1)
-	switch (mtype)
+	if (IS_SHAREWARE)
 	{
-	case stat_rlight:
-	case stat_glight:
-	case stat_ylight:
-	case stat_chandelier:
-		mtype = stat_blight;
-		break;
+		switch (mtype)
+		{
+			case stat_rlight:
+			case stat_glight:
+			case stat_ylight:
+			case stat_chandelier:
+				mtype = stat_blight;
+				break;
 
-	case stat_garb1:
-	case stat_garb2:
-	case stat_garb3:
-	case stat_shit:
-		mtype = stat_metalshards;
-		break;
+			case stat_garb1:
+			case stat_garb2:
+			case stat_garb3:
+			case stat_shit:
+				mtype = stat_metalshards;
+				break;
 
-	case stat_lamp:
-		mtype = stat_altbrazier2;
-		break;
+			case stat_lamp:
+				mtype = stat_altbrazier2;
+				break;
+		}
 	}
-#endif
 
 	if (BATTLEMODE)
 	{

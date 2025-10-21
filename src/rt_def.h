@@ -140,12 +140,7 @@ long filelength(int handle);
 #error please define for your platform.
 #endif
 
-#define STUB_FUNCTION                                                          \
-	fprintf(stderr, "STUB: %s at " __FILE__ ", line %d, thread %d\n",          \
-			__func__, __LINE__, getpid())
-
-#define far
-#define cdecl
+#define UNUSED(x) ((void)(x))
 
 //***************************************************************************
 //
@@ -363,14 +358,10 @@ typedef enum
 	wp_firebomb,
 	wp_firewall,
 	wp_godhand,
-
-#if (SHAREWARE == 0)
 	wp_split,
 	wp_kes,
 	wp_bat,
 	wp_dog
-#endif
-
 } weapontype;
 
 enum

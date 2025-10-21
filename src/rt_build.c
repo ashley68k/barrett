@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include "rt_build.h"
 #include "_rt_buil.h"
-#include "rt_dr_a.h"
+#include "rt_door.h"
 #include "rt_draw.h"
 #include "rt_scale.h"
 #include "rt_menu.h"
@@ -35,7 +35,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "engine.h"
 #include "lumpy.h"
-#include "rt_fc_a.h"
 #include "z_zone.h"
 #include "w_wad.h"
 #include "rt_view.h"

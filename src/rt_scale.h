@@ -51,4 +51,9 @@ void DrawPositionedScaledSprite(int x, int y, int shapenum, int height,
 								int type);
 void DrawNormalSprite(int x, int y, int shapenum);
 
+void R_DrawColumn(byte* buf);
+void R_DrawSolidColumn(int color, byte* buf);
+void R_TransColumn(byte* buf);
+void R_DrawClippedColumn(byte* buf);
+
 #endif

@@ -22,7 +22,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_def.h"
 #include "watcom.h"
 #include "rt_floor.h"
-#include "rt_fc_a.h"
 #include "_rt_floo.h"
 #include "rt_draw.h"
 #include "rt_util.h"

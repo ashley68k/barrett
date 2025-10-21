@@ -162,24 +162,6 @@ void W_AddFile(char* _filename)
 		free(fileinfo);
 }
 
-void W_FreeLumps(void)
-{
-
-}
-
-/*
-====================
-=
-= W_CheckWADIntegrity
-=
-====================
-*/
-
-void W_CheckWADIntegrity(void)
-{
-	// CRC disabled because it's not very useful these days
-}
-
 /*
 ====================
 =
@@ -222,7 +204,6 @@ void W_InitMultipleFiles(char** filenames)
 
 	if (!quiet)
 		printf("W_Wad: Wad Manager Started NUMLUMPS=%ld\n", (long int)numlumps);
-	W_CheckWADIntegrity();
 }
 
 /*

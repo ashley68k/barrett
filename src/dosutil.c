@@ -13,10 +13,9 @@
 #include <fcntl.h>
 
 #include "rt_def.h"
+#include "rt_main.h"
 
-#if defined(USE_SDL)
 #include "SDL2/SDL.h"
-#endif
 
 /*
   Copied over from Wolf3D Linux: http://www.icculus.org/wolf3d/
@@ -51,7 +50,6 @@ char* ultoa(unsigned long value, char* string, int radix)
 		sprintf(string, "%lux", value);
 		break;
 	default:
-		STUB_FUNCTION;
 		break;
 	}
 
@@ -69,30 +67,24 @@ extern char ApogeePath[256];
 
 int setup_homedir(void)
 {
+	char fetchCWD[160];
+	getcwd(fetchCWD, sizeof(fetchCWD));
+
 #if PLATFORM_UNIX && !defined(__MINGW32__)
 	int err;
 
 	/* try to create the root directory */
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
+	snprintf(ApogeePath, sizeof(ApogeePath), "%s/userdata/", fetchCWD);
 	err = mkdir(ApogeePath, S_IRWXU);
 
-	/* keep the shareware and registered game data separated */
-#if (SHAREWARE == 1)
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/", getenv("HOME"));
-#else
-	snprintf(ApogeePath, sizeof(ApogeePath), "%s/.rott/darkwar/",
-			 getenv("HOME"));
-#endif
-
-	err = mkdir(ApogeePath, S_IRWXU);
 	if (err == -1 && errno != EEXIST)
 	{
-		fprintf(stderr, "Couldn't create preferences directory: %s\n",
+		fprintf(stderr, "Couldn't create userdata directory: %s\n",
 				strerror(errno));
 		return -1;
 	}
 #else
-	sprintf(ApogeePath, ".%s", PATH_SEP_STR);
+	sprintf(ApogeePath, "./data/");;
 #endif
 
 	return 0;
@@ -168,7 +160,6 @@ char* itoa(int value, char* string, int radix)
 		sprintf(string, "%x", value);
 		break;
 	default:
-		STUB_FUNCTION;
 		break;
 	}
 
@@ -186,7 +177,6 @@ char* ltoa(long value, char* string, int radix)
 		sprintf(string, "%lx", value);
 		break;
 	default:
-		STUB_FUNCTION;
 		break;
 	}
 
@@ -277,8 +267,6 @@ void crash_print()
 	printf("OH NO OH NO ROTT CRASHED!\n");
 	printf("Here is where:\n");
 	print_stack(1);
-#if defined(USE_SDL)
 	atexit(SDL_Quit);
-#endif
 	exit(1);
 }

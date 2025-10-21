@@ -21,7 +21,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include "sprites.h"
 #include "rt_map.h"
-#include "rt_dr_a.h"
 #include "_rt_map.h"
 #include "isr.h"
 #include "rt_util.h"

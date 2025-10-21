@@ -31,9 +31,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DEFINE_CONVERTER(type)                                                 \
 	void Cvt_##type(void* lmp, int num)                                        \
 	{                                                                          \
-		int i;                                                                 \
+		int ii;                                                                \
 		type* recs = (type*)lmp;                                               \
-		for (i = 0; i < num; i++, recs++)                                      \
+		for (ii = 0; ii < num; ii++, recs++)                                   \
 		{                                                                      \
 			CONVERT_ENDIAN_##type(recs);                                       \
 		}                                                                      \
@@ -49,6 +49,7 @@ DEFINE_CONVERTER(cfont_t)
 
 void CvtNull(void* lmp, int num)
 {
+	UNUSED(num);
 	Debug("No-op endian converter on %p.\n", lmp);
 }
 

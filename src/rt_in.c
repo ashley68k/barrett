@@ -24,9 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
 
-#if USE_SDL
 #include "SDL2/SDL.h"
-#endif
 
 #include "rt_main.h"
 #include "rt_def.h"
@@ -79,7 +77,6 @@ int LastLetter = 0;
 char LetterQueue[MAXLETTERS];
 ModemMessage MSG;
 
-#if USE_SDL
 static SDL_Joystick* sdl_joysticks[MaxJoys];
 static word sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
@@ -89,7 +86,6 @@ static word sdl_sticks_joybits = 0;
 // hashtable if possible
 static HashTable* scancodes;
 extern boolean sdl_fullscreen;
-#endif
 
 //   'q','w','e','r','t','y','u','i','o','p','[',']','\\', 0 ,'a','s',
 
@@ -133,7 +129,7 @@ static Direction DirTable[] = // Quick lookup for total direction
 	{dir_NorthWest, dir_North,	   dir_NorthEast, dir_West,		dir_None,
 	 dir_East,		dir_SouthWest, dir_South,	  dir_SouthEast};
 
-int(far* function_ptr)();
+int(* function_ptr)();
 
 static char* ParmStrings[] = {"nojoys", "nomouse", NULL};
 
@@ -594,7 +590,6 @@ boolean INL_StartJoy(word joy)
 {
 	word x, y;
 
-#if USE_SDL
 	if (!SDL_WasInit(SDL_INIT_JOYSTICK))
 	{
 		SDL_Init(SDL_INIT_JOYSTICK);
@@ -618,7 +613,6 @@ boolean INL_StartJoy(word joy)
 	if (joy >= sdl_total_sticks)
 		return (false);
 	sdl_joysticks[joy] = SDL_JoystickOpen(joy);
-#endif
 
 	IN_GetJoyAbs(joy, &x, &y);
 

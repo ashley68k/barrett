@@ -93,9 +93,7 @@ int objcount;
 
 byte RANDOMACTORTYPE[10];
 
-#if (SHAREWARE == 0)
 _2Dpoint SNAKEPATH[512];
-#endif
 actor_misc_flags mstruct, *MISCVARS = &mstruct;
 int angletodir[ANGLES];
 objtype* new;

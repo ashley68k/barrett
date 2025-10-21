@@ -26,10 +26,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include <signal.h>
 
-#if USE_SDL
 /* Need to redefine main to SDL_main on some platforms... */
 #include "SDL2/SDL.h"
-#endif
 
 #include "rt_actor.h"
 #include "rt_stat.h"
@@ -61,7 +59,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "develop.h"
 #include "version.h"
 #include "rt_menu.h"
-#include "rt_dr_a.h"
 #include "rt_msg.h"
 #include "rt_build.h"
 #include "rt_error.h"
@@ -96,7 +93,6 @@ boolean MONOPRESENT = false;
 boolean MAPSTATS = false;
 boolean TILESTATS = false;
 boolean HUD = false;
-boolean IS8250 = false;
 
 boolean dopefish;
 
@@ -192,14 +188,13 @@ int main(int argc, char* argv[])
 	// Set which release version we're on
 	gamestate.Version = ROTTVERSION;
 
+	// HACK until shareware/registered are combined better
 #if (SHAREWARE == 1)
-	BATTMAPS = strdup(STANDARDBATTLELEVELS);
+	BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
 	FixFilePath(BATTMAPS);
 	gamestate.Product = ROTT_SHAREWARE;
 #else
-
 	BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
-
 	FixFilePath(BATTMAPS);
 	if (!access(BATTMAPS, R_OK))
 	{
@@ -219,7 +214,17 @@ int main(int argc, char* argv[])
 			free(BATTMAPS);
 			BATTMAPS = strdup(STANDARDBATTLELEVELS);
 			FixFilePath(BATTMAPS);
-			gamestate.Product = ROTT_REGISTERED;
+			if (!access(BATTMAPS, R_OK))
+			{
+				gamestate.Product = ROTT_REGISTERED;
+			}
+			else
+			{
+				free(BATTMAPS);
+				BATTMAPS = strdup(SHAREWAREBATTLELEVELS);
+				FixFilePath(BATTMAPS);
+				gamestate.Product = ROTT_SHAREWARE;
+			}
 		}
 	}
 #endif
@@ -265,27 +270,13 @@ int main(int argc, char* argv[])
 	{
 		int status2 = 0;
 
-		if (!NoSound && !IS8250)
+		if (!NoSound)
 		{
 			if (!quiet)
 				printf("MU_Startup: ");
 			MU_Startup(false);
 			if (!quiet)
 				printf("%s\n", MUSIC_ErrorString(MUSIC_Error));
-		}
-		else if (IS8250)
-		{
-			printf("==========================================================="
-				   "===================\n");
-			printf("WARNING: 8250 detected.\n");
-			printf("Music has been disabled.  This is necessary to maintain "
-				   "high interrupt\n");
-			printf("rates with the 8250 UART which will improve overall game "
-				   "performance.\n");
-			printf("                      < Press any key to continue >\n");
-			printf("==========================================================="
-				   "===================\n");
-			getch();
 		}
 
 		if (!NoSound)
@@ -368,24 +359,22 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-#if (SHAREWARE == 0)
-		if (dopefish == true)
+		if (IS_NOT_SHAREWARE)
 		{
-			DopefishTitle();
+			if (dopefish == true)
+			{
+				DopefishTitle();
+			}
+			else if (NoWait == false)
+			{
+				ApogeeTitle();
+			}
 		}
 		else if (NoWait == false)
 		{
-			ApogeeTitle();
-		}
-#else
-		if (NoWait == false)
-		{
 			if (W_CheckNumForName("svendor") != -1)
 			{
-				lbm_t* LBM;
-
-				LBM =
-					(lbm_t*)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
+				lbm_t *LBM = (lbm_t *)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
 				VL_DecompressLBM(LBM, true);
 				I_Delay(40);
 				MenuFadeOut();
@@ -393,7 +382,6 @@ int main(int argc, char* argv[])
 			//         ParticleIntro ();
 			ApogeeTitle();
 		}
-#endif
 	}
 	// SDL_WM_GrabInput( SDL_GRAB_ON );
 	GameLoop();
@@ -497,7 +485,6 @@ void CheckCommandLineParameters(void)
 	MONOPRESENT = false;
 	MAPSTATS = false;
 	TILESTATS = false;
-	IS8250 = false;
 	demoexit = false;
 
 	modemgame = false;
@@ -522,14 +509,15 @@ void CheckCommandLineParameters(void)
 		printf("              - next param is <widthxheight>, valid "
 			   "resolutions are:\n");
 		printf("              - 320x200, 640x480 and 800x600\n");
-#if (SHAREWARE == 0)
-		printf("   FILERTL    - used to load Userlevels (RTL files)\n");
-		printf("              - next parameter is RTL filename\n");
-		printf("   FILERTC    - used to load Battlelevels (RTC files)\n");
-		printf("              - next parameter is RTC filename\n");
-		printf("   FILE       - used to load Extern WAD files\n");
-		printf("              - next parameter is WAD filename\n");
-#endif
+		if (IS_NOT_SHAREWARE)
+		{
+			printf("   FILERTL    - used to load Userlevels (RTL files)\n");
+			printf("              - next parameter is RTL filename\n");
+			printf("   FILERTC    - used to load Battlelevels (RTC files)\n");
+			printf("              - next parameter is RTC filename\n");
+			printf("   FILE       - used to load Extern WAD files\n");
+			printf("              - next parameter is WAD filename\n");
+		}
 		printf("   NOJOYS     - Disable check for joystick.\n");
 		printf("   NOMOUSE    - Disable check for mouse.\n");
 		printf("   VER        - Version number.\n");
@@ -538,7 +526,6 @@ void CheckCommandLineParameters(void)
 		printf("   MONO       - Enable mono-monitor support.\n");
 		printf("   SCREENSHOTS- Clean screen capture for shots.\n");
 		printf("   PAUSE      - Pauses startup screen information.\n");
-		printf("   ENABLEVR   - Enable VR helmet input devices\n");
 		printf("   NOECHO     - Turn off sound reverb\n");
 		printf("   DEMOEXIT   - Exit program when demo is terminated\n");
 		printf("   WARP       - Warp to specific ROTT level\n");
@@ -704,7 +691,6 @@ void CheckCommandLineParameters(void)
 			startlevel = (ParseNum(_argv[i + 1]) - 1);
 			break;
 		case 15:
-			IS8250 = true;
 			break;
 		case 16:
 			break;
@@ -789,7 +775,9 @@ void SetupWads(void)
 		}
 	}
 
-#if (SHAREWARE == 0)
+	if (IS_SHAREWARE)
+		goto skip_file_loading;
+
 	// Check for rtl files
 	arg = CheckParm("filertl");
 	if (arg != 0)
@@ -931,20 +919,19 @@ NoRTC:;
 		newargs[argnum++] = _argv[arg + 1];
 	}
 
-#else
-	if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) ||
-		(CheckParm("file2") > 0))
-		printf("External wads ignored.\n");
-
-#endif
-
+skip_file_loading:
 	// Normal ROTT wads
+	if (IS_SHAREWARE)
+	{
+		if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) || (CheckParm("file2") > 0))
+			printf("External wads ignored.\n");
 
-#if (SHAREWARE)
-	newargs[argnum++] = DATADIR "HUNTBGIN.WAD";
-#else
-	newargs[argnum++] = DATADIR "DARKWAR.WAD";
-#endif
+		newargs[argnum++] = DATADIR "HUNTBGIN.WAD";
+	}
+	else
+	{
+		newargs[argnum++] = DATADIR "DARKWAR.WAD";
+	}
 
 	//   newargs [argnum++] = "credits.wad";
 
@@ -1179,12 +1166,8 @@ void GameLoop(void)
 					DoCreditScreen();
 					if ((!LastScan) && (!IN_GetMouseButtons()))
 						CheckHighScore(0, 0, false);
-#if (SHAREWARE == 0)
-					if ((!LastScan) && (!IN_GetMouseButtons()))
-					{
+					if (IS_NOT_SHAREWARE && (!LastScan) && (!IN_GetMouseButtons()))
 						DoMicroStoryScreen();
-					}
-#endif
 					if ((!LastScan) && (!IN_GetMouseButtons()) &&
 						(lowmemory == 0) && (GameLevels.avail == false))
 					{
@@ -1423,8 +1406,7 @@ void GameLoop(void)
 				gamestate.frame = 0;
 			}
 			StopWind();
-#if (SHAREWARE == 0)
-			if ((playstate == ex_bossdied) && (gamestate.mapon != 30))
+			if (IS_NOT_SHAREWARE && (playstate == ex_bossdied) && (gamestate.mapon != 30))
 			{
 
 				int shape;
@@ -1495,7 +1477,6 @@ void GameLoop(void)
 					IN_UpdateKeyboard(); // Thanks again DrLex
 				LastScan = 0;
 			}
-#endif
 
 			LevelCompleted(playstate);
 
@@ -1540,7 +1521,10 @@ void GameLoop(void)
 
 		case ex_gameover:
 			StopWind();
-			DoEndCinematic();
+			if (IS_SHAREWARE)
+				DoSharewareEndCinematic();
+			else
+				DoEndCinematic();
 			if (playstate == ex_gameover)
 			{
 				CheckHighScore(gamestate.score, gamestate.mapon + 1, false);
@@ -1650,8 +1634,6 @@ void QuitGame(void)
 	SetTextMode();
 
 	ClearScanCodes();
-
-	W_FreeLumps();
 
 	exit(0);
 }
@@ -2419,7 +2401,6 @@ void PollKeyboard(void)
 		}
 #endif
 	}
-#ifdef USE_SDL
 	/* SDL doesn't send proper release events for these */
 	if (Keystate[sc_CapsLock])
 	{
@@ -2433,7 +2414,6 @@ void PollKeyboard(void)
 		if (Keystate[0x45] == 3)
 			Keystate[0x45] = 0;
 	}
-#endif
 }
 
 #if SAVE_SCREEN
@@ -2649,9 +2629,7 @@ void SaveScreen(boolean saveLBM)
 
 	GetFileName(saveLBM);
 	GetPathFromEnvironment(filename, ApogeePath, savename);
-	//
-	memcpy(buffer, screen, iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT); // bna
-	// bna--VL_CopyPlanarPageToMemory(screen,buffer);
+	memcpy(buffer, screen, iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT);
 
 	if (saveLBM)
 	{
@@ -2822,14 +2800,13 @@ int PutBytes(unsigned char* ptr, unsigned int bytes)
 
 void PlayCinematic(void)
 {
+	byte pal[768];
 
-	if ((tedlevel == true) || (turbo == true))
+	if (IS_SHAREWARE || (tedlevel == true) || (turbo == true))
 		return;
 
 	switch (gamestate.mapon)
 	{
-#if (SHAREWARE == 0)
-		byte pal[768];
 	case 0: // Start of EPISODE 1
 
 		MU_StartSong(song_cinematic1);
@@ -2917,6 +2894,5 @@ void PlayCinematic(void)
 		IN_UpdateKeyboard();
 		LastScan = 0;
 		break;
-#endif
 	}
 }
