@@ -960,14 +960,6 @@ void ReadConfig(void)
 //
 //******************************************************************************
 
-#if (SHAREWARE == 1)
-#define VENDORDOC  ("VENDOR.DOC")
-#define VENDORLUMP ("VENDOR")
-#else
-#define VENDORDOC  ("LICENSE.DOC")
-#define VENDORLUMP ("LICENSE")
-#endif
-
 void CheckVendor(void)
 {
 	boolean saveout = false;
@@ -977,6 +969,18 @@ void CheckVendor(void)
 	int lump;
 	byte* vendor;
 	char filename[128];
+	const char *VENDORDOC, *VENDORLUMP;
+
+	if (IS_SHAREWARE)
+	{
+		VENDORDOC = "VENDOR.DOC";
+		VENDORLUMP = "VENDOR";
+	}
+	else
+	{
+		VENDORDOC = "LICENSE.DOC";
+		VENDORLUMP = "LICENSE";
+	}
 
 	GetPathFromEnvironment(filename, ApogeePath, VENDORDOC);
 	if (access(filename, F_OK) == 0)
@@ -2018,14 +2022,17 @@ void GetAlternateFile(char* tokenstr, AlternateInformation* info)
 			GetToken(false);
 			if (stricmp(token, "~"))
 			{
-#if (SHAREWARE == 0)
-				info->avail = true;
-				memset(&info->file[0], 0, sizeof(&info->file));
-				strcpy(&info->file[0], &token[0]);
-#else
-				printf("Alternate file %s ignored.\n", token);
-				memset(&info->file[0], 0, sizeof(info->file));
-#endif
+				if (IS_NOT_SHAREWARE)
+				{
+					info->avail = true;
+					memset(&info->file[0], 0, sizeof(&info->file));
+					strcpy(&info->file[0], &token[0]);
+				}
+				else
+				{
+					printf("Alternate file %s ignored.\n", token);
+					memset(&info->file[0], 0, sizeof(info->file));
+				}
 			}
 		}
 	}
