@@ -208,8 +208,6 @@ void OPL_SetVolume(double newVol)
     // essentially, 0.0-10.0f scaled to square of volumescale
     double volumescale = newVol / 127;
     volume = 10 * pow(volumescale, 2);
-
-    printf("new volume: %f\n", volume);
 }
 
 void OPL_Stop(void)
