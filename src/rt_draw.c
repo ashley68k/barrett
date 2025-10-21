@@ -2396,8 +2396,8 @@ void InterpolateMaskedWall(visobj_t* plane)
 		drawbottom = false;
 	}
 
-	d1 = (1 << (16 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (16 + HEIGHTFRACTION)) / plane->h2;
+	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
+	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
 	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
 		  (1 << (DHEIGHTFRACTION - 1))) /
 		 dx;
