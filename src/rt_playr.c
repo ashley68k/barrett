@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "keyb.h"
 #include "rt_def.h"
 #include "watcom.h"
 #include "rt_sound.h"
@@ -150,12 +151,12 @@ boolean RefreshPause = true;
 boolean buttonpoll[NUMBUTTONS];
 
 int buttonscan[NUMBUTTONS] = {
-	sc_Control, sc_Alt,		   sc_RShift,	 sc_Space,	   sc_PgUp,
-	sc_PgDn,	sc_Enter,	   sc_Delete,	 sc_Home,	   sc_End,
-	sc_1,		sc_2,		   sc_3,		 sc_4,		   sc_CapsLock,
-	sc_F12,		sc_Comma,	   sc_Period,	 sc_BackSpace, sc_A,
-	sc_UpArrow, sc_RightArrow, sc_DownArrow, sc_LeftArrow, sc_Tab,
-	sc_T,		sc_Z};
+	sc_Space, sc_Alt,		   sc_LShift,	 sc_E,	   sc_I,
+	sc_K,	sc_Enter,	   sc_Delete,	 sc_U,	   sc_M,
+	sc_1,		sc_2,		   sc_3,		 sc_4,		   sc_Control,
+	sc_F12,		sc_A,	   sc_D,	 sc_BackSpace, sc_None,
+	sc_W, sc_L, sc_S, sc_J, sc_Tab,
+	sc_T,		sc_Y};
 
 int joyxmax = 0, joyymax = 0, joyxmin = 0, joyymin = 0;
 
