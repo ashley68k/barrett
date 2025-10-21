@@ -81,6 +81,9 @@ static boolean OPL_WriteDefault(const char* path)
     // kvp for chip count
     fputs("count=2", ini);
 
+    // clean up
+    fclose(ini);
+
     return true;
 }
 
