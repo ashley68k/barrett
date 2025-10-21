@@ -246,7 +246,7 @@ void MUSIC_SetMaxFMMidiChannel(int channel)
 
 void MUSIC_SetVolume(int volume)
 {
-	if(useoplmusic)
+	if(useoplmusic && OPL_IsHooked())
 		OPL_SetVolume(volume >> 1);
 	else
 		Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
@@ -274,7 +274,7 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
-	if(useoplmusic)
+	if(useoplmusic && OPL_IsHooked())
 		return OPL_IsPlaying();
 	else
 		return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
@@ -313,6 +313,7 @@ int MUSIC_StopSong(void)
 
 	music_songdata = NULL;
 	music_musicchunk = NULL;
+
 	return (MUSIC_Ok);
 } // MUSIC_StopSong
 
@@ -320,11 +321,20 @@ int MUSIC_PlaySong(char* song, int size, int loopflag)
 {
 	if(useoplmusic)
 	{
-		OPL_SetLoop(loopflag);
-		OPL_Play(song, size);
+		if(!OPL_Play(song, size, loopflag))
+		{	
+			OPL_DeregisterHook();
+			goto oplskip;
+		}
+		else
+		{
+			OPL_RegisterHook();
+			return (MUSIC_Ok);
+		}
 	}
 	else
 	{
+oplskip:
 		MUSIC_StopSong();
 
 		if (size < 1) {
@@ -400,7 +410,7 @@ void MUSIC_StopFade(void)
 } // MUSIC_StopFade
 
 void MUSIC_RerouteMidiChannel(int channel,
-							  int cdecl (*function)(int event, int c1, int c2))
+							  int (*function)(int event, int c1, int c2))
 {
 	musdebug("STUB ... MUSIC_RerouteMidiChannel().\n");
 } // MUSIC_RerouteMidiChannel

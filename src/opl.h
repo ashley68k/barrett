@@ -21,18 +21,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef OPL_H_
 #define OPL_H_
 
+#include "rt_def.h"
+
 typedef struct opl
 {
     int oplChipNum;
     int bankNum;
 } oplCfg;
 
-void OPL_Init();
-void OPL_Play(char* buffer, int size);
-void OPL_Stop();
-void OPL_Pause();
-void OPL_SetLoop(int loopFlag);
+void OPL_RegisterHook(void);
+void OPL_DeregisterHook(void);
+int OPL_IsHooked(void);
+void OPL_Init(void);
+boolean OPL_Play(char* buffer, int siz, int loopflag);
+void OPL_Stop(void);
+void OPL_Pause(void);
 void OPL_SetVolume(double newVol);
-int OPL_IsPlaying();
+int OPL_IsPlaying(void);
 
 #endif

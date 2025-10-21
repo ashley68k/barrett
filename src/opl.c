@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 static void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 
 static boolean isPlaying = 0;
+static boolean isHooked = false;
 
 static double volume = 0;
 
@@ -87,8 +88,24 @@ static boolean OPL_WriteDefault(const char* path)
     return true;
 }
 
+void OPL_RegisterHook(void)
+{
+    Mix_HookMusic(OPLcallback, midi_player);
+    isHooked = true;
+}
 
-void OPL_Init()
+void OPL_DeregisterHook(void)
+{
+    Mix_HookMusic(NULL, NULL);
+    isHooked = false;
+}
+
+int OPL_IsHooked(void)
+{
+    return isHooked;
+}
+
+void OPL_Init(void)
 {
     char oplCfgPath[512];
     oplCfg cfg;
@@ -128,7 +145,7 @@ void OPL_Init()
     int getBank = cfg.bankNum ? cfg.bankNum : 70;
     adl_setBank(midi_player, getBank);
 
-    Mix_HookMusic(OPLcallback, midi_player);
+    OPL_RegisterHook();
 
     Mix_QuerySpec(NULL, &obtained_format, NULL);
 
@@ -167,15 +184,21 @@ void OPL_Init()
     }
 }
 
-void OPL_Play(char* buffer, int size)
+boolean OPL_Play(char* buffer, int size, int loopflag)
 {
     if(adl_openData(midi_player, buffer, size) < 0)
     {
         fprintf(stderr, "Couldn't open music file: %s\n", adl_errorInfo(midi_player));
-    }   
+
+        return false;
+    }
+
+    adl_setLoopEnabled(midi_player, loopflag);
 
     isPlaying = true;
     SDL_PauseAudio(0);
+
+    return true;
 }
 
 void OPL_SetVolume(double newVol)
@@ -189,24 +212,19 @@ void OPL_SetVolume(double newVol)
     printf("new volume: %f\n", volume);
 }
 
-void OPL_Stop()
+void OPL_Stop(void)
 {
     isPlaying = false;
 }
 
-void OPL_Pause()
+void OPL_Pause(void)
 {
     isPlaying = false;
 }
 
-int OPL_IsPlaying()
+int OPL_IsPlaying(void)
 {
     return isPlaying;
-}
-
-void OPL_SetLoop(int loopFlag)
-{
-    adl_setLoopEnabled(midi_player, loopFlag);
 }
 
 static void OPLcallback(void *cbFunc, Uint8 *stream, int len)
