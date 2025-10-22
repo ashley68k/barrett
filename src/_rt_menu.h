@@ -312,6 +312,11 @@ boolean SliderMenu(int* number, int upperbound, int lowerbound, int erasex,
 				   void (*routine)(int w), char* title, char* left,
 				   char* right);
 
+boolean NumberMenu(int* number, int upperbound, int lowerbound, int numadjust,
+				   void (*routine)(int w), char* title, char* left);
+
+void CP_SoundTest(void);
+
 void DrawF1Help(void);
 void CP_F1Help(void);
 void CP_ScreenSize(void);

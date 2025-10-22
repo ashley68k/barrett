@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //******************************************************************************
 
+#include <SDL_stdinc.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -299,7 +300,7 @@ char* colorname[] = {"Gray", "Brown", "Black", "Tan",	 "Red",	  "Olive",
 //
 CP_MenuNames MainMenuNames[] = {"NEW GAME",		"COMM-BAT� GAME",
 								"RESTORE GAME", "SAVE GAME",
-								"OPTIONS",		"ORDERING INFO",
+								"OPTIONS",		"SOUND TEST",
 								"VIEW SCORES",	//"END GAME"
 								"BACK TO DEMO", //"BACK TO GAME"
 								"QUIT"};
@@ -312,7 +313,7 @@ CP_itemtype MainMenu[] = {
 	{CP_Active, "mm_opt2\0", 'R', (menuptr)CP_LoadGame},
 	{CP_Inactive, "mm_opt3\0", 'S', (menuptr)CP_SaveGame},
 	{CP_Active, "mm_opt5\0", 'O', (menuptr)CP_ControlMenu},
-	{CP_Active, "ordrinfo\0", 'O', (menuptr)CP_OrderInfo},
+	{CP_Active, "ordrinfo\0", 'O', (menuptr)CP_SoundTest},
 	{CP_Active, "mm_opt7\0", 'V', (menuptr)CP_ViewScores},
 	{CP_Active, "mm_opt8\0", 'B', (menuptr)NULL},
 	{CP_Active, "mm_opt9\0", 'Q', (menuptr)CP_Quit}};
@@ -2295,6 +2296,22 @@ void CP_OrderInfo(void)
 void CP_ViewScores(void)
 {
 	CheckHighScore(0, 0, true);
+}
+
+//******************************************************************************
+//
+// CP_SoundTest()
+//
+//******************************************************************************
+
+void CP_SoundTest(void)
+{
+	int temp;
+
+	NumberMenu(&temp, 34, 0, 1, NULL, "Music Test",
+			   "Music No.");
+
+	handlewhich = 10;
 }
 
 //******************************************************************************
@@ -5789,6 +5806,149 @@ boolean SliderMenu(int* number, int upperbound, int lowerbound, int erasex,
 			DrawMenuBufItem(
 				blkx + ((((*number - lowerbound) * scale) / range) >> 16),
 				erasey, block);
+
+			if (routine)
+			{
+				routine(*number);
+			}
+
+			MN_PlayMenuSnd(SD_MOVECURSORSND);
+		}
+
+		if (ci.button0 || Keyboard[sc_Space] || Keyboard[sc_Enter])
+		{
+			exit = 1;
+		}
+		else if (ci.button1 || Keyboard[sc_Escape])
+		{
+			exit = 2;
+		}
+	} while (!exit);
+
+	if (exit == 2)
+	{
+		MN_PlayMenuSnd(SD_ESCPRESSEDSND);
+		returnval = false;
+	}
+	else
+	{
+		MN_PlayMenuSnd(SD_SELECTSND);
+		returnval = true;
+	}
+
+	WaitKeyUp();
+	return (returnval);
+}
+
+//******************************************************************************
+//
+// NumberMenu ()
+//
+//******************************************************************************
+
+boolean NumberMenu(int* number, int upperbound, int lowerbound, int numadjust,
+				   void (*routine)(int w), char* title, char* left)
+
+{
+	ControlInfo ci;
+	Direction lastdir;
+	boolean returnval;
+	boolean moved;
+	int exit;
+	int timer;
+	int width;
+	int height;
+
+	SetAlternateMenuBuf();
+	ClearMenuBuf();
+	SetMenuTitle(title);
+
+	newfont1 = (font_t*)W_CacheLumpName("newfnt1", PU_CACHE, Cvt_font_t, 1);
+	CurrentFont = newfont1;
+	PrintX = 24;
+	PrintY = 72;
+	DrawMenuBufPropString(PrintX, PrintY, left);
+
+	char* boundNum;
+	SDL_itoa(*number, boundNum, 10);
+
+	VW_MeasurePropString(boundNum, &width, &height);
+	DrawMenuBufPropString(263 - width, PrintY, boundNum);
+
+	// block = W_GetNumForName(blockname);
+	// shape = (patch_t*)W_CacheLumpNum(block, PU_CACHE, Cvt_patch_t, 1);
+	// blkx = erasex - shape->leftoffset;
+	// eraseh = shape->height;
+	// scale = (erasew + shape->leftoffset - shape->width) << 16;
+
+	// DrawSTMenuBuf(erasex - 1, erasey - 1, erasew + 1, eraseh + 1, false);
+
+	// DrawMenuBufItem(blkx + ((((*number - lowerbound) * scale) / range) >> 16),
+	// 				erasey, block);
+
+	DisplayInfo(1);
+	FlipMenuBuf();
+
+	exit = 0;
+	moved = false;
+	timer = GetTicCount();
+	lastdir = dir_None;
+
+	do
+	{
+		RefreshMenuBuf(0);
+
+		ReadAnyControl(&ci);
+		if (((GetTicCount() - timer) > 5) || (ci.dir != lastdir))
+		{
+			timer = GetTicCount();
+
+			switch (ci.dir)
+			{
+			case dir_North:
+			case dir_West:
+				if (*number > lowerbound)
+				{
+					*number = *number - numadjust;
+
+					if (*number < lowerbound)
+					{
+						*number = lowerbound;
+					}
+
+					moved = true;
+				}
+				break;
+
+			case dir_South:
+			case dir_East:
+				if (*number < upperbound)
+				{
+					*number = *number + numadjust;
+
+					if (*number > upperbound)
+					{
+						*number = upperbound;
+					}
+
+					moved = true;
+				}
+				break;
+			default:;
+			}
+
+			lastdir = ci.dir;
+		}
+
+		if (moved)
+		{
+			moved = false;
+
+			// EraseMenuBufRegion(erasex, erasey, erasew, eraseh);
+
+			// DrawMenuBufItem(
+			// 	blkx + ((((*number - lowerbound) * scale) / range) >> 16),
+			// 	erasey, block);
 
 			if (routine)
 			{
