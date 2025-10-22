@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 project(barrett
 	DESCRIPTION "A Rise of the Triad source port tailored towards moddability and QoL."
 	HOMEPAGE_URL "https://github.com/lunarmeadow/barrett"
-	LANGUAGES C
+	LANGUAGES C CXX
 )
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+find_package(Math)
 
 # only ONE of these may be active at a time (or none for the default registered version)
 option(BARRETT_SHAREWARE "Shareware" OFF)
@@ -24,6 +26,23 @@ else()
 	message(STATUS "Building Registered version")
 endif()
 
+include(FetchContent)
+
+FetchContent_Declare(
+	adlmidi
+	GIT_REPOSITORY https://github.com/Wohlstand/libADLMIDI.git
+	GIT_TAG v1.6.1
+	EXCLUDE_FROM_ALL
+)
+FetchContent_Declare(
+	inih
+	GIT_REPOSITORY https://github.com/benhoyt/inih.git
+	GIT_TAG r62
+	EXCLUDE_FROM_ALL
+)
+
+FetchContent_MakeAvailable(adlmidi inih)
+
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
@@ -42,6 +61,7 @@ set(AUDIOLIB_SOURCES
 )
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})
+
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wpedantic)
@@ -98,10 +118,13 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/winrott.c
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/HashTable.c
+	${PROJECT_SOURCE_DIR}/src/opl.c
+	${inih_SOURCE_DIR}/ini.c
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+target_include_directories(barrett PRIVATE ${inih_SOURCE_DIR})
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)

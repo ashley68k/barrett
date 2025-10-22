@@ -28,6 +28,8 @@
 #endif
 #include "music.h"
 
+#include "opl.h"
+
 #define __FX_TRUE  (1 == 1)
 #define __FX_FALSE (!__FX_TRUE)
 
@@ -168,6 +170,8 @@ static int music_loopflag = MUSIC_PlayOnce;
 static char* music_songdata = NULL;
 static Mix_Music* music_musicchunk = NULL;
 
+extern boolean useoplmusic;
+
 int MUSIC_Init(void)
 {
 	init_debugging();
@@ -186,6 +190,9 @@ int MUSIC_Init(void)
     const char *soundfonts = Mix_GetSoundFonts();
 
 	SDL_SetHint("SDL_HINT_AUDIO_RESAMPLING_MODE", "best");
+
+	if(useoplmusic)
+		OPL_Init();
 
     if (soundfonts)
     {
@@ -228,7 +235,10 @@ void MUSIC_SetMaxFMMidiChannel(int channel)
 
 void MUSIC_SetVolume(int volume)
 {
-	Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
+	if(useoplmusic && OPL_IsHooked())
+		OPL_SetVolume(volume >> 1);
+	else
+		Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
 } // MUSIC_SetVolume
 
 void MUSIC_SetMidiChannelVolume(int channel, int volume)
@@ -253,7 +263,10 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
-	return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
+	if(useoplmusic && OPL_IsHooked())
+		return OPL_IsPlaying();
+	else
+		return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
 } // MUSIC_SongPlaying
 
 void MUSIC_Continue(void)
@@ -278,6 +291,9 @@ int MUSIC_StopSong(void)
 		return (MUSIC_Error);
 	} // if
 
+	if(useoplmusic)
+		OPL_Stop();
+
 	if ((Mix_PlayingMusic()) || (Mix_PausedMusic()))
 		Mix_HaltMusic();
 
@@ -286,30 +302,47 @@ int MUSIC_StopSong(void)
 
 	music_songdata = NULL;
 	music_musicchunk = NULL;
+
 	return (MUSIC_Ok);
 } // MUSIC_StopSong
 
 int MUSIC_PlaySong(char* song, int size, int loopflag)
 {
-	MUSIC_StopSong();
-
-	if (size < 1) {
-		return MUSIC_Error;
-	}
-
-	SDL_RWops *rw = SDL_RWFromConstMem(song, size);
-	if (rw == NULL) 
+	if(useoplmusic)
 	{
-		return MUSIC_Error;
+		if(!OPL_Play(song, size, loopflag))
+		{	
+			OPL_DeregisterHook();
+			goto oplskip;
+		}
+		else
+		{
+			OPL_RegisterHook();
+			return (MUSIC_Ok);
+		}
 	}
+	else
+	{
+oplskip:
+		MUSIC_StopSong();
 
-	music_musicchunk = Mix_LoadMUS_RW(rw, SDL_TRUE);
+		if (size < 1) {
+			return MUSIC_Error;
+		}
 
-	music_songdata = song;
-	music_songdatasize = size;
+		SDL_RWops *rw = SDL_RWFromConstMem(song, size);
+		if (rw == NULL) 
+		{
+			return MUSIC_Error;
+		}
 
-	Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+		music_musicchunk = Mix_LoadMUS_RW(rw, SDL_TRUE);
 
+		music_songdata = song;
+		music_songdatasize = size;
+
+		Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+	}	
 	return (MUSIC_Ok);
 } // MUSIC_PlaySong
 

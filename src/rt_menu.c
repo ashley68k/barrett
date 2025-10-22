@@ -541,7 +541,7 @@ CP_MenuNames OptionsNames[] = {
 // bna added
 CP_MenuNames ExtOptionsNames[] = {
 	"MOUSELOOK", "INVERSE MOUSE",		 "ALLOW Y AXIS MOUSE", "CROSS HAIR",
-	"JUMPING",	 "AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM"};
+	"JUMPING",	 "AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM",	   "USE OPL MUSIC"};
 
 CP_MenuNames ExtGameOptionsNames[] = {"BLITZ RANDOM WEPS", "ENABLE AMMO PICKUP",
 									  "EXTRA PISTOL DROPS",
@@ -586,7 +586,7 @@ CP_iteminfo VisualOptionsItems = {
 
 CP_iteminfo ScreenResolutionItems; // This gets filled in at run time
 
-CP_iteminfo ExtOptionsItems = {20, MENU_Y,			7,			 0,
+CP_iteminfo ExtOptionsItems = {20, MENU_Y,			8,			 0,
 							   43, ExtOptionsNames, mn_largefont};
 
 CP_iteminfo ExtGameOptionsItems = {
@@ -608,7 +608,7 @@ CP_itemtype VisualsOptionsMenu[] = {{1, "", 'S', (menuptr)CP_ScreenResolution},
 CP_itemtype ExtOptionsMenu[] = {
 	{1, "", 'M', NULL}, {1, "", 'I', NULL}, {1, "", 'D', NULL},
 	{1, "", 'C', NULL}, {1, "", 'J', NULL}, {1, "", 'A', NULL},
-	{1, "", 'U', NULL},
+	{1, "", 'U', NULL}, {1, "", 'O', NULL},
 };
 
 CP_itemtype ExtGameMenu[] = {
@@ -4925,14 +4925,15 @@ void DrawExtOptionsMenu(void)
 	FlipMenuBuf();
 }
 
-static char* ExtOptionsDesc[7] = {
+static char* ExtOptionsDesc[8] = {
 	"Allow mouse look.",
 	"Invert the mouse.",
 	"Move forward and backward using mouse.",
 	"Enable Crosshairs.",
 	"Allow Jumping (may completely break levels)",
 	"Missile weapons are auto aimed after 1st shot.",
-	"Allow auto aim."};
+	"Allow auto aim.",
+	"Use OPL emulation for MIDI playback."};
 
 void DrawExtOptionDescription(int w)
 {
@@ -4957,6 +4958,7 @@ void DrawExtOptionDescription(int w)
 
 extern int inverse_mouse;
 extern boolean usemouselook;
+extern boolean oplmusicset;
 extern boolean iG_aimCross;
 extern boolean usejump;
 extern boolean autoAimMissileWeps;
@@ -4966,7 +4968,8 @@ extern boolean allowMovementWithMouseYAxis;
 void CP_ExtOptionsMenu(void)
 {
 	int which;
-
+	
+shit:
 	DrawExtOptionsMenu();
 
 	do
@@ -5010,6 +5013,12 @@ void CP_ExtOptionsMenu(void)
 		case 6:
 			autoAim ^= 1;
 			DrawExtOptionsButtons();
+			break;
+		case 7:
+			oplmusicset ^= 1;
+			DrawExtOptionsButtons();
+			CP_RestartProgramMessage();
+			goto shit;
 			break;
 		}
 
@@ -5064,6 +5073,10 @@ void DrawExtOptionsButtons(void)
 				break;
 			case 6:
 				if (autoAim == 1)
+					on = 1;
+				break;
+			case 7:
+				if (oplmusicset == 1)
 					on = 1;
 				break;
 			}
