@@ -1438,14 +1438,14 @@ void SetSpriteLightLevel(int x, int y, visobj_t* sprite, int dir,
 				intercept = (y >> 11) & 0x1c;
 
 			lv = (((LightSourceAt(x >> 16, y >> 16) >> intercept) & 0xf) >> 1);
-			i = maxshade - (sprite->viewheight >> normalshade) - lv;
+			i = maxshade - ((sprite->viewheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv;
 			if (i < minshade)
 				i = minshade;
 			sprite->colormap = colormap + (i << 8);
 		}
 		else
 		{
-			i = maxshade - (sprite->viewheight >> normalshade);
+			i = maxshade - ((sprite->viewheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
 			if (i < minshade)
 				i = minshade;
 			sprite->colormap = colormap + (i << 8);
