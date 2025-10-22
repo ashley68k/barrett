@@ -1596,7 +1596,7 @@ void SetWallLightLevel(wallcast_t* post)
 	}
 	else
 	{
-		i = maxshade - (post->wallheight >> normalshade) - lv + la;
+		i = maxshade - ((post->wallheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv + la;
 		if (i >= maxshade)
 			i = maxshade;
 		if (i < minshade + la)

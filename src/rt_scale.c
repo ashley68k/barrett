@@ -148,7 +148,7 @@ void SetLightLevel(int height)
 	}
 	else
 	{
-		i = maxshade - (height >> normalshade);
+		i = maxshade - ((height * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
 		if (i < minshade)
 			i = minshade;
 		shadingtable = colormap + (i << 8);
