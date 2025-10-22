@@ -2212,17 +2212,12 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-// #define MOUSE_RY_SHIFT 12
-// #define MOUSE_TZ_SHIFT 3
 #define MOUSE_TZ_SENSITIVITY_SCALE 65535
 #define MOUSE_RY_SENSITIVITY_SCALE 18725 * 2
-// #define MOUSE_RY_INPUT_SCALE 6000
 #define MOUSE_TZ_INPUT_SCALE 20
 int mouse_ry_input_scale = 5000;
 
 int sensitivity_scalar = 5;
-// #define MOUSE_RY_SCALE 65535
-// #define MOUSE_TZ_SCALE 65535
 #define MAXMOUSETURN 7000000
 
 /* use SDL mouse */
@@ -2234,22 +2229,9 @@ double Y_MouseSpeed = 70;
 void PollMouseMove(void)
 {
 	int mousexmove, mouseymove;
-	double Ys;
-	// SetTextMode();
+	double Ys = (Y_MouseSpeed / 100);
 
-	Ys = (Y_MouseSpeed / 100);
-	//
-
-	// const long inverse_mouse  = 1; //set  to -1 to invert mouse
-	// inverse_mouse def moved to RT_CFG.C
-
-#ifdef USESDLMOUSE
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
-#else
-	PollMouse(); // Uses DirectInput mouse in DInput.cpp
-	mousexmove = MX;
-	mouseymove = MY;
-#endif
 
 	if (abs(mousexmove) > abs(mouseymove))
 		mouseymove /= 2;
@@ -2261,61 +2243,43 @@ void PollMouseMove(void)
 	sensitivity_scalar = mouseadjustment;
 
 	if ((abs(mouseymove)) >= threshold)
-	{ //
+	{
 		MY = MOUSE_TZ_INPUT_SCALE * mouseymove;
 		MY *= inverse_mouse;
 		if (usemouselook == true)
 		{
+			playertype* pstate = &PLAYERSTATE[consoleplayer];
 			if (MY > 0)
 			{
-				playertype* pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// if (pstate->horizon > 512){
 				pstate->horizon -= Ys * (2 * sensitivity_scalar);
-				//}
 			}
 			else if (MY < 0)
 			{
-				playertype* pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// SetTextMode (  );
 				pstate->horizon += Ys * (2 * sensitivity_scalar);
-				// buttonpoll[ bt_horizonup ] = true;
 			}
 			MY = 0;
 		}
 		else
 		{
-			// MY += FixedMul(MY,mouseadjustment*MOUSE_TZ_SENSITIVITY_SCALE);
 			if (abs(mouseymove) > 200)
 			{
 				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookup ] = true;
 			}
 		}
 	}
 
 	if ((abs(mousexmove)) >= threshold)
 	{
-		// MX = -MOUSE_RY_INPUT_SCALE*mousexmove;
 		MX = -mouse_ry_input_scale * mousexmove;
 		MX += FixedMul(MX, sensitivity_scalar * MOUSE_RY_SENSITIVITY_SCALE);
-		//   if (abs(MX) > MAXMOUSETURN)
-		//   MX = MAXMOUSETURN*SGN(MX);
 		if (usemouselook == true)
 		{
 			if (abs(mouseymove) > 10)
 			{
 				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookdown ] = true;
 			}
 		}
 	}
-	//   if (MY > 0)
-	//      MX -= (MX/2);
-
-	//   MX=0;
-	//   MY=0;
 }
 
 //******************************************************************************
