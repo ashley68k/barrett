@@ -268,7 +268,6 @@ void CP_Keyboard(void);
 void CP_Mouse(void);
 void CP_Joystick(void);
 void CP_Special(void);
-void CP_OrderInfo(void);
 
 void DefineMouseBtns1(void);
 void DefineMouseBtns2(void);

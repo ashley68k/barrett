@@ -144,7 +144,7 @@ typedef enum
 	loadgame,
 	savegame,
 	control,
-	orderinfo,
+	jukebox,
 	viewscores,
 	backtodemo,
 	quit

@@ -299,7 +299,7 @@ char* colorname[] = {"Gray", "Brown", "Black", "Tan",	 "Red",	  "Olive",
 //
 CP_MenuNames MainMenuNames[] = {"NEW GAME",		"COMM-BAT� GAME",
 								"RESTORE GAME", "SAVE GAME",
-								"OPTIONS",		"ORDERING INFO",
+								"OPTIONS",		"JUKEBOX",
 								"VIEW SCORES",	//"END GAME"
 								"BACK TO DEMO", //"BACK TO GAME"
 								"QUIT"};
@@ -312,7 +312,7 @@ CP_itemtype MainMenu[] = {
 	{CP_Active, "mm_opt2\0", 'R', (menuptr)CP_LoadGame},
 	{CP_Inactive, "mm_opt3\0", 'S', (menuptr)CP_SaveGame},
 	{CP_Active, "mm_opt5\0", 'O', (menuptr)CP_ControlMenu},
-	{CP_Active, "ordrinfo\0", 'O', (menuptr)CP_OrderInfo},
+	{CP_Active, "mm_opt6\0", 'J', (menuptr)MU_JukeBoxMenu},
 	{CP_Active, "mm_opt7\0", 'V', (menuptr)CP_ViewScores},
 	{CP_Active, "mm_opt8\0", 'B', (menuptr)NULL},
 	{CP_Active, "mm_opt9\0", 'Q', (menuptr)CP_Quit}};
@@ -2160,130 +2160,6 @@ void ShowCursor(CP_iteminfo* item_i, CP_itemtype* items, int x, int* y,
 	{
 		RefreshMenuBuf(0);
 	}
-}
-
-//******************************************************************************
-//
-// DrawOrderInfo()
-//
-//******************************************************************************
-
-void DrawOrderInfo(int which)
-
-{
-	int start;
-	char* lumpname;
-
-	start = W_GetNumForName("ORDRSTRT") + 1;
-
-	lumpname = W_GetNameForNum(start + which);
-
-	// Screen shots are grabbed as pics
-	if (lumpname[0] == 'S')
-	{
-		VWB_DrawPic(
-			0, 0,
-			(pic_t*)W_CacheLumpNum(start + which, PU_CACHE, Cvt_pic_t, 1));
-	}
-	else
-	{
-		VL_DrawPostPic(W_GetNumForName("trilogo"));
-		DrawNormalSprite(0, 0, start);
-		DrawNormalSprite(0, 0, start + which);
-	}
-
-	VW_UpdateScreen();
-}
-
-//******************************************************************************
-//
-// CP_OrderInfo()
-//
-//******************************************************************************
-
-void CP_OrderInfo(void)
-
-{
-	int maxpage;
-	int page;
-	int key;
-	boolean newpage;
-
-	maxpage = W_GetNumForName("ORDRSTOP") - W_GetNumForName("ORDRSTRT") - 2;
-	newpage = false;
-	page = 1;
-
-	do
-	{
-		EnableScreenStretch(); // bna++
-		DrawOrderInfo(page);
-		DisableScreenStretch(); // bna++ turn off or screen will be strected
-								// every time it passes VW_UpdateScreen
-		if (newpage)
-		{
-			while (Keyboard[key])
-			{
-				VW_UpdateScreen();
-				IN_UpdateKeyboard();
-			}
-		}
-
-		LastScan = 0;
-		while (LastScan == 0)
-		{
-			VW_UpdateScreen();
-			IN_UpdateKeyboard();
-		}
-
-		key = LastScan;
-		switch (key)
-		{
-		case sc_Home:
-			if (page != 1)
-			{
-				page = 1;
-				newpage = true;
-				MN_PlayMenuSnd(SD_MOVECURSORSND);
-			}
-			break;
-
-		case sc_End:
-			if (page != maxpage)
-			{
-				page = maxpage;
-				newpage = true;
-				MN_PlayMenuSnd(SD_MOVECURSORSND);
-			}
-			break;
-
-		case sc_PgUp:
-		case sc_UpArrow:
-		case sc_LeftArrow:
-			if (page > 1)
-			{
-				page--;
-				newpage = true;
-				MN_PlayMenuSnd(SD_MOVECURSORSND);
-			}
-			break;
-
-		case sc_PgDn:
-		case sc_DownArrow:
-		case sc_RightArrow:
-			if (page < maxpage)
-			{
-				page++;
-				newpage = true;
-				MN_PlayMenuSnd(SD_MOVECURSORSND);
-			}
-			break;
-		}
-	} while (key != sc_Escape);
-
-	Keyboard[key] = 0;
-	LastScan = 0;
-	EnableScreenStretch(); // bna++
-	MN_PlayMenuSnd(SD_ESCPRESSEDSND);
 }
 
 //******************************************************************************
@@ -5857,16 +5733,6 @@ void CP_F1Help(void)
 	}
 
 	LastScan = 0;
-	if (IS_SHAREWARE)
-	{
-		DrawOrderInfo(2);
-		while (LastScan == 0)
-		{
-			IN_UpdateKeyboard();
-		}
-
-		LastScan = 0;
-	}
 }
 
 //****************************************************************************
