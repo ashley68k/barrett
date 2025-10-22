@@ -3812,6 +3812,15 @@ extern double dTopYZANGLELIMIT;
 
 boolean IsPlayerFalling(objtype* ob)
 {
+	if (!(ob->flags & FL_DOGMODE) && !(ob->flags & FL_GODMODE) &&
+		!(ob->flags & FL_FLEET) && !(ob->flags & FL_RIDING) &&
+		(ob->momentumz > (GRAVITY << 1))) 
+		return true;
+	else
+	 	return false;
+}
+boolean HasPlayerJustLanded(objtype* ob)
+{
 	playertype* pstate;
 	M_LINKSTATE(ob, pstate);
 	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
@@ -3839,7 +3848,9 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
-	if (IsPlayerFalling(ob))
+	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
+		((!(ob->flags & FL_FLEET)) ||
+		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
 		SetNormalHorizon(ob);
 
 	pstate->lastmomz = ob->momentumz;
@@ -3931,10 +3942,7 @@ void PlayerTiltHead(objtype* ob)
 				SetNormalHorizon(ob);
 			}
 		}
-		if (!(ob->flags & FL_DOGMODE) && !(ob->flags & FL_GODMODE) &&
-			!(ob->flags & FL_FLEET) && !(ob->flags & FL_RIDING) &&
-			(ob->momentumz > (GRAVITY << 1)) //(ob->momentumz>0x1000)
-		)
+		if(IsPlayerFalling(ob))
 		{
 			SetPlayerHorizon(pstate, FALLINGYZANGLE);
 		}
@@ -3942,18 +3950,18 @@ void PlayerTiltHead(objtype* ob)
 
 	if ((yzangle != pstate->horizon) && (dyz == 0))
 	{
-		if(pstate->guntarget || IsPlayerFalling(ob))
+		if(pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob))
 		{
-		int speed;
+			int speed;
 
-		speed = SNAPBACKSPEED;
-		
-		if (yzangle < pstate->horizon)
-			yzangle += speed;
-		else
-			yzangle -= speed;
-		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
-			yzangle = pstate->horizon;
+			speed = SNAPBACKSPEED;
+			
+			if (yzangle < pstate->horizon)
+				yzangle += speed;
+			else
+				yzangle -= speed;
+			if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
+				yzangle = pstate->horizon;
 		}
 	}
 	// SetTextMode();
