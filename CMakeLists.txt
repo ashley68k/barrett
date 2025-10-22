@@ -119,6 +119,7 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/HashTable.c
 	${PROJECT_SOURCE_DIR}/src/opl.c
+	${inih_SOURCE_DIR}/ini.c
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
