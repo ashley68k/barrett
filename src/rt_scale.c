@@ -101,14 +101,14 @@ void SetPlayerLightLevel(void)
 		lv = (((LightSourceAt(player->x >> 16, player->y >> 16) >> intercept) &
 			   0xf) >>
 			  1);
-		i = maxshade - (height >> normalshade) - lv;
+		i = maxshade - ((height * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv;
 		if (i < minshade)
 			i = minshade;
 		shadingtable = colormap + (i << 8);
 	}
 	else
 	{
-		i = maxshade - (height >> normalshade);
+		i = maxshade - ((height * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
 		if (i < minshade)
 			i = minshade;
 		shadingtable = colormap + (i << 8);
@@ -148,7 +148,7 @@ void SetLightLevel(int height)
 	}
 	else
 	{
-		i = maxshade - (height >> normalshade);
+		i = maxshade - ((height * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
 		if (i < minshade)
 			i = minshade;
 		shadingtable = colormap + (i << 8);
