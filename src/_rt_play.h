@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 TopYZANGLELIMIT
 */
 
-#define YZTILTSPEED		20
+#define YZTILTSPEED		10
 #define SNAPBACKSPEED	10
 #define YZHORIZONSPEED	4
 #define HORIZONYZOFFSET (FINEANGLES / 4)

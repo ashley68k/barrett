@@ -2224,61 +2224,38 @@ int sensitivity_scalar = 5;
 #define USESDLMOUSE 1
 
 extern int inverse_mouse;
-double Y_MouseSpeed = 70;
 
 void PollMouseMove(void)
 {
 	int mousexmove, mouseymove;
-	double Ys = (Y_MouseSpeed / 100);
 
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
 
-	if (abs(mousexmove) > abs(mouseymove))
-		mouseymove /= 2;
-	else
-		mousexmove /= 2;
 	MX = 0;
 	MY = 0;
 
 	sensitivity_scalar = mouseadjustment;
 
-	if ((abs(mouseymove)) >= threshold)
+	if (abs(mouseymove))
 	{
-		MY = MOUSE_TZ_INPUT_SCALE * mouseymove;
-		MY *= inverse_mouse;
-		if (usemouselook == true)
+		if (usemouselook)
 		{
 			playertype* pstate = &PLAYERSTATE[consoleplayer];
-			if (MY > 0)
+			if (mouseymove > 0)
 			{
-				pstate->horizon -= Ys * (2 * sensitivity_scalar);
+				SetPlayerHorizon(pstate, -mouseymove)
 			}
-			else if (MY < 0)
+			else if (mouseymove < 0)
 			{
-				pstate->horizon += Ys * (2 * sensitivity_scalar);
-			}
-			MY = 0;
-		}
-		else
-		{
-			if (abs(mouseymove) > 200)
-			{
-				buttonpoll[bt_run] = true;
+				SetPlayerHorizon(pstate, -mouseymove)
 			}
 		}
 	}
 
-	if ((abs(mousexmove)) >= threshold)
+	if (abs(mousexmove))
 	{
 		MX = -mouse_ry_input_scale * mousexmove;
 		MX += FixedMul(MX, sensitivity_scalar * MOUSE_RY_SENSITIVITY_SCALE);
-		if (usemouselook == true)
-		{
-			if (abs(mouseymove) > 10)
-			{
-				buttonpoll[bt_run] = true;
-			}
-		}
 	}
 }
 
@@ -3832,6 +3809,18 @@ void SetNormalHorizon(objtype* ob)
 */
 extern int iG_playerTilt;
 extern double dTopYZANGLELIMIT;
+
+boolean IsPlayerFalling(objtype* ob)
+{
+	playertype* pstate;
+	M_LINKSTATE(ob, pstate);
+	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
+		((!(ob->flags & FL_FLEET)) ||
+		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
+			return true;
+	else
+	 	return false;
+}
 void PlayerTiltHead(objtype* ob)
 {
 	playertype* pstate;
@@ -3850,9 +3839,7 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
-	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
-		((!(ob->flags & FL_FLEET)) ||
-		 ((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
+	if (IsPlayerFalling(ob))
 		SetNormalHorizon(ob);
 
 	pstate->lastmomz = ob->momentumz;
@@ -3955,15 +3942,19 @@ void PlayerTiltHead(objtype* ob)
 
 	if ((yzangle != pstate->horizon) && (dyz == 0))
 	{
+		if(pstate->guntarget || IsPlayerFalling(ob))
+		{
 		int speed;
 
 		speed = SNAPBACKSPEED;
+		
 		if (yzangle < pstate->horizon)
 			yzangle += speed;
 		else
 			yzangle -= speed;
 		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
 			yzangle = pstate->horizon;
+		}
 	}
 	// SetTextMode();
 
