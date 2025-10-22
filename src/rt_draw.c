@@ -2203,8 +2203,8 @@ void InterpolateWall(visobj_t* plane)
 	dx = (plane->x2 - plane->x1 + 1);
 	if (plane->h1 <= 0 || plane->h2 <= 0 || dx == 0)
 		return;
-	d1 = (1 << (16 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (16 + HEIGHTFRACTION)) / plane->h2;
+	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
+	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
 	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
 		  (1 << (DHEIGHTFRACTION - 1))) /
 		 dx;
@@ -2270,8 +2270,8 @@ void InterpolateDoor(visobj_t* plane)
 	shape = W_CacheLumpNum(plane->shapenum, PU_CACHE, Cvt_patch_t, 1);
 	shape2 = W_CacheLumpNum(plane->altshapenum, PU_CACHE, Cvt_patch_t, 1);
 	p = (patch_t*)shape;
-	d1 = (1 << (16 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (16 + HEIGHTFRACTION)) / plane->h2;
+	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
+	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
 	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
 		  (1 << (DHEIGHTFRACTION - 1))) /
 		 dx;
