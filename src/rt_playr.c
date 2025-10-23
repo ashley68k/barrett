@@ -23,11 +23,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdarg.h>
 #include "keyb.h"
 #include "rt_def.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "rt_sound.h"
 #include "gmove.h"
 #include "states.h"
-#include "rt_sqrt.h"
 #include "rt_actor.h"
 #include "rt_main.h"
 #include "rt_playr.h"

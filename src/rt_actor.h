@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "states.h"
 #include "queue.h"
+#include "rt_fixed.h"
 
 #define FL_SYNCED	0x400
 #define FL_MASTER	0x800

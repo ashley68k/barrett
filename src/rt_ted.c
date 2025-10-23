@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <time.h>
 #include <errno.h>
 #include "states.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "rt_ted.h"
 #include "_rt_ted.h"
 #include "w_wad.h"

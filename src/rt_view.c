@@ -39,7 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_battl.h"
 #include "rt_floor.h"
 #include "rt_str.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "develop.h"
 
 #define LIGHTNINGLEVEL	  4

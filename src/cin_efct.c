@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cin_def.h"
 #include "cin_main.h"
 #include "f_scale.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "lumpy.h"
 #include "w_wad.h"
 #include "z_zone.h"

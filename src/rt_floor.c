@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // RT_FLOOR.C
 
 #include "rt_def.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "rt_floor.h"
 #include "_rt_floo.h"
 #include "rt_draw.h"

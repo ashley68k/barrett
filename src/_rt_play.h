@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _rt_playr_private
 #define _rt_playr_private
 
-#include "watcom.h"
+#include "rt_fixed.h"
 // double dTopYZANGLELIMIT; in winrott.c
 #define TopYZANGLELIMIT (44 * FINEANGLES / 360) // bna added
 #define YZANGLELIMIT	(30 * FINEANGLES / 360) // bna--(30*FINEANGLES/360)

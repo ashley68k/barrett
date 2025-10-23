@@ -34,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_vid.h"
 #include "rt_menu.h"
 #include "rt_sound.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "scriplib.h"
 #include "rt_main.h"
 #include "_rt_main.h"

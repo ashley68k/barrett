@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 #include "cin_glob.h"
 #include "scriplib.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "z_zone.h"
 #include "w_wad.h"
 #include "cin_main.h"

@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "develop.h"
 #define SAVE_SCREEN 1
 
@@ -36,17 +37,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #if (defined _MSC_VER)
-/* __int64 is built in. */
 #include <malloc.h>
 #include <fcntl.h>
 #include <io.h>
 // #define alloca(x) _alloca(x)
 #define access(x, y) _access(x, y)
 #define F_OK		 0
-#elif (defined __GNUC__)
-#define __int64 long long
-#else
-#error please define your platform.
 #endif
 
 #if PLATFORM_WIN32
@@ -269,7 +265,6 @@ table
 typedef unsigned char byte;
 typedef unsigned short int word;
 typedef unsigned int longword;
-typedef int fixed;
 
 //////////////////////////////////////////////////////////////////////////
 

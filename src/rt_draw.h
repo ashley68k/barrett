@@ -26,6 +26,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
+#include "rt_fixed.h"
+
 #define MAXVISIBLE 256
 
 extern int whereami;

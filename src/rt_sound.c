@@ -30,7 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_playr.h"
 #include "rt_util.h"
 #include "rt_rand.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

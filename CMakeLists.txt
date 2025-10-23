@@ -93,6 +93,7 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/rt_dmand.c
 	${PROJECT_SOURCE_DIR}/src/rt_door.c
 	${PROJECT_SOURCE_DIR}/src/rt_draw.c
+	${PROJECT_SOURCE_DIR}/src/rt_fixed.c
 	${PROJECT_SOURCE_DIR}/src/rt_floor.c
 	${PROJECT_SOURCE_DIR}/src/rt_game.c
 	${PROJECT_SOURCE_DIR}/src/rt_in.c
@@ -105,7 +106,6 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/rt_rand.c
 	${PROJECT_SOURCE_DIR}/src/rt_scale.c
 	${PROJECT_SOURCE_DIR}/src/rt_sound.c
-	${PROJECT_SOURCE_DIR}/src/rt_sqrt.c
 	${PROJECT_SOURCE_DIR}/src/rt_stat.c
 	${PROJECT_SOURCE_DIR}/src/rt_state.c
 	${PROJECT_SOURCE_DIR}/src/rt_str.c
@@ -116,7 +116,6 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/rt_err.c
 	${PROJECT_SOURCE_DIR}/src/scriplib.c
 	${PROJECT_SOURCE_DIR}/src/w_wad.c
-	${PROJECT_SOURCE_DIR}/src/watcom.c
 	${PROJECT_SOURCE_DIR}/src/z_zone.c
 	${PROJECT_SOURCE_DIR}/src/byteordr.c
 	${PROJECT_SOURCE_DIR}/src/dukemusc.c

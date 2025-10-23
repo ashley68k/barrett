@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define _rt_view_public
 
 #include "modexlib.h"
+#include "rt_fixed.h"
 
 #define HEIGHTFRACTION 6
 #define MAXVIEWSIZES   11

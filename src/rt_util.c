@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <time.h>
 #include <SDL2/SDL_render.h>
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "_rt_util.h"
 #include "rt_util.h"
 #include "isr.h"

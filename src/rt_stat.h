@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define _rt_stat_public
 
 #include "rt_ted.h"
+#include "rt_fixed.h"
 
 #define MAXSWITCHES	 64
 #define MAXANIMWALLS 17

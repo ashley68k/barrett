@@ -22,7 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "profile.h"
 #include "rt_def.h"
 #include <string.h>
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "sprites.h"
 #include "rt_actor.h"
 #include "rt_stat.h"

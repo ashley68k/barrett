@@ -17,8 +17,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _rt_sqrt_public
-#define _rt_sqrt_public
+#ifndef _rt_fixed_public
+#define _rt_fixed_public
+
+#include <stdint.h>
+
+typedef int32_t fixed;
+typedef uint32_t ufixed;
 
 /*
 FUNCTION:
@@ -28,6 +33,11 @@ DESCRIPTION:
 	8.16 bit accuracy.
 */
 
-long FixedSqrtHP(long n); // High Precision (8.16)
+fixed FixedSqrtHP(fixed n); // High Precision (8.16)
+
+fixed FixedMul(fixed a, fixed b);
+fixed FixedDiv2(fixed a, fixed b);
+fixed FixedScale(fixed orig, fixed factor, fixed divisor);
+fixed FixedMulShift(fixed a, fixed b, fixed shift);
 
 #endif

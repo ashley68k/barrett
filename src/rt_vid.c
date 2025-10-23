@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_util.h"
 #include "modexlib.h"
 #include "profile.h"
-#include "watcom.h"
+#include "rt_fixed.h"
 #include "rt_str.h"
 #include "rt_draw.h"
 #include "rt_in.h"
