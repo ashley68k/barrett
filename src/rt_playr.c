@@ -2238,7 +2238,7 @@ void PollMouseMove(void)
 	{
 		if (usemouselook)
 		{
-			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 2));
+			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 4));
 
 			playertype* pstate = &PLAYERSTATE[consoleplayer];
 			if (mouseymove > 0)
@@ -3893,7 +3893,7 @@ void PlayerTiltHead(objtype* ob)
 		// this has the downside of inverting mouse input, and also means that vertical input can inadvertently
 		// overflow below or above the floor/ceiling. as such, both operations need to be treated the same,
 		// with a mouse inversion to rectify the problem.
-		
+
 		MY *= -1;
 		if(MY > 0)
 		{
@@ -3904,8 +3904,8 @@ void PlayerTiltHead(objtype* ob)
 		}
 		if(MY < 0)
 		{
-			if(yzangle + MY < 384)
-				yzangle = 384;
+			if(yzangle + MY < 256)
+				yzangle = 256;
 			else
 				yzangle += MY;
 		}
