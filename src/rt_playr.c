@@ -2212,18 +2212,14 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-#define MOUSE_TZ_SENSITIVITY_SCALE 65535
-#define MOUSE_RY_SENSITIVITY_SCALE 18725 * 2
-#define MOUSE_TZ_INPUT_SCALE 20
-int mouse_ry_input_scale = 5000;
+// sdl2 has doubled sensitivity on y axis
+#define MOUSE_RX_SENSITIVITY_SCALE 8192
+#define MOUSE_RY_SENSITIVITY_SCALE 4096
 
-int sensitivity_scalar = 5;
-#define MAXMOUSETURN 7000000
-
-/* use SDL mouse */
-#define USESDLMOUSE 1
+int mouse_rx_input_scale = 5000;
 
 extern int inverse_mouse;
+extern boolean allowMovementWithMouseYAxis;
 
 void PollMouseMove(void)
 {
@@ -2234,28 +2230,26 @@ void PollMouseMove(void)
 	MX = 0;
 	MY = 0;
 
-	if (abs(mouseymove))
-	{
-		if (usemouselook)
-		{
-			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 4));
-
-			playertype* pstate = &PLAYERSTATE[consoleplayer];
-			if (mouseymove > 0)
-			{
-				SetPlayerHorizon(pstate, -mouseymove)
-			}
-			else if (mouseymove < 0)
-			{
-				SetPlayerHorizon(pstate, -mouseymove)
-			}
-		}
-	}
-
 	if (abs(mousexmove))
 	{
-		MX = -mouse_ry_input_scale * mousexmove;
-		MX += FixedMul(MX, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE * 2);
+		MX = -mouse_rx_input_scale * mousexmove;
+		MX += FixedMul(MX, mouseadjustment * MOUSE_RX_SENSITIVITY_SCALE);
+	}
+
+	if (abs(mouseymove))
+	{
+		if (usemouselook || allowMovementWithMouseYAxis)
+		{
+			// why hath thou forsaken me, cruel icculus?
+			#ifdef PLATFORM_UNIX
+			if(mouseymove == 1 || mouseymove == -1)
+				MY = mouseymove;
+			else
+			#endif
+			{
+				MY += FixedMul(mouseymove, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE);
+			}
+		}
 	}
 }
 
