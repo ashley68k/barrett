@@ -3860,13 +3860,13 @@ void PlayerTiltHead(objtype* ob)
 		pstate->horizon = 0;	
 	}
 
-	if(landInterp)
+	if(landInterp && !usemouselook)
 	{
-		if(yzangle > 512)
+		if(yzangle > HORIZONYZOFFSET)
 		{
-			if(yzangle - 32 < 512)
+			if(yzangle - 32 < HORIZONYZOFFSET)
 			{
-				yzangle = 512;
+				yzangle = HORIZONYZOFFSET;
 				landInterp = false;
 			}
 			else
@@ -3874,11 +3874,11 @@ void PlayerTiltHead(objtype* ob)
 				yzangle -= 16;
 			}
 		}
-		if(yzangle < 512)
+		if(yzangle < HORIZONYZOFFSET)
 		{
-			if(yzangle + 32 > 512)
+			if(yzangle + 32 > HORIZONYZOFFSET)
 			{
-				yzangle = 512;
+				yzangle = HORIZONYZOFFSET;
 			    landInterp = false;
 			}
 			else
@@ -3889,26 +3889,29 @@ void PlayerTiltHead(objtype* ob)
 
 	if(MY && usemouselook)
 	{
-		int topanglimit = 512 + YZANGLELIMIT;
-		int bottomanglimit = 512 - YZANGLELIMIT;
-
+		// when MY is negative, you still have to add it in this case, as adding a negative is subtraction.
+		// this has the downside of inverting mouse input, and also means that vertical input can inadvertently
+		// overflow below or above the floor/ceiling. as such, both operations need to be treated the same,
+		// with a mouse inversion to rectify the problem.
+		
+		MY *= -1;
 		if(MY > 0)
 		{
-			if(yzangle + MY > topanglimit)
-				yzangle = topanglimit;
+			if(yzangle + MY > 768)
+				yzangle = 768;
 			else
-				yzangle += -MY;
+				yzangle += MY;
 		}
 		if(MY < 0)
 		{
-			if(yzangle - MY < bottomanglimit)
-				yzangle = bottomanglimit;
+			if(yzangle + MY < 384)
+				yzangle = 384;
 			else
-				yzangle -= MY;
+				yzangle += MY;
 		}
 			
 	}
-
+	
 	if (ob->flags & FL_SHROOMS)
 	{
 		ob->yzangle = FixedMulShift(
@@ -4004,7 +4007,7 @@ void PlayerTiltHead(objtype* ob)
 
 	if ((yzangle != pstate->horizon) && (dyz == 0))
 	{
-		if(pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob))
+		if(!usemouselook && (pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob)))
 		{
 			int speed;
 
