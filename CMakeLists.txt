@@ -11,6 +11,7 @@ find_package(Math)
 option(BARRETT_SHAREWARE "Shareware" OFF)
 option(BARRETT_SUPERROTT "SuperROTT" OFF)
 option(BARRETT_SITELICENSE "Site License" OFF)
+option(BARRETT_USEASAN "Turn on ASAN" OFF)
 
 if((BARRETT_SHAREWARE AND BARRETT_SUPERROTT) OR (BARRETT_SUPERROTT AND BARRETT_SITELICENSE) OR (BARRETT_SHAREWARE AND BARRETT_SITELICENSE))
 	message(FATAL_ERROR "Only one build option may be active at a time! (or none for the registered version)")
@@ -61,6 +62,10 @@ set(AUDIOLIB_SOURCES
 )
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})
+
+add_library(ASAN::ASAN IMPORTED INTERFACE)
+target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
+target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
@@ -126,6 +131,7 @@ add_executable(barrett ${BARRETT_SOURCES})
 target_include_directories(barrett PRIVATE ${inih_SOURCE_DIR})
 target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
+target_link_libraries(barrett PUBLIC $<$<BOOL:${BARRETT_USEASAN}>:ASAN::ASAN>)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
 target_compile_definitions(barrett PRIVATE SUPERROTT=$<BOOL:${BARRETT_SUPERROTT}>)
 target_compile_definitions(barrett PRIVATE SITELICENSE=$<BOOL:${BARRETT_SITELICENSE}>)
