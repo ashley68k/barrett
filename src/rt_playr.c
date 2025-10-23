@@ -2240,6 +2240,8 @@ void PollMouseMove(void)
 	{
 		if (usemouselook)
 		{
+			MY = mouseymove;
+
 			playertype* pstate = &PLAYERSTATE[consoleplayer];
 			if (mouseymove > 0)
 			{
@@ -3886,6 +3888,28 @@ void PlayerTiltHead(objtype* ob)
 		}
 	}
 	pstate->lastmomz = ob->momentumz;
+
+	if(MY && usemouselook)
+	{
+		int topanglimit = 512 + YZANGLELIMIT;
+		int bottomanglimit = 512 - YZANGLELIMIT;
+
+		if(MY > 0)
+		{
+			if(yzangle + MY > topanglimit)
+				yzangle = topanglimit;
+			else
+				yzangle += -MY;
+		}
+		if(MY < 0)
+		{
+			if(yzangle - MY < bottomanglimit)
+				yzangle = bottomanglimit;
+			else
+				yzangle -= MY;
+		}
+			
+	}
 
 	if (ob->flags & FL_SHROOMS)
 	{
