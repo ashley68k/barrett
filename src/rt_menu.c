@@ -4532,7 +4532,7 @@ extern int FocalWidthOffset;
 
 void DoAdjustFocalWidth(void)
 {
-	SliderMenu(&FocalWidthOffset, 200, 0, 44, 81, 194, 1, "block2", NULL,
+	SliderMenu(&FocalWidthOffset, 96, 0, 44, 81, 194, 4, "block2", NULL,
 			   "Adjust Focal Width", "Default", "You Crazy");
 	DrawVisualsMenu();
 }
