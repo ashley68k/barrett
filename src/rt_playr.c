@@ -2234,13 +2234,11 @@ void PollMouseMove(void)
 	MX = 0;
 	MY = 0;
 
-	sensitivity_scalar = mouseadjustment;
-
 	if (abs(mouseymove))
 	{
 		if (usemouselook)
 		{
-			MY = mouseymove;
+			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 2));
 
 			playertype* pstate = &PLAYERSTATE[consoleplayer];
 			if (mouseymove > 0)
@@ -2257,7 +2255,7 @@ void PollMouseMove(void)
 	if (abs(mousexmove))
 	{
 		MX = -mouse_ry_input_scale * mousexmove;
-		MX += FixedMul(MX, sensitivity_scalar * MOUSE_RY_SENSITIVITY_SCALE);
+		MX += FixedMul(MX, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE * 2);
 	}
 }
 
