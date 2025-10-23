@@ -3831,7 +3831,7 @@ boolean HasPlayerJustLanded(objtype* ob)
 	 	return false;
 }
 
-boolean landInterp = false;
+int tiltTimer = 0;
 
 void PlayerTiltHead(objtype* ob)
 {
@@ -3851,40 +3851,13 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
-	// ugly hack to get camera interpolation on landing
 	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
 		((!(ob->flags & FL_FLEET)) ||
 		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
 	{
-		landInterp = true;
-		pstate->horizon = 0;	
+		SetNormalHorizon(ob);
 	}
 
-	if(landInterp && !usemouselook)
-	{
-		if(yzangle > HORIZONYZOFFSET)
-		{
-			if(yzangle - 32 < HORIZONYZOFFSET)
-			{
-				yzangle = HORIZONYZOFFSET;
-				landInterp = false;
-			}
-			else
-			{
-				yzangle -= 16;
-			}
-		}
-		if(yzangle < HORIZONYZOFFSET)
-		{
-			if(yzangle + 32 > HORIZONYZOFFSET)
-			{
-				yzangle = HORIZONYZOFFSET;
-			    landInterp = false;
-			}
-			else
-				yzangle += 16;
-		}
-	}
 	pstate->lastmomz = ob->momentumz;
 
 	if(MY && usemouselook)
@@ -3944,7 +3917,6 @@ void PlayerTiltHead(objtype* ob)
 		{
 			if (pstate->guntarget)
 				pstate->guntarget->flags &= ~FL_TARGET;
-			pstate->guntarget = NULL;
 			SetNormalHorizon(ob);
 		}
 	}
@@ -3983,7 +3955,7 @@ void PlayerTiltHead(objtype* ob)
 				{
 					dyz = 0;
 				}
-
+				tiltTimer = oldpolltime + (VBLCOUNTER * 3);
 				SetNormalHorizon(ob);
 			}
 		}
@@ -3996,6 +3968,7 @@ void PlayerTiltHead(objtype* ob)
 				{
 					dyz = 0;
 				}
+				tiltTimer = oldpolltime + (VBLCOUNTER * 3);
 				SetNormalHorizon(ob);
 			}
 		}
@@ -4005,22 +3978,21 @@ void PlayerTiltHead(objtype* ob)
 		}
 	}
 
-	if ((yzangle != pstate->horizon) && (dyz == 0))
+	if ((yzangle != pstate->horizon) && (dyz == 0) 
+		&& !usemouselook && (oldpolltime > tiltTimer))
 	{
-		if(!usemouselook && (pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob)))
-		{
-			int speed;
+		int speed;
 
-			speed = SNAPBACKSPEED;
-			
-			if (yzangle < pstate->horizon)
-				yzangle += speed;
-			else
-				yzangle -= speed;
-			if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
-				yzangle = pstate->horizon;
-		}
+		speed = SNAPBACKSPEED;
+		
+		if (yzangle < pstate->horizon)
+			yzangle += speed;
+		else
+			yzangle -= speed;
+		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
+			yzangle = pstate->horizon;
 	}
+
 	// SetTextMode();
 
 	if (yzangle != 512)
