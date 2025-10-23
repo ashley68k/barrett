@@ -2212,110 +2212,51 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-// #define MOUSE_RY_SHIFT 12
-// #define MOUSE_TZ_SHIFT 3
 #define MOUSE_TZ_SENSITIVITY_SCALE 65535
 #define MOUSE_RY_SENSITIVITY_SCALE 18725 * 2
-// #define MOUSE_RY_INPUT_SCALE 6000
 #define MOUSE_TZ_INPUT_SCALE 20
 int mouse_ry_input_scale = 5000;
 
 int sensitivity_scalar = 5;
-// #define MOUSE_RY_SCALE 65535
-// #define MOUSE_TZ_SCALE 65535
 #define MAXMOUSETURN 7000000
 
 /* use SDL mouse */
 #define USESDLMOUSE 1
 
 extern int inverse_mouse;
-double Y_MouseSpeed = 70;
 
 void PollMouseMove(void)
 {
 	int mousexmove, mouseymove;
-	double Ys;
-	// SetTextMode();
 
-	Ys = (Y_MouseSpeed / 100);
-	//
-
-	// const long inverse_mouse  = 1; //set  to -1 to invert mouse
-	// inverse_mouse def moved to RT_CFG.C
-
-#ifdef USESDLMOUSE
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
-#else
-	PollMouse(); // Uses DirectInput mouse in DInput.cpp
-	mousexmove = MX;
-	mouseymove = MY;
-#endif
 
-	if (abs(mousexmove) > abs(mouseymove))
-		mouseymove /= 2;
-	else
-		mousexmove /= 2;
 	MX = 0;
 	MY = 0;
 
-	sensitivity_scalar = mouseadjustment;
-
-	if ((abs(mouseymove)) >= threshold)
-	{ //
-		MY = MOUSE_TZ_INPUT_SCALE * mouseymove;
-		MY *= inverse_mouse;
-		if (usemouselook == true)
-		{
-			if (MY > 0)
-			{
-				playertype* pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// if (pstate->horizon > 512){
-				pstate->horizon -= Ys * (2 * sensitivity_scalar);
-				//}
-			}
-			else if (MY < 0)
-			{
-				playertype* pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// SetTextMode (  );
-				pstate->horizon += Ys * (2 * sensitivity_scalar);
-				// buttonpoll[ bt_horizonup ] = true;
-			}
-			MY = 0;
-		}
-		else
-		{
-			// MY += FixedMul(MY,mouseadjustment*MOUSE_TZ_SENSITIVITY_SCALE);
-			if (abs(mouseymove) > 200)
-			{
-				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookup ] = true;
-			}
-		}
-	}
-
-	if ((abs(mousexmove)) >= threshold)
+	if (abs(mouseymove))
 	{
-		// MX = -MOUSE_RY_INPUT_SCALE*mousexmove;
-		MX = -mouse_ry_input_scale * mousexmove;
-		MX += FixedMul(MX, sensitivity_scalar * MOUSE_RY_SENSITIVITY_SCALE);
-		//   if (abs(MX) > MAXMOUSETURN)
-		//   MX = MAXMOUSETURN*SGN(MX);
-		if (usemouselook == true)
+		if (usemouselook)
 		{
-			if (abs(mouseymove) > 10)
+			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 4));
+
+			playertype* pstate = &PLAYERSTATE[consoleplayer];
+			if (mouseymove > 0)
 			{
-				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookdown ] = true;
+				SetPlayerHorizon(pstate, -mouseymove)
+			}
+			else if (mouseymove < 0)
+			{
+				SetPlayerHorizon(pstate, -mouseymove)
 			}
 		}
 	}
-	//   if (MY > 0)
-	//      MX -= (MX/2);
 
-	//   MX=0;
-	//   MY=0;
+	if (abs(mousexmove))
+	{
+		MX = -mouse_ry_input_scale * mousexmove;
+		MX += FixedMul(MX, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE * 2);
+	}
 }
 
 //******************************************************************************
@@ -3868,6 +3809,30 @@ void SetNormalHorizon(objtype* ob)
 */
 extern int iG_playerTilt;
 extern double dTopYZANGLELIMIT;
+
+boolean IsPlayerFalling(objtype* ob)
+{
+	if (!(ob->flags & FL_DOGMODE) && !(ob->flags & FL_GODMODE) &&
+		!(ob->flags & FL_FLEET) && !(ob->flags & FL_RIDING) &&
+		(ob->momentumz > (GRAVITY << 1))) 
+		return true;
+	else
+	 	return false;
+}
+boolean HasPlayerJustLanded(objtype* ob)
+{
+	playertype* pstate;
+	M_LINKSTATE(ob, pstate);
+	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
+		((!(ob->flags & FL_FLEET)) ||
+		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
+			return true;
+	else
+	 	return false;
+}
+
+boolean landInterp = false;
+
 void PlayerTiltHead(objtype* ob)
 {
 	playertype* pstate;
@@ -3886,13 +3851,67 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
+	// ugly hack to get camera interpolation on landing
 	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
 		((!(ob->flags & FL_FLEET)) ||
-		 ((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
-		SetNormalHorizon(ob);
+		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
+	{
+		landInterp = true;
+		pstate->horizon = 0;	
+	}
 
+	if(landInterp && !usemouselook)
+	{
+		if(yzangle > HORIZONYZOFFSET)
+		{
+			if(yzangle - 32 < HORIZONYZOFFSET)
+			{
+				yzangle = HORIZONYZOFFSET;
+				landInterp = false;
+			}
+			else
+			{
+				yzangle -= 16;
+			}
+		}
+		if(yzangle < HORIZONYZOFFSET)
+		{
+			if(yzangle + 32 > HORIZONYZOFFSET)
+			{
+				yzangle = HORIZONYZOFFSET;
+			    landInterp = false;
+			}
+			else
+				yzangle += 16;
+		}
+	}
 	pstate->lastmomz = ob->momentumz;
 
+	if(MY && usemouselook)
+	{
+		// when MY is negative, you still have to add it in this case, as adding a negative is subtraction.
+		// this has the downside of inverting mouse input, and also means that vertical input can inadvertently
+		// overflow below or above the floor/ceiling. as such, both operations need to be treated the same,
+		// with a mouse inversion to rectify the problem.
+
+		MY *= -1;
+		if(MY > 0)
+		{
+			if(yzangle + MY > 768)
+				yzangle = 768;
+			else
+				yzangle += MY;
+		}
+		if(MY < 0)
+		{
+			if(yzangle + MY < 256)
+				yzangle = 256;
+			else
+				yzangle += MY;
+		}
+			
+	}
+	
 	if (ob->flags & FL_SHROOMS)
 	{
 		ob->yzangle = FixedMulShift(
@@ -3980,10 +3999,7 @@ void PlayerTiltHead(objtype* ob)
 				SetNormalHorizon(ob);
 			}
 		}
-		if (!(ob->flags & FL_DOGMODE) && !(ob->flags & FL_GODMODE) &&
-			!(ob->flags & FL_FLEET) && !(ob->flags & FL_RIDING) &&
-			(ob->momentumz > (GRAVITY << 1)) //(ob->momentumz>0x1000)
-		)
+		if(IsPlayerFalling(ob))
 		{
 			SetPlayerHorizon(pstate, FALLINGYZANGLE);
 		}
@@ -3991,15 +4007,19 @@ void PlayerTiltHead(objtype* ob)
 
 	if ((yzangle != pstate->horizon) && (dyz == 0))
 	{
-		int speed;
+		if(!usemouselook && (pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob)))
+		{
+			int speed;
 
-		speed = SNAPBACKSPEED;
-		if (yzangle < pstate->horizon)
-			yzangle += speed;
-		else
-			yzangle -= speed;
-		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
-			yzangle = pstate->horizon;
+			speed = SNAPBACKSPEED;
+			
+			if (yzangle < pstate->horizon)
+				yzangle += speed;
+			else
+				yzangle -= speed;
+			if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
+				yzangle = pstate->horizon;
+		}
 	}
 	// SetTextMode();
 
