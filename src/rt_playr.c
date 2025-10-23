@@ -2314,40 +2314,40 @@ void PollMove(void)
 
 	y = KY + MY + JY + CY + VY;
 
-	if (buttonpoll[bt_aimbutton])
-	{
-		if (y > 0)
-		{
-			buttonpoll[bt_horizonup] = 1;
-			y = 0;
-			aimbuttonpressed = true;
-		}
-		else if (y < 0)
-		{
-			buttonpoll[bt_horizondown] = 1;
-			y = 0;
-			aimbuttonpressed = true;
-		}
-		else if (aimbuttonpressed == false)
-		{
-			buttonpoll[bt_lookup] = 1;
-			buttonpoll[bt_lookdown] = 1;
-		}
-	}
-	else
-	{
-		aimbuttonpressed = false;
-	}
+	// if (buttonpoll[bt_aimbutton])
+	// {
+	// 	if (y > 0)
+	// 	{
+	// 		buttonpoll[bt_horizonup] = 1;
+	// 		y = 0;
+	// 		aimbuttonpressed = true;
+	// 	}
+	// 	else if (y < 0)
+	// 	{
+	// 		buttonpoll[bt_horizondown] = 1;
+	// 		y = 0;
+	// 		aimbuttonpressed = true;
+	// 	}
+	// 	else if (aimbuttonpressed == false)
+	// 	{
+	// 		buttonpoll[bt_lookup] = 1;
+	// 		buttonpoll[bt_lookdown] = 1;
+	// 	}
+	// }
+	// else
+	// {
+	// 	aimbuttonpressed = false;
+	// }
 
 	if (!allowMovementWithMouseYAxis)
 	{
 		y = KY + JY + CY + VY;
 	}
-	// kill any movement
-	if (aimbuttonpressed)
-	{
-		y = 0;
-	}
+	// // kill any movement
+	// if (aimbuttonpressed)
+	// {
+	// 	y = 0;
+	// }
 
 	if (player->flags & FL_FLEET)
 		y += y >> 1;
@@ -3216,7 +3216,7 @@ randomlabel:
 			return;
 
 		LocalBonus1Message("Mercury Mode!");
-		LocalBonusMessage("Press Look Up and Down to fly.");
+		LocalBonusMessage("Press Fly Up and Down to fly.");
 
 		ob->flags &= ~FL_NOFRICTION;
 		goto drw;
@@ -3905,55 +3905,50 @@ void PlayerTiltHead(objtype* ob)
 	}
 	else
 	{
-		if (pstate->buttonstate[bt_horizonup])
-		{
-			if (yzangle != pstate->horizon)
-			{
-				SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
-			}
-			else
-			{
-				SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET +
-										  YZHORIZONSPEED));
-			}
-		}
-		else if (pstate->buttonstate[bt_horizondown])
-		{
-			if (yzangle != pstate->horizon)
-			{
-				SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
-			}
-			else
-			{
-				SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET -
-										  YZHORIZONSPEED));
-			}
-		}
+		// replaced by look up/down, horizon button is now for flying
+		// if (pstate->buttonstate[bt_horizonup])
+		// {
+		// 	if (yzangle != pstate->horizon)
+		// 	{
+		// 		SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
+		// 	}
+		// 	else
+		// 	{
+		// 		SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET +
+		// 								  YZHORIZONSPEED));
+		// 	}
+		// }
+		// else if (pstate->buttonstate[bt_horizondown])
+		// {
+		// 	if (yzangle != pstate->horizon)
+		// 	{
+		// 		SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
+		// 	}
+		// 	else
+		// 	{
+		// 		SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET -
+		// 								  YZHORIZONSPEED));
+		// 	}
+		// }
 		if (pstate->buttonstate[bt_lookup])
 		{
-			if (!(ob->flags & FL_FLEET))
+			dyz = YZTILTSPEED;
+			if (pstate->buttonstate[bt_lookdown])
 			{
-				dyz = YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookdown])
-				{
-					dyz = 0;
-				}
-				tiltTimer = oldpolltime + (VBLCOUNTER * 2);
-				SetNormalHorizon(ob);
+				dyz = 0;
 			}
+			tiltTimer = oldpolltime + (VBLCOUNTER * 2);
+			SetNormalHorizon(ob);
 		}
 		if (pstate->buttonstate[bt_lookdown])
 		{
-			if (!(ob->flags & FL_FLEET))
+			dyz = -YZTILTSPEED;
+			if (pstate->buttonstate[bt_lookup])
 			{
-				dyz = -YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookup])
-				{
-					dyz = 0;
-				}
-				tiltTimer = oldpolltime + (VBLCOUNTER * 2);
-				SetNormalHorizon(ob);
+				dyz = 0;
 			}
+			tiltTimer = oldpolltime + (VBLCOUNTER * 2);
+			SetNormalHorizon(ob);
 		}
 		if(IsPlayerFalling(ob))
 		{
@@ -5259,11 +5254,11 @@ void CheckProtectionsAndPowerups(objtype* ob, playertype* pstate)
 void CheckFlying(objtype* ob, playertype* pstate)
 {
 
-	if (pstate->buttonstate[bt_lookup])
+	if (pstate->buttonstate[bt_flyup])
 	{
 		ob->momentumz = -FLYINGZMOM;
 	}
-	if (pstate->buttonstate[bt_lookdown])
+	if (pstate->buttonstate[bt_flydown])
 	{
 		ob->momentumz = FLYINGZMOM;
 	}
