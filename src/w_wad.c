@@ -19,7 +19,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 // W_wad.c
 
-#include <alloca.h>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
