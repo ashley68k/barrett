@@ -2212,9 +2212,7 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-// sdl2 has doubled sensitivity on y axis
-#define MOUSE_RX_SENSITIVITY_SCALE 8192
-#define MOUSE_RY_SENSITIVITY_SCALE 4096
+#define MOUSE_SENSITIVITY_SCALE 8192
 
 int mouse_rx_input_scale = 5000;
 
@@ -2233,7 +2231,7 @@ void PollMouseMove(void)
 	if (abs(mousexmove))
 	{
 		MX = -mouse_rx_input_scale * mousexmove;
-		MX += FixedMul(MX, mouseadjustment * MOUSE_RX_SENSITIVITY_SCALE);
+		MX += FixedMul(MX, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 	}
 
 	if (abs(mouseymove))
@@ -2247,7 +2245,7 @@ void PollMouseMove(void)
 			else
 			#endif
 			{
-				MY += FixedMul(mouseymove, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE);
+				MY += FixedMul(mouseymove / 2, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 			}
 		}
 	}
