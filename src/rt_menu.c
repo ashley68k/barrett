@@ -133,7 +133,7 @@ int quicksaveslot = -1;
 char order[21] = {di_west,		 di_east,		 di_north,		 di_south,
 				  bt_run,		 bt_use,		 bt_attack,		 bt_strafe,
 				  bt_strafeleft, bt_straferight, bt_lookup,		 bt_lookdown,
-				  bt_aimbutton,	 bt_horizonup,	 bt_horizondown, bt_swapweapon,
+				  bt_aimbutton,	 bt_flyup,	 bt_flydown, bt_swapweapon,
 				  bt_dropweapon, bt_turnaround,	 bt_autorun,	 bt_message,
 				  bt_directmsg};
 
@@ -411,9 +411,9 @@ CP_MenuNames NormalKeyNames[] = {
 	"RUN                \x9      ", "OPEN               \x9      ",
 	"FIRE               \x9      ", "STRAFE             \x9      ",
 	"STRAFE LEFT        \x9      ", "STRAFE RIGHT       \x9      ",
-	"LOOK/FLY UP        \x9      ", "LOOK/FLY DOWN      \x9      ",
-	"AIM                \x9      ", "AIM UP             \x9      ",
-	"AIM DOWN           \x9      ", "TOGGLE WEAPON      \x9      ",
+	"LOOK UP            \x9      ", "LOOK DOWN          \x9      ",
+	"AIM                \x9      ", "FLY UP             \x9      ",
+	"FLY DOWN           \x9      ", "TOGGLE WEAPON      \x9      ",
 	"DROP WEAPON        \x9      ", "VOLTE-FACE         \x9      ",
 	"AUTORUN            \x9      ", "SEND MESSAGE       \x9      ",
 	"DIRECT MESSAGE     \x9      "};
@@ -441,16 +441,16 @@ CP_itemtype NormalKeyMenu[] = {
 CP_MenuNames ControlNames[] = {"NONE",			"LEFT",			 "RIGHT",
 							   "FORWARD",		"BACKWARD",		 "RUN",
 							   "OPEN",			"FIRE",			 "STRAFE",
-							   "STRAFE LEFT",	"STRAFE RIGHT",	 "LOOK/FLY UP",
-							   "LOOK/FLY DOWN", "AIM",			 "AIM UP",
-							   "AIM DOWN",		"TOGGLE WEAPON", "DROP WEAPON",
+							   "STRAFE LEFT",	"STRAFE RIGHT",	 "LOOK UP",
+							   "LOOK DOWN", "AIM",			 "FLY UP",
+							   "FLY DOWN",		"TOGGLE WEAPON", "DROP WEAPON",
 							   "VOLTE-FACE",	"AUTORUN",		 "MAP"};
 
 int controlorder[NUMCONTROLNAMES] = {
 	bt_nobutton,	di_west,	   di_east,		  di_north,		 di_south,
 	bt_run,			bt_use,		   bt_attack,	  bt_strafe,	 bt_strafeleft,
-	bt_straferight, bt_lookup,	   bt_lookdown,	  bt_aimbutton,	 bt_horizonup,
-	bt_horizondown, bt_swapweapon, bt_dropweapon, bt_turnaround, bt_autorun,
+	bt_straferight, bt_lookup,	   bt_lookdown,	  bt_aimbutton,	 bt_flyup,
+	bt_flydown, bt_swapweapon, bt_dropweapon, bt_turnaround, bt_autorun,
 	bt_map};
 
 #define CONTROLSELECT_X 106
@@ -3915,7 +3915,7 @@ int CalibrateJoystick(void)
 void MouseSensitivity(void)
 
 {
-	SliderMenu(&mouseadjustment, 480, 1, 21, 81, 240, 1, "block1", NULL,
+	SliderMenu(&mouseadjustment, 16, 1, 21, 81, 240, 1, "block1", NULL,
 			   "Mouse Sensitivity", "Slow", "Ludicrous");
 }
 
@@ -4532,7 +4532,7 @@ extern int FocalWidthOffset;
 
 void DoAdjustFocalWidth(void)
 {
-	SliderMenu(&FocalWidthOffset, 200, 0, 44, 81, 194, 1, "block2", NULL,
+	SliderMenu(&FocalWidthOffset, 96, 0, 44, 81, 194, 4, "block2", NULL,
 			   "Adjust Focal Width", "Default", "You Crazy");
 	DrawVisualsMenu();
 }

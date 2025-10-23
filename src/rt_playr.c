@@ -2211,18 +2211,12 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-#define MOUSE_TZ_SENSITIVITY_SCALE 65535
-#define MOUSE_RY_SENSITIVITY_SCALE 18725 * 2
-#define MOUSE_TZ_INPUT_SCALE 20
-int mouse_ry_input_scale = 5000;
+#define MOUSE_SENSITIVITY_SCALE 1024
 
-int sensitivity_scalar = 5;
-#define MAXMOUSETURN 7000000
-
-/* use SDL mouse */
-#define USESDLMOUSE 1
+int mouse_x_inscale = -65536;
 
 extern int inverse_mouse;
+extern boolean allowMovementWithMouseYAxis;
 
 void PollMouseMove(void)
 {
@@ -2233,28 +2227,17 @@ void PollMouseMove(void)
 	MX = 0;
 	MY = 0;
 
-	if (abs(mouseymove))
-	{
-		if (usemouselook)
-		{
-			MY += FixedMul(mouseymove, mouseadjustment * (MOUSE_RY_SENSITIVITY_SCALE / 4));
-
-			playertype* pstate = &PLAYERSTATE[consoleplayer];
-			if (mouseymove > 0)
-			{
-				SetPlayerHorizon(pstate, -mouseymove)
-			}
-			else if (mouseymove < 0)
-			{
-				SetPlayerHorizon(pstate, -mouseymove)
-			}
-		}
-	}
-
 	if (abs(mousexmove))
 	{
-		MX = -mouse_ry_input_scale * mousexmove;
-		MX += FixedMul(MX, mouseadjustment * MOUSE_RY_SENSITIVITY_SCALE * 2);
+		MX += FixedMul(mousexmove * mouse_x_inscale, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
+	}
+
+	if (abs(mouseymove))
+	{
+		if (usemouselook || allowMovementWithMouseYAxis)
+		{
+			MY += FixedMul(mouseymove, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
+		}
 	}
 }
 
@@ -2330,40 +2313,40 @@ void PollMove(void)
 
 	y = KY + MY + JY + CY + VY;
 
-	if (buttonpoll[bt_aimbutton])
-	{
-		if (y > 0)
-		{
-			buttonpoll[bt_horizonup] = 1;
-			y = 0;
-			aimbuttonpressed = true;
-		}
-		else if (y < 0)
-		{
-			buttonpoll[bt_horizondown] = 1;
-			y = 0;
-			aimbuttonpressed = true;
-		}
-		else if (aimbuttonpressed == false)
-		{
-			buttonpoll[bt_lookup] = 1;
-			buttonpoll[bt_lookdown] = 1;
-		}
-	}
-	else
-	{
-		aimbuttonpressed = false;
-	}
+	// if (buttonpoll[bt_aimbutton])
+	// {
+	// 	if (y > 0)
+	// 	{
+	// 		buttonpoll[bt_horizonup] = 1;
+	// 		y = 0;
+	// 		aimbuttonpressed = true;
+	// 	}
+	// 	else if (y < 0)
+	// 	{
+	// 		buttonpoll[bt_horizondown] = 1;
+	// 		y = 0;
+	// 		aimbuttonpressed = true;
+	// 	}
+	// 	else if (aimbuttonpressed == false)
+	// 	{
+	// 		buttonpoll[bt_lookup] = 1;
+	// 		buttonpoll[bt_lookdown] = 1;
+	// 	}
+	// }
+	// else
+	// {
+	// 	aimbuttonpressed = false;
+	// }
 
 	if (!allowMovementWithMouseYAxis)
 	{
 		y = KY + JY + CY + VY;
 	}
-	// kill any movement
-	if (aimbuttonpressed)
-	{
-		y = 0;
-	}
+	// // kill any movement
+	// if (aimbuttonpressed)
+	// {
+	// 	y = 0;
+	// }
 
 	if (player->flags & FL_FLEET)
 		y += y >> 1;
@@ -3232,7 +3215,7 @@ randomlabel:
 			return;
 
 		LocalBonus1Message("Mercury Mode!");
-		LocalBonusMessage("Press Look Up and Down to fly.");
+		LocalBonusMessage("Press Fly Up and Down to fly.");
 
 		ob->flags &= ~FL_NOFRICTION;
 		goto drw;
@@ -3830,7 +3813,7 @@ boolean HasPlayerJustLanded(objtype* ob)
 	 	return false;
 }
 
-boolean landInterp = false;
+int tiltTimer = 0;
 
 void PlayerTiltHead(objtype* ob)
 {
@@ -3850,40 +3833,13 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
-	// ugly hack to get camera interpolation on landing
 	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
 		((!(ob->flags & FL_FLEET)) ||
 		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
 	{
-		landInterp = true;
-		pstate->horizon = 0;	
+		SetNormalHorizon(ob);
 	}
 
-	if(landInterp && !usemouselook)
-	{
-		if(yzangle > HORIZONYZOFFSET)
-		{
-			if(yzangle - 32 < HORIZONYZOFFSET)
-			{
-				yzangle = HORIZONYZOFFSET;
-				landInterp = false;
-			}
-			else
-			{
-				yzangle -= 16;
-			}
-		}
-		if(yzangle < HORIZONYZOFFSET)
-		{
-			if(yzangle + 32 > HORIZONYZOFFSET)
-			{
-				yzangle = HORIZONYZOFFSET;
-			    landInterp = false;
-			}
-			else
-				yzangle += 16;
-		}
-	}
 	pstate->lastmomz = ob->momentumz;
 
 	if(MY && usemouselook)
@@ -3943,60 +3899,55 @@ void PlayerTiltHead(objtype* ob)
 		{
 			if (pstate->guntarget)
 				pstate->guntarget->flags &= ~FL_TARGET;
-			pstate->guntarget = NULL;
 			SetNormalHorizon(ob);
 		}
 	}
 	else
 	{
-		if (pstate->buttonstate[bt_horizonup])
-		{
-			if (yzangle != pstate->horizon)
-			{
-				SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
-			}
-			else
-			{
-				SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET +
-										  YZHORIZONSPEED));
-			}
-		}
-		else if (pstate->buttonstate[bt_horizondown])
-		{
-			if (yzangle != pstate->horizon)
-			{
-				SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
-			}
-			else
-			{
-				SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET -
-										  YZHORIZONSPEED));
-			}
-		}
+		// replaced by look up/down, horizon button is now for flying
+		// if (pstate->buttonstate[bt_horizonup])
+		// {
+		// 	if (yzangle != pstate->horizon)
+		// 	{
+		// 		SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
+		// 	}
+		// 	else
+		// 	{
+		// 		SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET +
+		// 								  YZHORIZONSPEED));
+		// 	}
+		// }
+		// else if (pstate->buttonstate[bt_horizondown])
+		// {
+		// 	if (yzangle != pstate->horizon)
+		// 	{
+		// 		SetPlayerHorizon(pstate, yzangle - HORIZONYZOFFSET);
+		// 	}
+		// 	else
+		// 	{
+		// 		SetPlayerHorizon(pstate, (pstate->horizon - HORIZONYZOFFSET -
+		// 								  YZHORIZONSPEED));
+		// 	}
+		// }
 		if (pstate->buttonstate[bt_lookup])
 		{
-			if (!(ob->flags & FL_FLEET))
+			dyz = YZTILTSPEED;
+			if (pstate->buttonstate[bt_lookdown])
 			{
-				dyz = YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookdown])
-				{
-					dyz = 0;
-				}
-
-				SetNormalHorizon(ob);
+				dyz = 0;
 			}
+			tiltTimer = oldpolltime + (VBLCOUNTER * 2);
+			SetNormalHorizon(ob);
 		}
 		if (pstate->buttonstate[bt_lookdown])
 		{
-			if (!(ob->flags & FL_FLEET))
+			dyz = -YZTILTSPEED;
+			if (pstate->buttonstate[bt_lookup])
 			{
-				dyz = -YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookup])
-				{
-					dyz = 0;
-				}
-				SetNormalHorizon(ob);
+				dyz = 0;
 			}
+			tiltTimer = oldpolltime + (VBLCOUNTER * 2);
+			SetNormalHorizon(ob);
 		}
 		if(IsPlayerFalling(ob))
 		{
@@ -4004,22 +3955,22 @@ void PlayerTiltHead(objtype* ob)
 		}
 	}
 
-	if ((yzangle != pstate->horizon) && (dyz == 0))
+	if ((yzangle != pstate->horizon) && (dyz == 0) 
+		&& !usemouselook && ((oldpolltime > tiltTimer) 
+		|| (autoAim && pstate->guntarget)))
 	{
-		if(!usemouselook && (pstate->guntarget || IsPlayerFalling(ob) || HasPlayerJustLanded(ob)))
-		{
-			int speed;
+		int speed;
 
-			speed = SNAPBACKSPEED;
-			
-			if (yzangle < pstate->horizon)
-				yzangle += speed;
-			else
-				yzangle -= speed;
-			if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
-				yzangle = pstate->horizon;
-		}
+		speed = SNAPBACKSPEED;
+		
+		if (yzangle < pstate->horizon)
+			yzangle += speed;
+		else
+			yzangle -= speed;
+		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
+			yzangle = pstate->horizon;
 	}
+
 	// SetTextMode();
 
 	if (yzangle != 512)
@@ -5302,11 +5253,11 @@ void CheckProtectionsAndPowerups(objtype* ob, playertype* pstate)
 void CheckFlying(objtype* ob, playertype* pstate)
 {
 
-	if (pstate->buttonstate[bt_lookup])
+	if (pstate->buttonstate[bt_flyup])
 	{
 		ob->momentumz = -FLYINGZMOM;
 	}
-	if (pstate->buttonstate[bt_lookdown])
+	if (pstate->buttonstate[bt_flydown])
 	{
 		ob->momentumz = FLYINGZMOM;
 	}
