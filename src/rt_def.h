@@ -262,9 +262,9 @@ table
 
 ///////////////////      GLOBAL DATA TYPES ///////////////////////////////
 
-typedef unsigned char byte;
-typedef unsigned short int word;
-typedef unsigned int longword;
+typedef uint8_t byte;
+typedef uint16_t word;
+typedef uint32_t longword;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -272,7 +272,7 @@ typedef unsigned int longword;
 
 /* boolean is serialized at the moment, and watcomc made it a byte. */
 
-typedef unsigned char boolean;
+typedef uint8_t boolean;
 enum
 {
 	false,
