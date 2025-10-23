@@ -2212,9 +2212,9 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-#define MOUSE_SENSITIVITY_SCALE 8192
+#define MOUSE_SENSITIVITY_SCALE 1024
 
-int mouse_rx_input_scale = 5000;
+int mouse_x_inscale = -65536;
 
 extern int inverse_mouse;
 extern boolean allowMovementWithMouseYAxis;
@@ -2230,23 +2230,14 @@ void PollMouseMove(void)
 
 	if (abs(mousexmove))
 	{
-		MX = -mouse_rx_input_scale * mousexmove;
-		MX += FixedMul(MX, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
+		MX += FixedMul(mousexmove * mouse_x_inscale, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 	}
 
 	if (abs(mouseymove))
 	{
 		if (usemouselook || allowMovementWithMouseYAxis)
 		{
-			// why hath thou forsaken me, cruel icculus?
-			#ifdef PLATFORM_UNIX
-			if(mouseymove == 1 || mouseymove == -1)
-				MY = mouseymove;
-			else
-			#endif
-			{
-				MY += FixedMul(mouseymove / 2, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
-			}
+			MY += FixedMul(mouseymove, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 		}
 	}
 }
@@ -3947,7 +3938,7 @@ void PlayerTiltHead(objtype* ob)
 				{
 					dyz = 0;
 				}
-				tiltTimer = oldpolltime + (VBLCOUNTER * 3);
+				tiltTimer = oldpolltime + (VBLCOUNTER * 2);
 				SetNormalHorizon(ob);
 			}
 		}
@@ -3960,7 +3951,7 @@ void PlayerTiltHead(objtype* ob)
 				{
 					dyz = 0;
 				}
-				tiltTimer = oldpolltime + (VBLCOUNTER * 3);
+				tiltTimer = oldpolltime + (VBLCOUNTER * 2);
 				SetNormalHorizon(ob);
 			}
 		}
@@ -3971,7 +3962,8 @@ void PlayerTiltHead(objtype* ob)
 	}
 
 	if ((yzangle != pstate->horizon) && (dyz == 0) 
-		&& !usemouselook && (oldpolltime > tiltTimer))
+		&& !usemouselook && ((oldpolltime > tiltTimer) 
+		|| (autoAim && pstate->guntarget)))
 	{
 		int speed;
 
