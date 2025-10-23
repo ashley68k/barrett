@@ -3830,6 +3830,9 @@ boolean HasPlayerJustLanded(objtype* ob)
 	else
 	 	return false;
 }
+
+boolean landInterp = false;
+
 void PlayerTiltHead(objtype* ob)
 {
 	playertype* pstate;
@@ -3848,11 +3851,40 @@ void PlayerTiltHead(objtype* ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
+	// ugly hack to get camera interpolation on landing
 	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
 		((!(ob->flags & FL_FLEET)) ||
 		((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
-		SetNormalHorizon(ob);
+	{
+		landInterp = true;
+		pstate->horizon = 0;	
+	}
 
+	if(landInterp)
+	{
+		if(yzangle > 512)
+		{
+			if(yzangle - 32 < 512)
+			{
+				yzangle = 512;
+				landInterp = false;
+			}
+			else
+			{
+				yzangle -= 16;
+			}
+		}
+		if(yzangle < 512)
+		{
+			if(yzangle + 32 > 512)
+			{
+				yzangle = 512;
+			    landInterp = false;
+			}
+			else
+				yzangle += 16;
+		}
+	}
 	pstate->lastmomz = ob->momentumz;
 
 	if (ob->flags & FL_SHROOMS)
