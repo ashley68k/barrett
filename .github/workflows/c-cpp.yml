@@ -92,28 +92,28 @@ jobs:
           cmake --build cmake-build --config Release
 
       - name: Upload artifacts (Windows)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: runner.os == 'Windows'
         with:
           name: barrett-${{ github.sha }}-win64
           path: |
-            cmake-build/barrett.exe
-            cmake-build/barrett_shareware.exe
+            cmake-build/barrett-win.exe
+            cmake-build/barrett_shareware-win.exe
 
       - name: Upload artifacts (Linux)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: runner.os == 'Linux'
         with:
           name: barrett-${{ github.sha }}-Linux
           path: |
-            cmake-build/barrett
-            cmake-build/barrett_shareware
+            cmake-build/barrett-linux
+            cmake-build/barrett_shareware-linux
 
       - name: Upload artifacts (macOS)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: runner.os == 'macOS'
         with:
           name: barrett-${{ github.sha }}-macOS
           path: |
-            cmake-build/barrett
-            cmake-build/barrett_shareware
+            cmake-build/barrett-mac
+            cmake-build/barrett_shareware-mac
