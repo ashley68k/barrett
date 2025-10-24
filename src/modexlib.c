@@ -26,7 +26,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <ctype.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <SDL2/SDL_video.h>
 #include "modexlib.h"
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
@@ -34,8 +33,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_vid.h"
 #include "queue.h"
 #include "lumpy.h"
-// #include "SDL2_rotozoom.h"
-// #include <SDL2/SDL_image.h>
 
 static void StretchMemPicture();
 // GLOBAL VARIABLES

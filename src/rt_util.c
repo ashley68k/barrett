@@ -31,7 +31,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <time.h>
-#include <SDL2/SDL_render.h>
 #include "rt_fixed.h"
 #include "_rt_util.h"
 #include "rt_util.h"
