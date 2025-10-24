@@ -541,7 +541,7 @@ CP_MenuNames OptionsNames[] = {
 // bna added
 CP_MenuNames ExtOptionsNames[] = {
 	"MOUSELOOK", "INVERSE MOUSE",		 "ALLOW Y AXIS MOUSE", "CROSS HAIR",
-	"JUMPING",	 "AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM",	   "USE OPL MUSIC"};
+	"UNCAP FRAMERATE",	 "AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM",	   "USE OPL MUSIC"};
 
 CP_MenuNames ExtGameOptionsNames[] = {"BLITZ RANDOM WEPS", "ENABLE AMMO PICKUP",
 									  "EXTRA PISTOL DROPS",
@@ -4806,7 +4806,7 @@ static char* ExtOptionsDesc[8] = {
 	"Invert the mouse.",
 	"Move forward and backward using mouse.",
 	"Enable Crosshairs.",
-	"Allow Jumping (may completely break levels)",
+	"Uncap framerate using frame interpolation.",
 	"Missile weapons are auto aimed after 1st shot.",
 	"Allow auto aim.",
 	"Use OPL emulation for MIDI playback."};
@@ -4836,7 +4836,7 @@ extern int inverse_mouse;
 extern boolean usemouselook;
 extern boolean oplmusicset;
 extern boolean iG_aimCross;
-extern boolean usejump;
+extern boolean uncapfps;
 extern boolean autoAimMissileWeps;
 extern boolean autoAim;
 extern boolean allowMovementWithMouseYAxis;
@@ -4879,7 +4879,7 @@ shit:
 			DrawExtOptionsButtons();
 			break;
 		case 4:
-			usejump ^= 1;
+			uncapfps ^= 1;
 			DrawExtOptionsButtons();
 			break;
 		case 5:
@@ -4940,7 +4940,7 @@ void DrawExtOptionsButtons(void)
 					on = 1;
 				break;
 			case 4:
-				if (usejump == 1)
+				if (uncapfps == 1)
 					on = 1;
 				break;
 			case 5:
