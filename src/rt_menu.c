@@ -545,7 +545,8 @@ CP_MenuNames ExtOptionsNames[] = {
 
 CP_MenuNames ExtGameOptionsNames[] = {"BLITZ RANDOM WEPS", "ENABLE AMMO PICKUP",
 									  "EXTRA PISTOL DROPS",
-									  "ENABLE ZOMROTT"}; // LT added
+									  "ENABLE ZOMROTT", // LT added
+									  "LOW MEMORY MODE"}; // erysdren added
 
 CP_MenuNames VisualOptionsNames[] = {"SCREEN RESOLUTION", "ADJUST FOCAL WIDTH",
 									 "HUD SCALING", "DISPLAY OPTIONS"};
@@ -590,7 +591,7 @@ CP_iteminfo ExtOptionsItems = {20, MENU_Y,			8,			 0,
 							   43, ExtOptionsNames, mn_largefont};
 
 CP_iteminfo ExtGameOptionsItems = {
-	20, MENU_Y, 4, 0, 43, ExtGameOptionsNames, mn_largefont}; // LT added
+	20, MENU_Y, 5, 0, 43, ExtGameOptionsNames, mn_largefont}; // LT added
 
 CP_iteminfo DisplayOptionsMenu = {
 	20, MENU_Y, 3, 0, 43, DisplayOptionsNames, mn_largefont}; // LT added
@@ -616,6 +617,7 @@ CP_itemtype ExtGameMenu[] = {
 	{1, "", 'P', NULL},
 	{1, "", 'E', NULL},
 	{1, "", 'Z', NULL},
+	{1, "", 'L', NULL},
 }; // LT added
 
 // bna added end
@@ -4973,7 +4975,9 @@ static char* ExtGameOptionsDesc[sizeof(ExtGameOptionsItems)] = {
 	"Allow Blitzguards to be randomly given any missile weapon.",
 	"Take ammo from dropped missile weapons upon touching them.",
 	"Guards with pistols drop their pistol when killed.",
-	"If enabled, guards will respawn UNLESS if GIBBED."};
+	"If enabled, guards will respawn UNLESS if GIBBED.",
+	"If enabled, emulate DOS ROTT's \"low memory\" mode."
+};
 
 void DrawExtGameOptionsButtons(void)
 {
@@ -5028,6 +5032,12 @@ void DrawExtGameOptionsButtons(void)
 										EraseMenuBufRegion (25, 4, 287 - 25, 10
 					   ); DrawOptionDescription( ExtGameOptionsDesc, 3 );
 					*/
+					on = 1;
+				}
+				break;
+			case 4:
+				if (lowmemory == 1)
+				{
 					on = 1;
 				}
 				break;
@@ -5119,6 +5129,10 @@ void CP_ExtGameOptionsMenu(void)
 			break;
 		case 3:
 			enableZomROTT ^= 1;
+			DrawExtGameOptionsButtons();
+			break;
+		case 4:
+			lowmemory ^= 1;
 			DrawExtGameOptionsButtons();
 			break;
 		}
