@@ -26,6 +26,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 //***************************************************************************
 
+#include "rt_def.h"
+#include "rt_cfg.h"
 #include "states.h"
 #include "queue.h"
 #include "rt_fixed.h"
@@ -92,6 +94,8 @@ typedef enum
 
 #define M_ABS abs
 
+extern boolean uncapfps;
+
 #define M_CheckPlayerKilled(ob)                                                \
 	{                                                                          \
 		if ((ob->obclass == playerobj) && (ob->flags & FL_DYING))              \
@@ -108,20 +112,36 @@ typedef enum
 
 #define SetFinePosition(ob, newx, newy)                                        \
 	{              															   \
-		ob->lastx = ob->x;                                                     \
-		ob->lasty = ob->y;   												   \
-		ob->x = FixedInterp(ob->lastx, newx, 0x10000);						   \
-		ob->y = FixedInterp(ob->lasty, newy, 0x10000); 						   \
+		if(uncapfps) 														   \
+		{							 										   \
+			ob->lastx = ob->x;                                                 \
+			ob->lasty = ob->y;												   \
+			ob->x = FixedInterp(ob->lastx, newx, 0x10000);				       \
+			ob->y = FixedInterp(ob->lasty, newy, 0x10000);				   	   \
+		}  												                       \
+		else																   \
+		{																	   \
+			ob->x = newx;						                               \
+			ob->y = newy; 													   \
+		}  							  										   \
 		ob->tilex = (ob->x >> TILESHIFT);                                      \
 		ob->tiley = (ob->y >> TILESHIFT);                                      \
 	}
 
 #define SetVisiblePosition(ob, x, y)                                           \
 	{                       												   \
-		ob->lastdrawx = ob->drawx;      									   \
-		ob->lastdrawy = ob->drawy;                                             \
-		ob->drawx = FixedInterp(ob->lastdrawx, x, 0x10000);                    \
-		ob->drawy = FixedInterp(ob->lastdrawy, y, 0x10000);                    \
+		if(uncapfps) 														   \
+		{																	   \
+			ob->lastdrawx = ob->drawx;      								   \
+			ob->lastdrawy = ob->drawy;                                         \
+			ob->drawx = FixedInterp(ob->lastdrawx, x, 0x10000);				   \
+			ob->drawy = FixedInterp(ob->lastdrawy, y, 0x10000);				   \
+		}  												                       \
+		else																   \
+		{																	   \
+			ob->drawx = x;						                               \
+			ob->drawy = y; 													   \
+		}  							  										   \
 	}
 
 //***************************************************************************
