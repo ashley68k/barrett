@@ -2,7 +2,7 @@
 
 #include "rt_fixed.h"
 
-inline fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff)
+fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff)
 {
     return oldVal + FixedMul(newVal - oldVal, fracDiff);
 }

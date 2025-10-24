@@ -141,6 +141,9 @@ typedef struct statstruct
 	thingtype which;
 	byte tilex, tiley;
 	fixed x, y, z;
+	
+	// for frame interp
+	fixed lastx, lasty, lastz;
 	int shapenum;
 	unsigned flags;
 	signed char ticcount;

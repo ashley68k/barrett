@@ -34,7 +34,7 @@ DESCRIPTION:
 */
 fixed FixedSqrtHP(fixed n); // High Precision (8.16)
 
-inline fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff);
+fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff);
 
 fixed FixedMul(fixed a, fixed b);
 fixed FixedDiv2(fixed a, fixed b);

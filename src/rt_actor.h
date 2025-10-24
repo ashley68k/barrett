@@ -107,17 +107,21 @@ typedef enum
 	}
 
 #define SetFinePosition(ob, newx, newy)                                        \
-	{                                                                          \
-		ob->x = newx;                                                          \
-		ob->y = newy;                                                          \
+	{              															   \
+		ob->lastx = ob->x;                                                     \
+		ob->lasty = ob->y;   												   \
+		ob->x = FixedInterp(ob->lastx, newx, 0x10000);						   \
+		ob->y = FixedInterp(ob->lasty, newy, 0x10000); 						   \
 		ob->tilex = (ob->x >> TILESHIFT);                                      \
 		ob->tiley = (ob->y >> TILESHIFT);                                      \
 	}
 
 #define SetVisiblePosition(ob, x, y)                                           \
-	{                                                                          \
-		ob->drawx = x;                                                         \
-		ob->drawy = y;                                                         \
+	{                       												   \
+		ob->lastdrawx = ob->drawx;      									   \
+		ob->lastdrawy = ob->drawy;                                             \
+		ob->drawx = FixedInterp(ob->lastdrawx, x, 0x10000);                    \
+		ob->drawy = FixedInterp(ob->lastdrawy, y, 0x10000);                    \
 	}
 
 //***************************************************************************
@@ -221,6 +225,7 @@ typedef struct objstruct
 
 	signed short dirchoosetime;
 	fixed drawx, drawy;
+	fixed lastdrawx, lastdrawy;
 	classtype obclass;
 	statetype* state;
 	signed char door_to_open;
