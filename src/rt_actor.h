@@ -209,6 +209,10 @@ typedef struct objstruct
 	thingtype which;
 	byte tilex, tiley;
 	fixed x, y, z;
+
+	// for frame interp
+	fixed lastx, lasty, lastz;
+
 	int shapenum;
 	unsigned flags;
 	short ticcount;
@@ -225,9 +229,13 @@ typedef struct objstruct
 	int targettilex, targettiley;
 
 	dirtype dir;
+	
 	short int angle;
 	short int yzangle;
 
+	// interp
+	short int lastangle, lastyzangle;
+	
 	int soundhandle;
 	int speed;
 	int momentumx, momentumy, momentumz;
