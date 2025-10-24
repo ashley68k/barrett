@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "WinRott.h"
 #include "rt_def.h"
-#include "SDL2/SDL.h"
+#include "SDL.h"
 /*
 int iGLOBAL_SCREENWIDTH;//bna val 800
 int iGLOBAL_SCREENHEIGHT;//bna val 600

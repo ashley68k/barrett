@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <signal.h>
 
 /* Need to redefine main to SDL_main on some platforms... */
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include "rt_actor.h"
 #include "rt_stat.h"

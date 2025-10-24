@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rt_def.h"
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include <stdarg.h>
 #include <fcntl.h>

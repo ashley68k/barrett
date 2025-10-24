@@ -34,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "profile.h"
 #include "develop.h"
 #include "rt_main.h"
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 // Global Variables
 

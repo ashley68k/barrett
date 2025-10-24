@@ -15,7 +15,7 @@
 #include "rt_def.h"
 #include "rt_main.h"
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 /*
   Copied over from Wolf3D Linux: http://www.icculus.org/wolf3d/

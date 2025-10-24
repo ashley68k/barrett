@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 #include "rt_main.h"
 #include "rt_def.h"

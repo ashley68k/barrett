@@ -34,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "rt_vid.h"
 #include "queue.h"
 #include "lumpy.h"
-// #include "SDL2/SDL2_rotozoom.h"
+// #include "SDL2_rotozoom.h"
 // #include <SDL2/SDL_image.h>
 
 static void StretchMemPicture();
