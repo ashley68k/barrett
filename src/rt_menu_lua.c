@@ -331,20 +331,26 @@ no_items:
 
 static void LCP_DrawMenu(lua_State *L, rt_lua_menu_t *menu)
 {
-	MN_GetCursorLocation(&menu->info, menu->items);
+	MenuNum = 1;
+	SetAlternateMenuBuf();
+	ClearMenuBuf();
 	SetMenuTitle(menu->title);
+	MN_GetCursorLocation(&menu->info, menu->items);
 	DrawMenu(&menu->info, menu->items);
 	DisplayInfo(0);
+	FlipMenuBuf();
 }
 
 static void LCP_DoMenu(lua_State *L, rt_lua_menu_t *menu)
 {
-	EnableScreenStretch();
-	SetAlternateMenuBuf();
-	ClearMenuBuf();
+	int which;
+
 	LCP_DrawMenu(L, menu);
-	DrawMenuBufItem(menu->info.x, ((menu->info.curpos * 14) + (menu->info.y - 2)), W_GetNumForName(LargeCursor) + CursorFrame[CursorNum]);
-	FlipMenuBuf();
+
+	do
+	{
+		which = HandleMenu(&menu->info, menu->items, NULL);
+	} while (which >= 0);
 }
 
 #define MENU_MAIN_SCRIPT "res/menus/main.lua"
@@ -369,21 +375,8 @@ void LCP_MainMenu(void)
 	if (!menu)
 		Error("Lua error: %s", lua_tostring(MENU_LUA_STATE, -1));
 
-	// draw menu
-	LCP_DrawMenu(MENU_LUA_STATE, menu);
-
 	// run menu loop
-	while (1)
-	{
-		IN_ClearKeysDown();
-
-		which = HandleMenu(&menu->info, menu->items, NULL);
-
-		if (which == -1)
-			break;
-
-		LCP_DoMenu(MENU_LUA_STATE, menu);
-	}
+	LCP_DoMenu(MENU_LUA_STATE, menu);
 
 	// cleanup menu
 	LCP_FreeMenu(MENU_LUA_STATE, menu);
