@@ -116,6 +116,9 @@ typedef struct pwallstruct
 {
 	thingtype which;
 	int x, y;
+	
+	// interp
+	int prevx, prevy;
 	int momentumx, momentumy;
 	byte areanumber;
 	byte lock;

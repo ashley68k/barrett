@@ -32,8 +32,9 @@ DESCRIPTION:
 	This does a high-precision square root of a Fixed32.  It has
 	8.16 bit accuracy.
 */
-
 fixed FixedSqrtHP(fixed n); // High Precision (8.16)
+
+inline fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff);
 
 fixed FixedMul(fixed a, fixed b);
 fixed FixedDiv2(fixed a, fixed b);

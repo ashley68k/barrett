@@ -2,6 +2,11 @@
 
 #include "rt_fixed.h"
 
+inline fixed FixedInterp(fixed oldVal, fixed newVal, fixed fracDiff)
+{
+    return oldVal + FixedMul(newVal - oldVal, fracDiff);
+}
+
 fixed FixedMul(fixed a, fixed b)
 {
 	int64_t scratch1 = (int64_t)a * (int64_t)b + (int64_t)0x8000;
