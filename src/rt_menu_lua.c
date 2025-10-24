@@ -350,6 +350,10 @@ static void LCP_DoMenu(lua_State *L, rt_lua_menu_t *menu)
 	do
 	{
 		which = HandleMenu(&menu->info, menu->items, NULL);
+
+		if (which == -1)
+			CP_Quit(-1);
+
 	} while (which >= 0);
 }
 
