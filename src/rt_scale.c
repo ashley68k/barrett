@@ -1126,10 +1126,13 @@ void R_DrawColumn(byte* buf)
 
 	while (count--)
 	{
-		//*dest = test++;
 		*dest = shadingtable[dc_source[(frac >> SFRACBITS)]];
 		dest += iGLOBAL_SCREENWIDTH;
-		frac += fracstep;
+
+		// duplicate last pixel to avoid reading random texture garbage.
+		// count is the correct number of pixels, but the texture info can be garbage at the last index.
+		if(count > 1)
+			frac += fracstep;
 	}
 }
 

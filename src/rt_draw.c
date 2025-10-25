@@ -2420,8 +2420,11 @@ void InterpolateMaskedWall(visobj_t* plane)
 				dc_texturemid =
 					((pheight - nominalheight + topoffset) << SFRACBITS) +
 					(SFRACUNIT >> 1);
+
+				// add half pixel offset to avoid oob texture reads
+				// in conjunction with r_drawcolumn patch
 				sprtopoffset =
-					centeryfrac - FixedMul(dc_texturemid, dc_invscale);
+					centeryfrac - FixedMul(dc_texturemid, dc_invscale) + 0x8000;
 
 				texture = ((top / bot) + (plane->texturestart >> 4)) >> 6;
 				SetLightLevel(height >> DHEIGHTFRACTION);
