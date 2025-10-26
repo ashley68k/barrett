@@ -208,7 +208,7 @@ typedef struct objstruct
 {
 	thingtype which;
 	byte tilex, tiley;
-	fixed x, y, z;
+	fix32_t x, y, z;
 	int shapenum;
 	unsigned flags;
 	short ticcount;
@@ -216,7 +216,7 @@ typedef struct objstruct
 	word whichactor;
 
 	signed short dirchoosetime;
-	fixed drawx, drawy;
+	fix32_t drawx, drawy;
 	classtype obclass;
 	statetype* state;
 	signed char door_to_open;

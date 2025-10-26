@@ -51,8 +51,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //===========================================================================
 
 static int tilesize;
-static fixed xscale;
-static fixed yscale;
+static fix32_t xscale;
+static fix32_t yscale;
 static int mapscale = 2;
 static int oldw, oldh;
 static byte* skytile;
@@ -408,7 +408,7 @@ void DrawMap_Player(int x, int y)
 
 void DrawMap(int cx, int cy)
 {
-	fixed x, y;
+	fix32_t x, y;
 	statobj_t* s;
 	objtype* a;
 	int i, j;
