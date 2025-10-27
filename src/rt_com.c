@@ -354,9 +354,9 @@ void SendSyncPacket(sync_t* sync, int dest)
 
 boolean SlavePhaseHandler(sync_t* sync)
 {
-	boolean done;
+	boolean phasedone;
 
-	done = false;
+	phasedone = false;
 
 	switch (sync->pkt.phase)
 	{
@@ -375,10 +375,10 @@ boolean SlavePhaseHandler(sync_t* sync)
 	case SYNC_PHASE5:
 		ISR_SetTime(GetTicCount() - sync->pkt.delta);
 		sync->sendtime = sync->pkt.clocktime;
-		done = true;
+		phasedone = true;
 		break;
 	}
-	return done;
+	return phasedone;
 }
 
 /*
@@ -391,9 +391,9 @@ boolean SlavePhaseHandler(sync_t* sync)
 
 boolean MasterPhaseHandler(sync_t* sync)
 {
-	boolean done;
+	boolean phasedone;
 
-	done = false;
+	phasedone = false;
 
 	switch (sync->pkt.phase)
 	{
@@ -415,10 +415,10 @@ boolean MasterPhaseHandler(sync_t* sync)
 			sync->pkt.clocktime - GetTicCount() + (sync->deltatime >> 1);
 		sync->sendtime = GetTicCount() + SYNCTIME;
 		sync->pkt.clocktime = sync->sendtime;
-		done = true;
+		phasedone = true;
 		break;
 	}
-	return done;
+	return phasedone;
 }
 
 /*
@@ -433,7 +433,7 @@ void ComSetTime(void)
 {
 	int i;
 	sync_packet_t* syncpacket;
-	boolean done = false;
+	boolean timedone = false;
 
 	syncpacket = (sync_packet_t*)SafeMalloc(sizeof(sync_packet_t));
 
@@ -502,7 +502,7 @@ void ComSetTime(void)
 	}
 	else // Slave/Client
 	{
-		while (done == false)
+		while (timedone == false)
 		{
 			AbortCheck("ComSetTime aborted as client");
 
@@ -512,7 +512,7 @@ void ComSetTime(void)
 				if (syncpacket->type == COM_START)
 				{
 					controlsynctime = syncpacket->clocktime;
-					done = true;
+					timedone = true;
 				}
 			}
 		}
@@ -542,7 +542,7 @@ void ComSetTime(void)
 */
 void InitialMasterSync(sync_t* sync, int client)
 {
-	boolean done = false;
+	boolean syncdone = false;
 	int i;
 
 	if (networkgame == true)
@@ -562,7 +562,7 @@ void InitialMasterSync(sync_t* sync, int client)
 
 	sync->sendtime = GetTicCount() - SYNCTIME;
 
-	while (done == false)
+	while (syncdone == false)
 	{
 		sync->pkt.phase = SYNC_PHASE0;
 
@@ -583,7 +583,7 @@ void InitialMasterSync(sync_t* sync, int client)
 				while (time + SYNCTIME > GetTicCount())
 				{
 				}
-				done = true;
+				syncdone = true;
 			}
 		}
 	}
@@ -598,9 +598,9 @@ void InitialMasterSync(sync_t* sync, int client)
 */
 void InitialSlaveSync(sync_t* sync)
 {
-	boolean done = false;
+	boolean syncdone = false;
 
-	while (done == false)
+	while (syncdone == false)
 	{
 		AbortCheck("Initial sync aborted as slave");
 		if (ValidSyncPacket(sync) == true)
@@ -623,7 +623,7 @@ void InitialSlaveSync(sync_t* sync)
 				{
 					ReadPacket();
 				}
-				done = true;
+				syncdone = true;
 			}
 		}
 	}
@@ -642,7 +642,7 @@ void InitialSlaveSync(sync_t* sync)
 void SyncTime(int client)
 {
 	int dtime[NUMSYNCPHASES];
-	boolean done;
+	boolean syncdone;
 	int i;
 	sync_t* sync;
 
@@ -655,7 +655,7 @@ void SyncTime(int client)
 
 		InitialMasterSync(sync, client);
 
-		done = false;
+		syncdone = false;
 
 		// Initial setup for Master
 		// Initialize send time so as soon as we enter the loop, we send
@@ -663,7 +663,7 @@ void SyncTime(int client)
 		sync->pkt.phase = SYNC_PHASE1;
 		sync->sendtime = GetTicCount() - SYNCTIME;
 
-		while (done == false)
+		while (syncdone == false)
 		{
 			// Master
 
@@ -690,7 +690,7 @@ void SyncTime(int client)
 				else
 					Error("SyncTime: this should not happen\n");
 
-				done = MasterPhaseHandler(sync);
+				syncdone = MasterPhaseHandler(sync);
 
 				SendSyncPacket(sync, client);
 			}
@@ -702,9 +702,9 @@ void SyncTime(int client)
 
 		InitialSlaveSync(sync);
 
-		done = false;
+		syncdone = false;
 
-		while (done == false)
+		while (syncdone == false)
 		{
 			// Slave
 
@@ -712,9 +712,9 @@ void SyncTime(int client)
 
 			while (ValidSyncPacket(sync) == true)
 			{
-				done = SlavePhaseHandler(sync);
+				syncdone = SlavePhaseHandler(sync);
 
-				if (done == false)
+				if (syncdone == false)
 					SendSyncPacket(sync, server);
 			}
 		}
