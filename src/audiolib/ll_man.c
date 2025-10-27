@@ -46,7 +46,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **********************************************************************/
 
 void LL_AddNode(char* item, char** head, char** tail, int next, int prev)
-
 {
 	OFFSET(item, prev) = NULL;
 	OFFSET(item, next) = *head;
@@ -64,7 +63,6 @@ void LL_AddNode(char* item, char** head, char** tail, int next, int prev)
 }
 
 void LL_RemoveNode(char* item, char** head, char** tail, int next, int prev)
-
 {
 	if (OFFSET(item, prev) == NULL)
 	{
@@ -95,7 +93,6 @@ void LL_RemoveNode(char* item, char** head, char** tail, int next, int prev)
 ---------------------------------------------------------------------*/
 
 static void LL_LockEnd(void)
-
 {
 }
 
@@ -106,13 +103,7 @@ static void LL_LockEnd(void)
 ---------------------------------------------------------------------*/
 
 void LL_UnlockMemory(void)
-
 {
-#ifdef LOCKMEMORY
-
-	DPMI_UnlockMemoryRegion(LL_AddNode, LL_LockEnd);
-
-#endif
 }
 
 /*---------------------------------------------------------------------
@@ -122,20 +113,6 @@ void LL_UnlockMemory(void)
 ---------------------------------------------------------------------*/
 
 int LL_LockMemory(void)
-
 {
-
-#ifdef LOCKMEMORY
-
-	int status;
-
-	status = DPMI_LockMemoryRegion(LL_AddNode, LL_LockEnd);
-	if (status != DPMI_Ok)
-	{
-		return (LL_Error);
-	}
-
-#endif
-
 	return (LL_Ok);
 }
