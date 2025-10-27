@@ -1440,14 +1440,16 @@ void ReadROTTMap(char* filename, int mapnum)
 	long expanded;
 	int plane;
 	byte* buffer;
+	size_t mapsoffset;
 
 	CheckRTLVersion(filename);
 	filehandle = SafeOpenRead(filename);
+	mapsoffset = GetMapArrayOffset(filehandle);
 
 	//
 	// Load map header
 	//
-	lseek(filehandle, RTL_HEADER_OFFSET + mapnum * sizeof(RTLMap), SEEK_SET);
+	lseek(filehandle, mapsoffset + mapnum * sizeof(RTLMap), SEEK_SET);
 	SafeRead(filehandle, &RTLMap, sizeof(RTLMap));
 
 	SwapIntelLong((int*)&RTLMap.used);
@@ -1594,15 +1596,17 @@ void GetMapFileInfo(mapfileinfo_t* mapinfo, char* filename)
 	int filehandle;
 	int i;
 	int nummaps;
+	size_t mapsoffset;
 
 	CheckRTLVersion(filename);
 
 	filehandle = SafeOpenRead(filename);
+	mapsoffset = GetMapArrayOffset(filehandle);
 
 	//
 	// Load map header
 	//
-	lseek(filehandle, RTL_HEADER_OFFSET, SEEK_SET);
+	lseek(filehandle, mapsoffset, SEEK_SET);
 	SafeRead(filehandle, &RTLMap, sizeof(RTLMap));
 	close(filehandle);
 
@@ -1681,15 +1685,17 @@ word GetMapCRC(int num)
 	int filehandle;
 	char filename[80];
 	RTLMAP RTLMap;
+	size_t mapsoffset;
 
 	GetMapFileName(&filename[0]);
 	CheckRTLVersion(filename);
 	filehandle = SafeOpenRead(filename);
+	mapsoffset = GetMapArrayOffset(filehandle);
 
 	//
 	// Load map header
 	//
-	lseek(filehandle, RTL_HEADER_OFFSET + num * sizeof(RTLMap), SEEK_SET);
+	lseek(filehandle, mapsoffset + num * sizeof(RTLMap), SEEK_SET);
 	SafeRead(filehandle, &RTLMap, sizeof(RTLMap));
 
 	close(filehandle);
