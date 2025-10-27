@@ -80,3 +80,4 @@ compile_commands.json
 CMakeCache.txt
 Makefile
 cmake_install.cmake
+compile.log

@@ -240,7 +240,7 @@ boolean SD_StartRecordingSound(void)
 	FeederPointer = -1;
 	RecordingPointer = 0;
 
-	status = FX_StartRecording(RECORDINGSAMPLERATE, SD_UpdateRecordingSound);
+	status = FX_StartRecording();
 
 	if (status != FX_Ok)
 	{

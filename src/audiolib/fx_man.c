@@ -145,10 +145,8 @@ int FX_SetupCard(fx_device* device)
    Returns the current BLASTER environment variable settings.
 ---------------------------------------------------------------------*/
 
-int FX_GetBlasterSettings(fx_blaster_config* blaster)
-
+int FX_GetBlasterSettings()
 {
-
 	return (FX_Ok);
 }
 
@@ -158,11 +156,8 @@ int FX_GetBlasterSettings(fx_blaster_config* blaster)
    Handles manual setup of the Sound Blaster information.
 ---------------------------------------------------------------------*/
 
-int FX_SetupSoundBlaster(fx_blaster_config blaster, int* MaxVoices,
-						 int* MaxSampleBits, int* MaxChannels)
-
+int FX_SetupSoundBlaster()
 {
-
 	return (FX_Ok);
 }
 
@@ -786,7 +781,7 @@ int FX_StartDemandFeedPlayback(void (*function)(char** ptr,
    Starts the sound recording engine.
 ---------------------------------------------------------------------*/
 
-int FX_StartRecording(int MixRate, void (*function)(char* ptr, int length))
+int FX_StartRecording(void)
 
 {
 	int status;

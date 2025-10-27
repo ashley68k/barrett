@@ -108,7 +108,7 @@ int FX_StartDemandFeedPlayback(void (*function)(char** ptr,
 							   int rate, int pitchoffset, int vol, int left,
 							   int right, int priority,
 							   unsigned long callbackval);
-int FX_StartRecording(int MixRate, void (*function)(char* ptr, int length));
+int FX_StartRecording(void);
 void FX_StopRecord(void);
 
 // ROTT Special - SBF
