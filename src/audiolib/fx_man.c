@@ -145,7 +145,7 @@ int FX_SetupCard(fx_device* device)
    Returns the current BLASTER environment variable settings.
 ---------------------------------------------------------------------*/
 
-int FX_GetBlasterSettings()
+int FX_GetBlasterSettings(void)
 {
 	return (FX_Ok);
 }
@@ -156,7 +156,7 @@ int FX_GetBlasterSettings()
    Handles manual setup of the Sound Blaster information.
 ---------------------------------------------------------------------*/
 
-int FX_SetupSoundBlaster()
+int FX_SetupSoundBlaster(void)
 {
 	return (FX_Ok);
 }

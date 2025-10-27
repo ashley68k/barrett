@@ -75,7 +75,7 @@ void SetRottScreenRes(int Width, int Height)
 // luckey for me that I am not programmin a 386 or the next
 // 4 function would never have worked. bna++
 extern int viewsize;
-void MoveScreenUpLeft()
+void MoveScreenUpLeft(void)
 {
 	int startX, startY, startoffset;
 	byte *Ycnt, *b;
@@ -98,7 +98,7 @@ void MoveScreenUpLeft()
 	}
 }
 //----------------------------------------------------------------------
-void MoveScreenDownLeft()
+void MoveScreenDownLeft(void)
 {
 	int startX, startY, startoffset;
 	byte *Ycnt, *b;
@@ -122,7 +122,7 @@ void MoveScreenDownLeft()
 	}
 }
 //----------------------------------------------------------------------
-void MoveScreenUpRight()
+void MoveScreenUpRight(void)
 {
 	int startX, startY, startoffset;
 	byte *Ycnt, *b;
@@ -146,7 +146,7 @@ void MoveScreenUpRight()
 	}
 }
 //----------------------------------------------------------------------
-void MoveScreenDownRight()
+void MoveScreenDownRight(void)
 {
 	int startX, startY, startoffset;
 	byte *Ycnt, *b;

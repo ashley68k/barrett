@@ -1084,7 +1084,7 @@ int getASCII(void)
 //
 //******************************************************************************
 
-void ScanForSavedGames()
+void ScanForSavedGames(void)
 {
 	struct find_t f;
 	char filename[256];

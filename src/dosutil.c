@@ -262,7 +262,7 @@ void print_stack(int level)
 
 #endif
 
-void crash_print()
+void crash_print(void)
 {
 	printf("OH NO OH NO ROTT CRASHED!\n");
 	printf("Here is where:\n");

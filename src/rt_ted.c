@@ -5262,7 +5262,7 @@ void DoLowMemoryConversion(void)
 // Queue enemiesToRes;
 Queue* enemiesToRes[8]; // 8 "Organic enemy Types"
 
-void SetupZomROTTStuff()
+void SetupZomROTTStuff(void)
 {
 	int x;
 	for (x = 0; x < 8; x++)

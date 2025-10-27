@@ -57,12 +57,12 @@ void SetTransitTime(int client, int time);
 
 #ifdef PLATFORM_UNIX
 
-static void ReadUDPPacket()
+static void ReadUDPPacket(void)
 {
 	rottcom->remotenode = -1;
 }
 
-static void WriteUDPPacket()
+static void WriteUDPPacket(void)
 {
 }
 

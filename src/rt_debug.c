@@ -858,7 +858,7 @@ void FloorandCeiling(boolean off)
 ================
 */
 
-void GiveGasMask()
+void GiveGasMask(void)
 {
 
 	if (PLAYER[0]->flags & FL_GASMASK)
@@ -875,7 +875,7 @@ void GiveGasMask()
 ================
 */
 
-void GiveBulletProofArmor()
+void GiveBulletProofArmor(void)
 {
 	if (PLAYER[0]->flags & FL_BPV)
 		return;
@@ -891,7 +891,7 @@ void GiveBulletProofArmor()
 ================
 */
 
-void GiveAsbestoArmor()
+void GiveAsbestoArmor(void)
 {
 	if (PLAYER[0]->flags & FL_AV)
 		return;
@@ -906,7 +906,7 @@ void GiveAsbestoArmor()
 =
 ================
 */
-void OutfitPlayer()
+void OutfitPlayer(void)
 {
 	AddMessage("Outfit Player!", MSG_CHEAT);
 
@@ -938,7 +938,7 @@ void OutfitPlayer()
 ================
 */
 
-void KillPlayer()
+void KillPlayer(void)
 {
 	AddMessage("Say Goodnight.", MSG_CHEAT);
 	playstate = ex_died;

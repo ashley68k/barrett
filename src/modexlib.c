@@ -378,7 +378,7 @@ void DisableHudStretch(void)
 }
 
 // bna section -------------------------------------------
-static void StretchMemPicture()
+static void StretchMemPicture(void)
 {
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -403,7 +403,7 @@ extern boolean ingame;
 extern exit_t playstate;
 int iG_playerTilt;
 
-void DrawCenterAim()
+void DrawCenterAim(void)
 {
 	int x;
 

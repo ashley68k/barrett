@@ -3406,7 +3406,7 @@ void AddEnemyToResurrectList(objtype* ob)
 	// enqueue(&enemiesToRes, ob);
 }
 
-void FreeUpResurrectList()
+void FreeUpResurrectList(void)
 {
 	int x = 0;
 	for (x = 0; x < 8; x++)
@@ -3472,7 +3472,7 @@ void SpawnDuringGameWithState(classtype which, int tilex, int tiley, int dir,
 	ConnectAreas();
 }
 
-void ResurrectEnemies()
+void ResurrectEnemies(void)
 {
 	objtype* actor;
 

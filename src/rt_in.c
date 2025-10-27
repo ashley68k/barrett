@@ -811,7 +811,7 @@ void IN_Startup(void)
 	IN_Started = true;
 }
 
-void ClearScanCodes()
+void ClearScanCodes(void)
 {
 	ClearHashTable(scancodes);
 }
