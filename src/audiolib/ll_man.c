@@ -45,8 +45,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 **********************************************************************/
 
-#define LL_LockStart LL_AddNode
-
 void LL_AddNode(char* item, char** head, char** tail, int next, int prev)
 
 {
@@ -112,7 +110,7 @@ void LL_UnlockMemory(void)
 {
 #ifdef LOCKMEMORY
 
-	DPMI_UnlockMemoryRegion(LL_LockStart, LL_LockEnd);
+	DPMI_UnlockMemoryRegion(LL_AddNode, LL_LockEnd);
 
 #endif
 }
@@ -131,7 +129,7 @@ int LL_LockMemory(void)
 
 	int status;
 
-	status = DPMI_LockMemoryRegion(LL_LockStart, LL_LockEnd);
+	status = DPMI_LockMemoryRegion(LL_AddNode, LL_LockEnd);
 	if (status != DPMI_Ok)
 	{
 		return (LL_Error);
