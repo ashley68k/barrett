@@ -58,12 +58,6 @@ static int oldw, oldh;
 static byte* skytile;
 static int mapcolor = 8;
 
-typedef struct PType
-{
-	int x;
-	int y;
-} point_t;
-
 static point_t arrows[8][7] = {
 	{{4, 2}, {2, 4}, {2, 3}, {0, 3}, {0, 1}, {2, 1}, {2, 0}},
 	{{4, 0}, {4, 3}, {3, 2}, {1, 4}, {0, 3}, {2, 1}, {1, 0}},

@@ -42,20 +42,18 @@ extern int fontcolor;
 //
 //***************************************************************************
 
-typedef struct
-{
+typedef struct point {
 	int x, y;
-} Point;
+} point_t;
 
 typedef struct
 {
 	int x, y, w, h, px, py;
 } WindowRec; // Record used to save & restore screen windows
 
-typedef struct
-{
-	Point ul, lr;
-} Rect;
+typedef struct rect {
+	point_t ul, lr;
+} rect_t;
 
 //***************************************************************************
 //
@@ -84,7 +82,7 @@ void US_Print(const char* s);
 void US_BufPrint(const char* s);
 void US_PrintUnsigned(unsigned long int n);
 void US_PrintSigned(long int n);
-void USL_PrintInCenter(const char* s, Rect r);
+void USL_PrintInCenter(const char* s, rect_t r);
 void US_PrintCentered(const char* s);
 void US_CPrintLine(const char* s);
 void US_CPrint(const char* s);

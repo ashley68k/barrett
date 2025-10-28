@@ -497,7 +497,7 @@ void US_PrintSigned(long int n)
 //
 //******************************************************************************
 
-void USL_PrintInCenter(const char* s, Rect r)
+void USL_PrintInCenter(const char* s, rect_t r)
 {
 	int w, h, rw, rh;
 
@@ -518,7 +518,7 @@ void USL_PrintInCenter(const char* s, Rect r)
 
 void US_PrintCentered(const char* s)
 {
-	Rect r;
+	rect_t r;
 
 	r.ul.x = WindowX;
 	r.ul.y = WindowY;
