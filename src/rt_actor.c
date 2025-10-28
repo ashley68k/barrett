@@ -92,7 +92,7 @@ int objcount;
 
 byte RANDOMACTORTYPE[10];
 
-_2Dpoint SNAKEPATH[512];
+vec2i_t SNAKEPATH[512];
 actor_misc_flags mstruct, *MISCVARS = &mstruct;
 int angletodir[ANGLES];
 objtype* new;
@@ -7974,7 +7974,7 @@ hiding_status HoleStatus(objtype* ob)
 	int i, tx, ty, dist, noneleft, invisible, curr, min;
 	thing_point dummy, *dptr = &dummy;
 	objtype* tactor;
-	_2Dpoint* tdptr;
+	vec2i_t* tdptr;
 
 	min = 0x7fffffff;
 	noneleft = 1;

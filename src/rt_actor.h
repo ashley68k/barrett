@@ -137,10 +137,9 @@ typedef struct bas
 
 extern basic_actor_sounds BAS[NUMCLASSES + 3];
 
-typedef struct
-{
+typedef struct vec2i {
 	int x, y;
-} _2Dpoint;
+} vec2i_t;
 
 typedef enum
 {
@@ -261,7 +260,7 @@ typedef struct b_struct
 	int gasindex;
 	boolean NET_IN_FLIGHT;
 	boolean madenoise;
-	_2Dpoint ETOUCH[MAXTOUCH], EPOP[MAXPOP], TOMLOC;
+	vec2i_t ETOUCH[MAXTOUCH], EPOP[MAXPOP], TOMLOC;
 	int NUMWEAPONS;
 	int BulletHoleNum;
 	int NUMBEGGINGKEVINS;
@@ -290,7 +289,7 @@ extern objtype *lastactive, *firstactive;
 extern objtype* new, **objlist, *killerobj;
 extern void* actorat[MAPSIZE][MAPSIZE];
 extern int angletodir[ANGLES];
-extern _2Dpoint SNAKEPATH[512];
+extern vec2i_t SNAKEPATH[512];
 /* extern  int              STOPSPEED; */
 extern int FRICTION;
 
