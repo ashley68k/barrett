@@ -224,6 +224,8 @@ void SD_UpdateRecordingSound(char* ptr, int length)
 
 boolean SD_StartRecordingSound(void)
 {
+	return false;
+#if 0
 	int status;
 
 	if (SD_Started == false)
@@ -250,6 +252,7 @@ boolean SD_StartRecordingSound(void)
 	}
 
 	return true;
+#endif
 }
 
 //***************************************************************************
@@ -260,6 +263,7 @@ boolean SD_StartRecordingSound(void)
 
 void SD_StopRecordingSound(void)
 {
+#if 0
 	if (SD_Started == false)
 		return;
 	if (Recording == true)
@@ -267,6 +271,7 @@ void SD_StopRecordingSound(void)
 		FX_StopRecord();
 		Recording = false;
 	}
+#endif
 }
 
 //***************************************************************************
