@@ -55,10 +55,7 @@ set(AUDIOLIB_SOURCES
 	${PROJECT_SOURCE_DIR}/src/audiolib/multivoc.c
 	${PROJECT_SOURCE_DIR}/src/audiolib/mv_mix.c
 	${PROJECT_SOURCE_DIR}/src/audiolib/mvreverb.c
-	${PROJECT_SOURCE_DIR}/src/audiolib/nodpmi.c
 	${PROJECT_SOURCE_DIR}/src/audiolib/pitch.c
-	${PROJECT_SOURCE_DIR}/src/audiolib/user.c
-	${PROJECT_SOURCE_DIR}/src/audiolib/usrhooks.c
 )
 
 add_library(audiolib STATIC ${AUDIOLIB_SOURCES})

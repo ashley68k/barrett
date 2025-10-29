@@ -35,7 +35,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "dsl.h"
 
 #include "ll_man.h"
-#include "user.h"
 #include "fx_man.h"
 
 #define TRUE  (1 == 1)
@@ -114,12 +113,6 @@ int FX_SetupCard(fx_device* device)
 	int status;
 	int DeviceStatus;
 
-	if (USER_CheckParameter("ASSVER"))
-	{
-		FX_SetErrorCode(FX_ASSVersion);
-		return (FX_Error);
-	}
-
 	status = FX_Ok;
 	FX_SetErrorCode(FX_Ok);
 
@@ -182,19 +175,6 @@ int FX_Init(int numvoices, int numchannels, int samplebits, unsigned mixrate)
 		FX_Shutdown();
 	}
 
-	if (USER_CheckParameter("ASSVER"))
-	{
-		FX_SetErrorCode(FX_ASSVersion);
-		return (FX_Error);
-	}
-
-	status = LL_LockMemory();
-	if (status != LL_Ok)
-	{
-		FX_SetErrorCode(FX_DPMI_Error);
-		return (FX_Error);
-	}
-
 	FX_MixRate = mixrate;
 
 	status = FX_Ok;
@@ -205,11 +185,7 @@ int FX_Init(int numvoices, int numchannels, int samplebits, unsigned mixrate)
 		status = FX_Error;
 	}
 
-	if (status != FX_Ok)
-	{
-		LL_UnlockMemory();
-	}
-	else
+	if (status == FX_Ok)
 	{
 		FX_Installed = TRUE;
 	}
@@ -241,7 +217,6 @@ int FX_Shutdown(void)
 	}
 
 	FX_Installed = FALSE;
-	LL_UnlockMemory();
 
 	return (status);
 }

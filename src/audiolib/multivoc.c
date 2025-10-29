@@ -35,8 +35,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <time.h>
 
 #include "util.h"
-#include "dpmi.h"
-#include "usrhooks.h"
 #include "interrup.h"
 #include "dma.h"
 #include "linklist.h"
@@ -2451,20 +2449,11 @@ int MV_Init(int MixRate, int Voices, int numchannels, int samplebits)
 	}
 
 	MV_TotalMemory = Voices * sizeof(VoiceNode) + sizeof(HARSH_CLIP_TABLE_8);
-	status = USRHOOKS_GetMem((void**)&ptr, MV_TotalMemory);
-	if (status != USRHOOKS_Ok)
+	ptr = malloc(MV_TotalMemory);
+	if (!ptr)
 	{
 		MV_UnlockMemory();
 		MV_SetErrorCode(MV_NoMem);
-		return (MV_Error);
-	}
-
-	status = DPMI_LockMemory(ptr, MV_TotalMemory);
-	if (status != DPMI_Ok)
-	{
-		USRHOOKS_FreeMem(ptr);
-		MV_UnlockMemory();
-		MV_SetErrorCode(MV_DPMI_Error);
 		return (MV_Error);
 	}
 
@@ -2489,7 +2478,7 @@ int MV_Init(int MixRate, int Voices, int numchannels, int samplebits)
 	if (status)
 	{
 		DPMI_UnlockMemory(MV_Voices, MV_TotalMemory);
-		USRHOOKS_FreeMem(MV_Voices);
+		free(MV_Voices);
 		MV_Voices = NULL;
 		MV_TotalMemory = 0;
 		MV_UnlockMemory();
@@ -2512,7 +2501,7 @@ int MV_Init(int MixRate, int Voices, int numchannels, int samplebits)
 		status = MV_ErrorCode;
 
 		DPMI_UnlockMemory(MV_Voices, MV_TotalMemory);
-		USRHOOKS_FreeMem(MV_Voices);
+		free(MV_Voices);
 		MV_Voices = NULL;
 		MV_TotalMemory = 0;
 
@@ -2610,7 +2599,7 @@ int MV_Shutdown(void)
 
 	// Free any voices we allocated
 	DPMI_UnlockMemory(MV_Voices, MV_TotalMemory);
-	USRHOOKS_FreeMem(MV_Voices);
+	free(MV_Voices);
 	MV_Voices = NULL;
 	MV_TotalMemory = 0;
 

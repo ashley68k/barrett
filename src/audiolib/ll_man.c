@@ -28,14 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
    (c) Copyright 1994 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#define LOCKMEMORY
-
 #include <stddef.h>
 #include "ll_man.h"
-
-#ifdef LOCKMEMORY
-#include "dpmi.h"
-#endif
 
 #define OFFSET(structure, offset) (*((char**)&(structure)[offset]))
 
@@ -45,10 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 **********************************************************************/
 
-#define LL_LockStart LL_AddNode
-
 void LL_AddNode(char* item, char** head, char** tail, int next, int prev)
-
 {
 	OFFSET(item, prev) = NULL;
 	OFFSET(item, next) = *head;
@@ -66,7 +57,6 @@ void LL_AddNode(char* item, char** head, char** tail, int next, int prev)
 }
 
 void LL_RemoveNode(char* item, char** head, char** tail, int next, int prev)
-
 {
 	if (OFFSET(item, prev) == NULL)
 	{
@@ -88,56 +78,4 @@ void LL_RemoveNode(char* item, char** head, char** tail, int next, int prev)
 
 	OFFSET(item, next) = NULL;
 	OFFSET(item, prev) = NULL;
-}
-
-/*---------------------------------------------------------------------
-   Function: LL_LockEnd
-
-   Used for determining the length of the functions to lock in memory.
----------------------------------------------------------------------*/
-
-static void LL_LockEnd(void)
-
-{
-}
-
-/*---------------------------------------------------------------------
-   Function: LL_UnlockMemory
-
-   Unlocks all neccessary data.
----------------------------------------------------------------------*/
-
-void LL_UnlockMemory(void)
-
-{
-#ifdef LOCKMEMORY
-
-	DPMI_UnlockMemoryRegion(LL_LockStart, LL_LockEnd);
-
-#endif
-}
-
-/*---------------------------------------------------------------------
-   Function: LL_LockMemory
-
-   Locks all neccessary data.
----------------------------------------------------------------------*/
-
-int LL_LockMemory(void)
-
-{
-
-#ifdef LOCKMEMORY
-
-	int status;
-
-	status = DPMI_LockMemoryRegion(LL_LockStart, LL_LockEnd);
-	if (status != DPMI_Ok)
-	{
-		return (LL_Error);
-	}
-
-#endif
-
-	return (LL_Ok);
 }
