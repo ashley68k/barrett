@@ -3764,7 +3764,7 @@ void PrintLSEntry(int w)
 	if (SaveGamesAvail[w])
 		DrawMenuBufPropString(PrintX, PrintY, SaveGameNames[w]);
 	else
-		DrawMenuBufPropString(PrintX, PrintY, "     - ∩┐╜ -");
+		DrawMenuBufPropString(PrintX, PrintY, "     - \x81 -");
 }
 
 //******************************************************************************
