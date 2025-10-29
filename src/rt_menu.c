@@ -297,7 +297,7 @@ char* colorname[] = {"Gray", "Brown", "Black", "Tan",	 "Red",	  "Olive",
 //
 // MENU ITEMS
 //
-CP_MenuNames MainMenuNames[] = {"NEW GAME",		"COMM-BAT� GAME",
+CP_MenuNames MainMenuNames[] = {"NEW GAME",		"COMM-BAT\x81 GAME",
 								"RESTORE GAME", "SAVE GAME",
 								"OPTIONS",		"JUKEBOX",
 								"VIEW SCORES",	//"END GAME"
@@ -3042,7 +3042,7 @@ int CP_SaveGame(void)
 				if (SaveGamesAvail[which])
 					DrawMenuBufPropString(PrintX, PrintY, SaveGameNames[which]);
 				else
-					DrawMenuBufPropString(PrintX, PrintY, "     - � -");
+					DrawMenuBufPropString(PrintX, PrintY, "     - \x81 -");
 
 				//            MN_PlayMenuSnd (SD_ESCPRESSEDSND);
 				continue;
@@ -3764,7 +3764,7 @@ void PrintLSEntry(int w)
 	if (SaveGamesAvail[w])
 		DrawMenuBufPropString(PrintX, PrintY, SaveGameNames[w]);
 	else
-		DrawMenuBufPropString(PrintX, PrintY, "     - � -");
+		DrawMenuBufPropString(PrintX, PrintY, "     - ∩┐╜ -");
 }
 
 //******************************************************************************

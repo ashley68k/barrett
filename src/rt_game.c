@@ -4530,14 +4530,12 @@ void DoLoadGameAction(void)
 		py = 152;
 		if (whichstr)
 		{
-			//         VW_DrawPropString ("�");
-			VW_DrawPropString(".");
+			VW_DrawPropString ("\x83");
 			whichstr = 0;
 		}
 		else
 		{
-			//         VW_DrawPropString ("�");
-			VW_DrawPropString(".");
+			VW_DrawPropString ("\x84");
 			whichstr = 1;
 		}
 		bufferofs = temp;
