@@ -254,6 +254,7 @@ typedef struct
 {
 	thingtype which;
 	byte tilex, tiley;
+	byte lasttilex, lasttiley;
 	fixed x, y, z;
 } thing_point;
 
