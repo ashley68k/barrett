@@ -103,11 +103,19 @@ extern boolean uncapfps;
 	}
 
 #define SetTilePosition(ob, newtilex, newtiley)                                \
-	{                                                                          \
-		ob->lasttilex = ob->tilex;											   \
-		ob->lasttiley = ob->tiley;                                             \
-		ob->tilex = FixedInterp(ob->lasttilex, newtilex, 0x10000);       	   \
-		ob->tilex = FixedInterp(ob->lasttilex, newtilex, 0x10000);       	   \
+	{                         												   \
+		if(uncapfps)														   \
+		{																	   \
+			ob->lasttilex = ob->tilex;										   \
+			ob->lasttiley = ob->tiley;                                         \
+			ob->tilex = FixedInterp(ob->lasttilex, newtilex, 0x10000);         \
+			ob->tiley = FixedInterp(ob->lasttiley, newtiley, 0x10000);     	   \
+		}                           										   \
+		else 																   \
+		{																	   \
+			ob->tilex = newtilex;											   \
+			ob->tiley = newtiley; 											   \
+		}                     												   \
 		ob->x = (ob->tilex << TILESHIFT) + TILEGLOBAL / 2;                     \
 		ob->y = (ob->tiley << TILESHIFT) + TILEGLOBAL / 2;                     \
 	}
