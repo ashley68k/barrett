@@ -246,6 +246,7 @@ typedef struct objstruct
 
 	// for frame interp
 	fixed lastx, lasty, lastz;
+	byte lasttilex, lasttiley;
 
 	int shapenum;
 	unsigned flags;
