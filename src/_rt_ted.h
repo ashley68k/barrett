@@ -28,8 +28,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define SHAREWARE_TAG	  0x4d4b
 #define REGISTERED_TAG	  0x4344
 #define RTL_VERSION		  (0x0101)
+#define RXL_VERSION		  (0x0200)
 #define COMMBAT_SIGNATURE ("RTC")
 #define NORMAL_SIGNATURE  ("RTL")
+#define NORMAL_SIGNATURE_EX  ("RXL")
+#define COMMBAT_SIGNATURE_EX  ("RXC")
 #define RTL_HEADER_OFFSET 8
 
 typedef struct
