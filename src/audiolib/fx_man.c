@@ -30,11 +30,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "SDL.h"
+
 #include "multivoc.h"
 
-#include "dsl.h"
-
-#include "ll_man.h"
 #include "fx_man.h"
 
 #define TRUE  (1 == 1)
@@ -78,7 +77,7 @@ char* FX_ErrorString(int ErrorNumber)
 		break;
 
 	case FX_SoundCardError:
-		ErrorString = DSL_ErrorString(DSL_Error);
+		ErrorString = "Sound Card Error.";
 		break;
 
 	case FX_InvalidCard:
@@ -108,16 +107,12 @@ char* FX_ErrorString(int ErrorNumber)
 ---------------------------------------------------------------------*/
 
 int FX_SetupCard(fx_device* device)
-
 {
-	int status;
-	int DeviceStatus;
+	int status = FX_Ok;
 
-	status = FX_Ok;
-	FX_SetErrorCode(FX_Ok);
+	FX_SetErrorCode(status);
 
-	DeviceStatus = DSL_Init();
-	if (DeviceStatus != DSL_Ok)
+	if (SDL_WasInit(SDL_INIT_AUDIO) == 0 && SDL_InitSubSystem(SDL_INIT_AUDIO) != 0)
 	{
 		FX_SetErrorCode(FX_SoundCardError);
 		status = FX_Error;
