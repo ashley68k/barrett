@@ -70,7 +70,7 @@ target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 set_target_properties(audiolib PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 17)
 target_link_libraries(audiolib PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer)
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wpedantic -Wfatal-errors)
+	target_compile_options(audiolib PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 set(BARRETT_SOURCES

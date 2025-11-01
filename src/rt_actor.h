@@ -103,19 +103,9 @@ extern boolean uncapfps;
 	}
 
 #define SetTilePosition(ob, newtilex, newtiley)                                \
-	{                         												   \
-		if(uncapfps)														   \
-		{																	   \
-			ob->lasttilex = ob->tilex;										   \
-			ob->lasttiley = ob->tiley;                                         \
-			ob->tilex = FixedInterp(ob->lasttilex, newtilex, 0x10000);         \
-			ob->tiley = FixedInterp(ob->lasttiley, newtiley, 0x10000);     	   \
-		}                           										   \
-		else 																   \
-		{																	   \
-			ob->tilex = newtilex;											   \
-			ob->tiley = newtiley; 											   \
-		}                     												   \
+	{                                                                          \
+		ob->tilex = newtilex;                                                  \
+		ob->tiley = newtiley;                                                  \
 		ob->x = (ob->tilex << TILESHIFT) + TILEGLOBAL / 2;                     \
 		ob->y = (ob->tiley << TILESHIFT) + TILEGLOBAL / 2;                     \
 	}
@@ -246,7 +236,6 @@ typedef struct objstruct
 
 	// for frame interp
 	fixed lastx, lasty, lastz;
-	byte lasttilex, lasttiley;
 
 	int shapenum;
 	unsigned flags;
