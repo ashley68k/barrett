@@ -820,7 +820,7 @@ void SetupWads(void)
 				else
 				{
 					fread(buf, 3, 3, f); // is the 3 first letters RTL (RTC)
-					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RTC") != 0))
+					if ((strstr(buf, "RTL") != 0) || (strstr(buf, "RTC") != 0) || (strstr(buf, "RXL") != 0) || (strstr(buf, "RXC") != 0))
 					{
 						GameLevels.file = strdup(tempstr);
 						GameLevels.avail++;
