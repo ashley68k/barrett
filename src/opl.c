@@ -18,7 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "SDL_stdinc.h"
 #include "SDL_mixer.h"
 
 #include <adlmidi.h>
@@ -35,6 +34,7 @@ static boolean isPlaying = 0;
 static boolean isHooked = false;
 
 static double volume = 0;
+static double pos = 0;
 
 static struct ADLMIDI_AudioFormat s_audioFormat;
 
@@ -86,23 +86,6 @@ static boolean OPL_WriteDefault(const char* path)
     fclose(ini);
 
     return true;
-}
-
-void OPL_RegisterHook(void)
-{
-    Mix_HookMusic(OPLcallback, midi_player);
-    isHooked = true;
-}
-
-void OPL_DeregisterHook(void)
-{
-    Mix_HookMusic(NULL, NULL);
-    isHooked = false;
-}
-
-int OPL_IsHooked(void)
-{
-    return isHooked;
 }
 
 void OPL_Init(void)
@@ -184,6 +167,52 @@ void OPL_Init(void)
     }
 }
 
+
+void OPL_RegisterHook(void)
+{
+    Mix_HookMusic(OPLcallback, midi_player);
+    isHooked = true;
+}
+
+void OPL_DeregisterHook(void)
+{
+    Mix_HookMusic(NULL, NULL);
+    isHooked = false;
+}
+
+
+int OPL_GetPosition(void)
+{
+    return (int)(adl_positionTell(midi_player) * 1000);
+}
+
+void OPL_SetPosition(int ms)
+{
+    adl_positionSeek(midi_player, (double)ms / 1000);
+}
+
+
+void OPL_SetVolume(double newVol)
+{
+    // newvol/127 = normalize to 0.0-1.0
+    // y = 10 * (newVol / 127) ^ 2
+    // essentially, 0.0-10.0f scaled to square of volumescale
+    double volumescale = newVol / 127;
+    volume = 10 * pow(volumescale, 2);
+}
+
+int OPL_IsPlaying(void)
+{
+    return isPlaying;
+}
+
+int OPL_IsHooked(void)
+{
+    return isHooked;
+}
+
+
+
 boolean OPL_Play(char* buffer, int size, int loopflag)
 {
     if(adl_openData(midi_player, buffer, size) < 0)
@@ -201,14 +230,6 @@ boolean OPL_Play(char* buffer, int size, int loopflag)
     return true;
 }
 
-void OPL_SetVolume(double newVol)
-{
-    // newvol/127 = normalize to 0.0-1.0
-    // y = 10 * (newVol / 127) ^ 2
-    // essentially, 0.0-10.0f scaled to square of volumescale
-    double volumescale = newVol / 127;
-    volume = 10 * pow(volumescale, 2);
-}
 
 void OPL_Stop(void)
 {
@@ -220,10 +241,6 @@ void OPL_Pause(void)
     isPlaying = false;
 }
 
-int OPL_IsPlaying(void)
-{
-    return isPlaying;
-}
 
 static void OPLcallback(void *cbFunc, Uint8 *stream, int len)
 {
