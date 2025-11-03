@@ -237,6 +237,7 @@ void ScaleMaskedPost(byte* src, byte* buf)
 			R_DrawColumn(buf);
 		}
 		src += length;
+
 		offset = *(src++);
 	}
 }
@@ -1112,24 +1113,24 @@ void R_DrawColumn(byte* buf)
 {
 	// This is *NOT* 100% correct - DDOI
 	int count;
-	int frac, fracstep;
+	int frac;
 	byte* dest;
 
-	count = dc_yh - dc_yl + 1;
+	count = (dc_yh + 1) - dc_yl;
 	if (count < 0)
 		return;
 
 	dest = buf + ylookup[dc_yl];
 
-	fracstep = dc_iscale;
-	frac = dc_texturemid + (dc_yl - centery) * fracstep;
+	frac = dc_texturemid - ((centery - dc_yl) * dc_iscale);
 
 	while (count--)
 	{
 		//*dest = test++;
-		*dest = shadingtable[dc_source[(frac >> SFRACBITS)]];
+		*dest = shadingtable[dc_source[(frac >> SFRACBITS)&127]];
 		dest += iGLOBAL_SCREENWIDTH;
-		frac += fracstep;
+
+		frac += dc_iscale;
 	}
 }
 
