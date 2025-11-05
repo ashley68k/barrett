@@ -42,13 +42,16 @@ FetchContent_Declare(
 	EXCLUDE_FROM_ALL
 )
 FetchContent_Declare(
-	libspng
+	spng
 	GIT_REPOSITORY https://github.com/randy408/libspng.git
 	GIT_TAG v0.7.4
 	EXCLUDE_FROM_ALL
 )
 
-FetchContent_MakeAvailable(adlmidi inih libspng)
+FetchContent_MakeAvailable(adlmidi inih spng)
+
+add_library(inih STATIC ${inih_SOURCE_DIR}/ini.c)
+target_link_directories(inih PUBLIC ${inih_SOURCE_DIR})
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
@@ -130,13 +133,10 @@ set(BARRETT_SOURCES
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/HashTable.c
 	${PROJECT_SOURCE_DIR}/src/opl.c
-	${inih_SOURCE_DIR}/ini.c
-	${libspng_SOURCE_DIR}/spng/spng.c
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_include_directories(barrett PRIVATE ${inih_SOURCE_DIR} ${libspng_SOURCE_DIR}/spng)
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI inih spng_static $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
 target_link_libraries(barrett PUBLIC $<$<BOOL:${BARRETT_USEASAN}>:ASAN::ASAN>)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
