@@ -30,6 +30,7 @@ typedef struct opl
 } oplCfg;
 
 void OPL_Init(void);
+void OPL_Free(void);
 
 void OPL_RegisterHook(void);
 void OPL_DeregisterHook(void);

@@ -17,6 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "opl.h"
 #include "rt_def.h"
 #include "lumpy.h"
 #include <stdio.h>
@@ -1610,6 +1611,7 @@ void ShutDown(void)
 	MU_Shutdown();
 	I_ShutdownTimer();
 	SD_Shutdown();
+	OPL_Free();
 	IN_Shutdown();
 	ShutdownSoftError();
 	Z_ShutDown();
