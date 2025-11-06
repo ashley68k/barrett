@@ -167,6 +167,10 @@ void OPL_Init(void)
     }
 }
 
+void OPL_Free(void)
+{
+    adl_close(midi_player);
+}
 
 void OPL_RegisterHook(void)
 {
