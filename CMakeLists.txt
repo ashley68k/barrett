@@ -47,8 +47,14 @@ FetchContent_Declare(
 	GIT_TAG v0.7.4
 	EXCLUDE_FROM_ALL
 )
+FetchContent_Declare(
+	miniz
+	GIT_REPOSITORY https://github.com/richgel999/miniz.git
+	GIT_TAG 3.1.0
+	EXCLUDE_FROM_ALL
+)
 
-FetchContent_MakeAvailable(adlmidi inih spng)
+FetchContent_MakeAvailable(adlmidi inih spng miniz)
 
 add_library(inih STATIC ${inih_SOURCE_DIR}/ini.c)
 target_link_directories(inih PUBLIC ${inih_SOURCE_DIR})
@@ -136,7 +142,7 @@ set(BARRETT_SOURCES
 )
 
 add_executable(barrett ${BARRETT_SOURCES})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI inih spng_static $<TARGET_NAME_IF_EXISTS:Math::Math>)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI inih spng_static miniz $<TARGET_NAME_IF_EXISTS:Math::Math>)
 target_link_libraries(barrett PRIVATE audiolib)
 target_link_libraries(barrett PUBLIC $<$<BOOL:${BARRETT_USEASAN}>:ASAN::ASAN>)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)
