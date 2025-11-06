@@ -1,0 +1,69 @@
+/*
+Copyright (C) 1994-1995 Apogee Software, Ltd.
+Copyright (C) 2002-2015 icculus.org, GNU/Linux port
+Copyright (C) 2017-2018 Steven LeVesque
+Copyright (C) 2025 lunarmeadow (she/her)
+Copyright (C) 2025 erysdren (it/its)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef _KPFDATA_H
+#define _KPFDATA_H
+
+#include "miniz.h"
+#include "miniz_zip.h"
+#include "rt_def.h"
+
+#ifndef ARRAY_COUNT
+#define ARRAY_COUNT(a) (sizeof(a)/sizeof(*a))
+#endif
+
+static const char *betaWalls[] = {
+	"WALB03",
+	"WALB04",
+	"WALB05",
+	"WALB06",
+	"WALB07",
+	"WALB08",
+	"WALB13",
+	"WALB14",
+	"WALB15",
+	"WALB16",
+	"WALB17",
+	"WALB18",
+	"WALB19",
+	"WALB20",
+	"WALB21",
+	"WALB26",
+	"WALB27",
+	"WALB28",
+	"WALB40",
+	"WALB41",
+	"WALB42",
+	"WALB44",
+	"WALB46",
+	"WALB48",
+	"WALB51",
+	"WALB58",
+	"WALB59",
+	"WALB60",
+	"WALB61",
+	"WALB69",
+	"WALB70",
+	"WALB71"
+};
+
+boolean FetchBetaWalls(mz_zip_archive kpfArc);
+
+#endif
