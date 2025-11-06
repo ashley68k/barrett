@@ -20,6 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "kpfdata.h"
 #include "kpf.h"
+
+#include "png.h"
+
 #include "miniz.h"
 #include "miniz_zip.h"
 #include "rt_def.h"
@@ -28,10 +31,11 @@ boolean FetchBetaWalls(mz_zip_archive kpfArc)
 {
     void *filePtr;
     char wallPath[128];
+    size_t decompSize;
 
     for(unsigned long i = 0; i < ARRAY_COUNT(betaWalls); i++)
     {
-        snprintf(wallPath, 128, "/wad/wall/%s", betaWalls[i]);
+        snprintf(wallPath, 128, "/wad/wall/%s.png", betaWalls[i]);
 
         int fileIdx = mz_zip_reader_locate_file(&kpfArc, wallPath, NULL, 
             MZ_ZIP_FLAG_IGNORE_PATH | MZ_ZIP_FLAG_CASE_SENSITIVE);
@@ -49,6 +53,19 @@ boolean FetchBetaWalls(mz_zip_archive kpfArc)
             ShutdownKPF();
             return false;
         }
+
+        filePtr = mz_zip_reader_extract_file_to_heap(&kpfArc, wallPath, &decompSize, NULL);
+
+        if(!decompSize)
+        {
+            printf("File %s failed to decompress!", betaWalls[i]);
+            ShutdownKPF();
+            return false;
+        }
+
+        PNGDecode(filePtr, decompSize);
+
+        mz_free(filePtr);
     }
 
     return true;

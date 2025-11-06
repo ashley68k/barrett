@@ -21,4 +21,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _PNG_H
 #define _PNG_H
 
+#include <stddef.h>
+
+void PNGDecode(void* buf, size_t size);
+
 #endif

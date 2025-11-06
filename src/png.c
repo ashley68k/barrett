@@ -20,3 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <spng.h>
 
+void PNGDecode(void* buf, size_t size)
+{
+    // TODO: decode the indexed png into a patch_t and send it off
+}
