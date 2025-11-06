@@ -30,14 +30,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 boolean FetchBetaWalls(mz_zip_archive kpfArc)
 {
     void *filePtr;
-    char wallPath[128];
     size_t decompSize;
 
     for(unsigned long i = 0; i < ARRAY_COUNT(betaWalls); i++)
     {
-        snprintf(wallPath, 128, "/wad/wall/%s.png", betaWalls[i]);
-
-        int fileIdx = mz_zip_reader_locate_file(&kpfArc, wallPath, NULL, 
+        int fileIdx = mz_zip_reader_locate_file(&kpfArc, betaWalls[i], NULL, 
             MZ_ZIP_FLAG_IGNORE_PATH | MZ_ZIP_FLAG_CASE_SENSITIVE);
 
         if(fileIdx < 0)
@@ -54,7 +51,7 @@ boolean FetchBetaWalls(mz_zip_archive kpfArc)
             return false;
         }
 
-        filePtr = mz_zip_reader_extract_file_to_heap(&kpfArc, wallPath, &decompSize, NULL);
+        filePtr = mz_zip_reader_extract_file_to_heap(&kpfArc, betaWalls[i], &decompSize, NULL);
 
         if(!decompSize)
         {

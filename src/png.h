@@ -21,7 +21,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _PNG_H
 #define _PNG_H
 
-#include <stddef.h>
+#include "spng.h"
+
+typedef struct
+{
+    spng_ctx *ctx;
+    char *image;
+    size_t image_size;
+    int width;
+    int height;
+} png_context_t;
 
 void PNGDecode(void* buf, size_t size);
 
