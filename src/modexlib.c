@@ -428,7 +428,7 @@ void DrawCenterAim()
 				iG_playerTilt = x / 2;
 			}
 			iG_buf_center =
-				(char*)(bufferofs + ((iG_Y_center - iG_playerTilt) *
+				(char*)(bufferofs + ((iG_Y_center) *
 									 iGLOBAL_SCREENWIDTH)); //+iG_X_center;
 
 			for (x = iG_X_center - 10; x <= iG_X_center - 4; x++)
