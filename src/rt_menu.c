@@ -4974,7 +4974,7 @@ void DrawExtGameOptionsButtons(void)
 
 			switch (i)
 			{
-			case 1:
+			case 0:
 				if (lowmemory == 1)
 				{
 					on = 1;
@@ -5054,7 +5054,7 @@ void CP_ExtGameOptionsMenu(void)
 
 		switch (which)
 		{
-		case 1:
+		case 0:
 			lowmemory ^= 1;
 			DrawExtGameOptionsButtons();
 			break;
