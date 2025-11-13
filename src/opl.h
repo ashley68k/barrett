@@ -27,6 +27,7 @@ typedef struct opl
 {
     int oplChipNum;
     int bankNum;
+    int emulator;
 } oplCfg;
 
 void OPL_Init(void);
