@@ -2493,20 +2493,6 @@ void PollControls(void)
 	{
 		AddExitCommand();
 	}
-	// bna section
-	if (Keyboard[sc_5])
-	{
-		//	 SetTextMode (  );
-		weaponscale += 1000;
-		// testval++;
-	}
-	if (Keyboard[sc_6])
-	{
-		//	 SetTextMode (  );
-		weaponscale -= 1000;
-		//  testval--;
-	}
-	// bna section end
 
 	for (i = (NUMTXBUTTONS - 1); i >= 0; i--)
 	{

@@ -545,7 +545,6 @@ void CheckCommandLineParameters(void)
 		printf("         Shift            - Run/Turn faster\n");
 		printf("         E                - Use/Open\n");
 		printf("         1-4              - Choose Weapon\n");
-		printf("         5-6              - Scale Weapon Up/Down\n");
 		printf("         Enter            - Swap Weapon\n");
 		printf("         Backspace        - Turn 180\n");
 		printf("         Delete           - Drop Weapon\n");
