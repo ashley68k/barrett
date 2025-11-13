@@ -96,13 +96,20 @@ void OPL_Init(void)
     oplCfg cfg;
 
     GetPathFromEnvironment(oplCfgPath, ApogeePath, "opl.ini");
-    
-    if (ini_parse(oplCfgPath, OPL_FetchConfig, &cfg) < 0) {
-        printf("Can't load 'opl.ini'\n");
+
+    if (access(oplCfgPath, F_OK) != 0)
+    {
+        printf("opl.ini doesn't exist!\n");
+
         if(!OPL_WriteDefault(oplCfgPath))
-            printf("opl.ini creation failed.");
+            printf("opl.ini creation failed.\n");
         else
-            printf("opl.ini creation succeeded in %s.", ApogeePath);
+            printf("opl.ini creation succeeded in %s.\n", ApogeePath);
+    }
+    
+    if (ini_parse(oplCfgPath, OPL_FetchConfig, &cfg) < 0) 
+    {
+        printf("Can't load 'opl.ini'\n");
         exit(0);
     }
 
@@ -125,12 +132,13 @@ void OPL_Init(void)
     
     adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
 
-    // banknum if set - default to ROTT bank
+    // banknum if set - default to Duke 3D (RoTT v1.3) bank
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
-    int getBank = cfg.bankNum ? cfg.bankNum : 70;
+    int getBank = cfg.bankNum ? cfg.bankNum : 62;
     adl_setBank(midi_player, getBank);
-
-    OPL_RegisterHook();
+    
+    if(useoplmusic)
+        OPL_RegisterHook();
 
     Mix_QuerySpec(NULL, &obtained_format, NULL);
 

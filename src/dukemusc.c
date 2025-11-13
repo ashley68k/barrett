@@ -191,8 +191,7 @@ int MUSIC_Init(void)
 
 	SDL_SetHint("SDL_HINT_AUDIO_RESAMPLING_MODE", "best");
 
-	if(useoplmusic)
-		OPL_Init();
+	OPL_Init();
 
     if (soundfonts)
     {
