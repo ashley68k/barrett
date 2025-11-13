@@ -77,7 +77,6 @@ boolean mouseenabled = 1;
 boolean usemouselook = 0;
 boolean useoplmusic = 0;
 int inverse_mouse = 1; // set  to -1 to invert mouse
-boolean usejump = 0;
 boolean sdl_fullscreen = 1;
 boolean borderWindow = 0;
 boolean borderlessWindow = 0;
@@ -444,9 +443,6 @@ boolean ParseConfigFile(void)
 
 		ReadBoolean("AllowMovementWithMouseYAxis",
 					&allowMovementWithMouseYAxis);
-
-		// Read in UseJump
-		ReadBoolean("UseJump", &usejump);
 
 		// Read in CrossHair
 		ReadBoolean("CrossHair", &iG_aimCross);
@@ -1684,12 +1680,6 @@ void WriteConfig(void)
 	SafeWriteString(file, "; 0 - Allow only X movement with Mouse.\n");
 	WriteParameter(file, "allowMovementWithMouseYAxis    ",
 				   allowMovementWithMouseYAxis);
-
-	// Write out UseJump
-	SafeWriteString(file, "\n;\n");
-	SafeWriteString(file, "; 1 - usejump Enabled\n");
-	SafeWriteString(file, "; 0 - usejump Disabled\n");
-	WriteParameter(file, "UseJump          ", usejump);
 
 	// Write out CrossHair
 	SafeWriteString(file, "\n;\n");
