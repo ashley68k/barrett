@@ -33,6 +33,8 @@ static void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 static boolean isPlaying = 0;
 static boolean isHooked = false;
 
+extern boolean useoplmusic;
+
 static double volume = 0;
 static double pos = 0;
 
@@ -184,6 +186,17 @@ void OPL_DeregisterHook(void)
     isHooked = false;
 }
 
+void OPL_CheckForStateChange(void)
+{
+    if(!OPL_IsHooked() && useoplmusic)
+	{
+		OPL_RegisterHook();
+	}
+	if(OPL_IsHooked() && !useoplmusic)
+	{
+		OPL_DeregisterHook();
+	}
+}
 
 int OPL_GetPosition(void)
 {
@@ -194,7 +207,6 @@ void OPL_SetPosition(int ms)
 {
     adl_positionSeek(midi_player, (double)ms / 1000);
 }
-
 
 void OPL_SetVolume(double newVol)
 {

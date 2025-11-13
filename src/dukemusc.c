@@ -308,6 +308,8 @@ int MUSIC_StopSong(void)
 
 int MUSIC_PlaySong(char* song, int size, int loopflag)
 {
+	OPL_CheckForStateChange();
+
 	if(useoplmusic)
 	{
 		if(!OPL_Play(song, size, loopflag))

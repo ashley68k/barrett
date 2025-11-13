@@ -37,6 +37,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "opl.h"
 #include "rt_def.h"
 #include "_rt_menu.h"
 #include "rt_menu.h"
@@ -4836,18 +4837,19 @@ void DrawExtOptionDescription(int w)
 
 extern int inverse_mouse;
 extern boolean usemouselook;
-extern boolean oplmusicset;
+extern boolean useoplmusic;
 extern boolean iG_aimCross;
 extern boolean usejump;
 extern boolean autoAimMissileWeps;
 extern boolean autoAim;
 extern boolean allowMovementWithMouseYAxis;
 
+boolean oplchanged;
+
 void CP_ExtOptionsMenu(void)
 {
 	int which;
 	
-shit:
 	DrawExtOptionsMenu();
 
 	do
@@ -4893,10 +4895,8 @@ shit:
 			DrawExtOptionsButtons();
 			break;
 		case 7:
-			oplmusicset ^= 1;
+			useoplmusic ^= 1;
 			DrawExtOptionsButtons();
-			CP_RestartProgramMessage();
-			goto shit;
 			break;
 		}
 
@@ -4954,7 +4954,7 @@ void DrawExtOptionsButtons(void)
 					on = 1;
 				break;
 			case 7:
-				if (oplmusicset == 1)
+				if (useoplmusic == 1)
 					on = 1;
 				break;
 			}
