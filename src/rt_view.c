@@ -157,12 +157,12 @@ void SetViewDelta(void)
 	//  and sprite x calculations
 	//
 
-	scale = (centerx * focalwidth) / (160);
+	scale = (fixed)((double)centerx * ((double)focalwidth / 160));
 	//
 	// divide heightnumerator by a posts distance to get the posts height for
 	// the heightbuffer.  The pixel height is height>>HEIGHTFRACTION
 	//
-	heightnumerator = (((focalwidth / 10) * centerx * 4096) << HEIGHTFRACTION);
+	heightnumerator = ((longword)(((double)focalwidth / 10) * centerx * 4096) << HEIGHTFRACTION);
 }
 
 /*
