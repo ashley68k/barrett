@@ -198,7 +198,7 @@ void InterpolatePlane(visobj_t* plane)
 		{
 			if (bot)
 			{
-				texture = ((top / bot) + (plane->texturestart >> 4)) >> 6;
+				texture = ((int)((double)top / bot) + (plane->texturestart >> 4)) >> 6;
 				posts[i].texture = texture * plane->viewx;
 				posts[i].lump = plane->shapenum;
 				posts[i].wallheight = (height >> 8);

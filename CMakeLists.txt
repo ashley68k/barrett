@@ -5,7 +5,6 @@ project(barrett
 	LANGUAGES C CXX
 )
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-find_package(Math)
 
 # only ONE of these may be active at a time (or none for the default registered version)
 option(BARRETT_SHAREWARE "Shareware" OFF)
@@ -129,7 +128,7 @@ set(BARRETT_SOURCES
 
 add_executable(barrett ${BARRETT_SOURCES})
 target_include_directories(barrett PRIVATE ${inih_SOURCE_DIR})
-target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI $<TARGET_NAME_IF_EXISTS:Math::Math>)
+target_link_libraries(barrett PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer ADLMIDI)
 target_link_libraries(barrett PRIVATE audiolib)
 target_link_libraries(barrett PUBLIC $<$<BOOL:${BARRETT_USEASAN}>:ASAN::ASAN>)
 target_compile_definitions(barrett PRIVATE SHAREWARE=$<BOOL:${BARRETT_SHAREWARE}>)

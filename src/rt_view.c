@@ -205,7 +205,7 @@ void CalcProjection(void)
 	pangle = SafeMalloc(length * sizeof(int));
 	memcpy(pangle, ptr, length * sizeof(int));
 
-	frac = ((length * 65536 / centerx)) >> 1;
+	frac = (int)((length * (double)65536 / centerx)) >> 1;
 	for (i = 0; i < centerx; i++)
 	{
 		// start 1/2 pixel over, so viewangle bisects two middle pixels
@@ -213,7 +213,7 @@ void CalcProjection(void)
 		SwapIntelLong(&intang);
 		pixelangle[centerx - 1 - i] = (short)intang;
 		pixelangle[centerx + i] = (short)-intang;
-		frac += (length * 65536 / centerx);
+		frac += (int)(length * (double)65536 / centerx);
 	}
 	table = W_CacheLumpName("tables", PU_CACHE, CvtNull, 1);
 	SafeFree(pangle);
