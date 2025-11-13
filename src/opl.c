@@ -85,14 +85,14 @@ static boolean OPL_WriteDefault(const char* path)
     fputs("; 67 = ROTT v1.3 (default)\n", ini);
     fputs("; 70 = ROTT v1.0-1.2\n", ini);
     fputs("; 72 = DMXOPL\n\n", ini);
-    fputs("; for more: https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini\n\n", ini);
+    fputs("; for more: https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini\n", ini);
 
-    fputs("bank=67\n", ini);
+    fputs("bank=67\n\n", ini);
 
     // kvp for chip count
     fputs("; how many opl chips to emulate\n", ini);
 
-    fputs("count=2", ini);
+    fputs("count=2\n\n", ini);
 
     // kvp for OPL emulator
     fputs("; opl emulator choices: \n\n", ini);
@@ -107,7 +107,7 @@ static boolean OPL_WriteDefault(const char* path)
     fputs("; 7 = YMFM OPL2\n", ini);
     fputs("; 8 = YMFM OPL3\n", ini);
     fputs("; 9 = Nuked OPL2 LLE\n", ini);
-    fputs("; 10 = Nuked OPL3 LLE\n\n", ini);
+    fputs("; 10 = Nuked OPL3 LLE\n", ini);
 
     fputs("emulator=2", ini);
 
