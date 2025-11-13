@@ -80,14 +80,9 @@ int inverse_mouse = 1; // set  to -1 to invert mouse
 boolean sdl_fullscreen = 1;
 boolean borderWindow = 0;
 boolean borderlessWindow = 0;
-
-boolean allowBlitzMoreMissileWeps = 0;
-boolean enableAmmoPickups = 0;
 boolean autoAimMissileWeps = 0;
 boolean autoAim = 1;
-boolean enableExtraPistolDrops = 0;
 boolean allowMovementWithMouseYAxis = 1;
-boolean enableZomROTT = 0;
 int FocalWidthOffset = 0;
 int ScreenHeightToWriteToCfg = 0;
 int HudScaleToWriteToCfg = 0;
@@ -410,24 +405,13 @@ boolean ParseConfigFile(void)
 
 	if (version == ROTTVERSION)
 	{
-		// Read in allowBlitzguardMoreMissileWeps
-		ReadBoolean("AllowBlitzguardMoreMissileWeps",
-					&allowBlitzMoreMissileWeps);
-
-		// Read in enableAmmoPickups
-		ReadBoolean("EnableAmmoPickups", &enableAmmoPickups);
-
 		// Read in AutoAim
 		ReadBoolean("AutoAim", &autoAim);
 
 		// Read in AutoAimMissileWeps
 		ReadBoolean("AutoAimMissileWeps", &autoAimMissileWeps);
 
-		// Read in EnableExtraPistolDrops
-		ReadBoolean("EnableExtraPistolDrops", &enableExtraPistolDrops);
-
 		// Read in scaleOffset
-
 		ReadInt("FocalWidthOffset", &FocalWidthOffset);
 
 		// Read in MouseEnabled
@@ -1599,24 +1583,6 @@ void WriteConfig(void)
 
 	WriteParameter(file, "Version          ", ROTTVERSION);
 
-	// Write out AllowBlitzguardMoreMissileWeps
-
-	SafeWriteString(file, "\n;\n");
-	SafeWriteString(
-		file, "; 1 - Allows Blitzguards to have Random Missile weapons\n");
-	SafeWriteString(file, "; 0 - Disallows the above (ROTT Default)\n");
-	WriteParameter(file, "AllowBlitzguardMoreMissileWeps    ",
-				   allowBlitzMoreMissileWeps);
-
-	// Write out enableAmmoPickups
-
-	SafeWriteString(file, "\n;\n");
-	SafeWriteString(file,
-					"; 1 - Allows players to refill their missile weapons by "
-					"running over one a matching one on the ground\n");
-	SafeWriteString(file, "; 0 - Disables the above (ROTT default)\n");
-	WriteParameter(file, "EnableAmmoPickups     ", enableAmmoPickups);
-
 	// Write out autoAim
 
 	SafeWriteString(file, "\n;\n");
@@ -1633,15 +1599,6 @@ void WriteConfig(void)
 	SafeWriteString(file, "; 0 - Missile weapons are not automatically aimed "
 						  "at targets. (ROTT default)\n");
 	WriteParameter(file, "AutoAimMissileWeps    ", autoAimMissileWeps);
-
-	// Write out enableExtraPistolDrops
-
-	SafeWriteString(file, "\n;\n");
-	SafeWriteString(file, "; 1 - Enemies equipped with pistols have a chance "
-						  "of dropping an extra pistol when killed.\n");
-	SafeWriteString(
-		file, "; 0 - Enemies will not drop extra pistols at all. (Default)\n");
-	WriteParameter(file, "EnableExtraPistolDrops     ", enableExtraPistolDrops);
 
 	// Write out scaleOffset
 	SafeWriteString(file, "\n;\n");

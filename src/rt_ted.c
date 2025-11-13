@@ -5352,25 +5352,6 @@ void DoLowMemoryConversion(void)
 	DoLowMemoryConversionIconPlane();
 }
 
-// int freeSlot = 0;
-// Queue enemiesToRes;
-Queue* enemiesToRes[8]; // 8 "Organic enemy Types"
-
-void SetupZomROTTStuff()
-{
-	int x;
-	for (x = 0; x < 8; x++)
-	{
-		// if (enemiesToRes[x]->head != NULL && enemiesToRes[x]->tail != NULL)
-		//{
-		// clearQueue(enemiesToRes[x]);
-		//}
-		Queue* enemyQueue = malloc(sizeof(Queue));
-		InitQueue(enemyQueue, sizeof(objtype));
-		enemiesToRes[x] = enemyQueue;
-	}
-}
-
 /*
 ==================
 =
@@ -5378,8 +5359,6 @@ void SetupZomROTTStuff()
 =
 ==================
 */
-
-extern boolean enableZomROTT;
 
 void SetupGameLevel(void)
 {
@@ -5533,10 +5512,6 @@ void SetupGameLevel(void)
 	else
 	{
 		FixTiles();
-	}
-	if (enableZomROTT)
-	{
-		SetupZomROTTStuff();
 	}
 
 	if (gamestate.SpawnEluder || gamestate.SpawnDeluder)

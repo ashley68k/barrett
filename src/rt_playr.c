@@ -2659,9 +2659,6 @@ boolean DetermineAmmoPickup(playertype* pstate, statobj_t* check)
 	}
 }
 
-extern boolean enableAmmoPickups;
-boolean wasAmmoPickup = false;
-
 boolean GivePlayerMissileWeapon(objtype* ob, playertype* pstate,
 								statobj_t* check)
 {
@@ -2679,21 +2676,6 @@ boolean GivePlayerMissileWeapon(objtype* ob, playertype* pstate,
 	else if ((GetWeaponForItem(check->itemnumber) == pstate->missileweapon) &&
 			 (check->ammo == stats[check->itemnumber].ammo) &&
 			 (pstate->ammo >= stats[check->itemnumber].ammo))
-		return false;
-
-	// LT added, this bit here handles ammo pickups if that option's enabled
-	if (enableAmmoPickups && DetermineAmmoPickup(pstate, check))
-	{
-		wasAmmoPickup = true;
-		GivePlayerAmmo(ob, check, GetWeaponForItem(check->itemnumber));
-		if ((ob == player) && SHOW_BOTTOM_STATUS_BAR())
-			DrawBarAmmo(false);
-		SD_PlaySoundRTP(SD_GETWEAPONSND, ob->x, ob->y);
-		return true;
-	}
-
-	else if ((GetWeaponForItem(check->itemnumber) == pstate->missileweapon) &&
-			 (pstate->ammo >= check->ammo) && enableAmmoPickups)
 		return false;
 
 	SD_PlaySoundRTP(SD_GETWEAPONSND, ob->x, ob->y);
@@ -2961,12 +2943,14 @@ randomlabel:
 	case stat_twopistol:
 		if (GiveBulletWeapon(ob, wp_twopistol, check) == false)
 			return;
+
 		LocalBonusMessage("You got an extra pistol.");
 
 		break;
 	case stat_mp40:
 		if (GiveBulletWeapon(ob, wp_mp40, check) == false)
 			return;
+
 		LocalBonusMessage("You picked up an MP40.");
 
 		break;
@@ -2974,113 +2958,65 @@ randomlabel:
 	case stat_bazooka:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You bagged more Bazooka rounds!");
-		}
-		else
-		{
-			LocalBonusMessage("You bagged a bazooka!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You bagged a bazooka!");
+
 		break;
 
 	case stat_firebomb:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You got more Firebomb rounds!");
-		}
-		else
-		{
-			LocalBonusMessage("You found a Firebomb!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You found a Firebomb!");
+
 		break;
 
 	case stat_heatseeker:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You got more Heatseeker rounds!");
-		}
-		else
-		{
-			LocalBonusMessage("You have a Heat-seeker!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You have a Heat-seeker!");
+
 		break;
 
 	case stat_drunkmissile:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You recovered more Drunk missiles!");
-		}
-		else
-		{
-			LocalBonusMessage("You recovered a Drunk Missile!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You recovered a Drunk Missile!");
+
 		break;
 
 	case stat_firewall:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You filched more FlameWalls!");
-		}
-		else
-		{
-			LocalBonusMessage("You filched a FlameWall!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You filched a FlameWall!");
+
 		break;
 
 	case stat_splitmissile:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You snagged more Split Missiles!");
-		}
-		else
-		{
-			LocalBonusMessage("You snagged a Split Missile!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You snagged a Split Missile!");
+
 		break;
 
 	case stat_kes:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You got more Dark Staff rounds!");
-		}
-		else
-		{
-			LocalBonusMessage("You wield the Dark Staff!");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You wield the Dark Staff!");
+
 		break;
 
 	case stat_bat:
 		if (GivePlayerMissileWeapon(ob, pstate, check) == false)
 			return;
-		if (wasAmmoPickup)
-		{
-			LocalBonusMessage("You got more bat blast rounds!");
-		}
-		else
-		{
-			LocalBonusMessage("You picked up the Excalibat.");
-		}
-		wasAmmoPickup = false;
+
+		LocalBonusMessage("You picked up the Excalibat.");
+
 		break;
 
 	case stat_lifeitem1:

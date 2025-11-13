@@ -39,8 +39,6 @@ extern int FXvolume;
 extern boolean mouseenabled;
 extern boolean joystickenabled;
 extern boolean joypadenabled;
-extern boolean allowBlitzMoreMissileWeps;
-extern boolean enableAmmoPickups;
 extern boolean autoAimMissileWeps;
 extern boolean autoAim;
 

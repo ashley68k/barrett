@@ -1050,8 +1050,6 @@ int NumberOfTeams(void)
 	return (count);
 }
 
-extern boolean allowBlitzMoreMissileWeps;
-extern boolean enableZomROTT;
 extern boolean doRescaling;
 
 void GameLoop(void)
@@ -1679,7 +1677,6 @@ void InitCharacter(void)
 	UpdateScore(gamestate.score);
 }
 
-extern boolean enableZomROTT;
 void UpdateGameObjects(void)
 {
 	int j;
@@ -1709,10 +1706,6 @@ void UpdateGameObjects(void)
 		UpdateLightning();
 		TriggerStuff();
 		CheckCriticalStatics();
-		if (enableZomROTT && gamestate.killcount > 0)
-		{
-			ResurrectEnemies();
-		}
 
 		for (j = 0; j < numclocks; j++)
 			if (Clocks[j].time1 && ((gamestate.TimeCount == Clocks[j].time1) ||
