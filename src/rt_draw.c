@@ -624,7 +624,7 @@ int CalcHeight(void)
 	if (nx < mindist)
 		nx = mindist; // don't let divide overflo'
 
-	return (heightnumerator / nx);
+	return (int)((double)heightnumerator / nx);
 }
 
 //==========================================================================
@@ -1422,7 +1422,7 @@ void SetSpriteLightLevel(int x, int y, visobj_t* sprite, int dir,
 
 	if (fog)
 	{
-		i = ((sprite->viewheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) +
+		i = ((int)(sprite->viewheight * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade) +
 			minshade;
 		if (i > maxshade)
 			i = maxshade;
@@ -1438,14 +1438,14 @@ void SetSpriteLightLevel(int x, int y, visobj_t* sprite, int dir,
 				intercept = (y >> 11) & 0x1c;
 
 			lv = (((LightSourceAt(x >> 16, y >> 16) >> intercept) & 0xf) >> 1);
-			i = maxshade - ((sprite->viewheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv;
+			i = maxshade - ((int)(sprite->viewheight * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv;
 			if (i < minshade)
 				i = minshade;
 			sprite->colormap = colormap + (i << 8);
 		}
 		else
 		{
-			i = maxshade - ((sprite->viewheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
+			i = maxshade - ((int)(sprite->viewheight * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade);
 			if (i < minshade)
 				i = minshade;
 			sprite->colormap = colormap + (i << 8);
@@ -1487,7 +1487,7 @@ void SetColorLightLevel(int x, int y, visobj_t* sprite, int dir, int color,
 
 	if (fog)
 	{
-		i = ((height * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) + minshade;
+		i = ((int)(height * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade) + minshade;
 		if (i > maxshade)
 			i = maxshade;
 		sprite->colormap = map + (i << 8);
@@ -1588,7 +1588,7 @@ void SetWallLightLevel(wallcast_t* post)
 	}
 	if (fog)
 	{
-		i = ((post->wallheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) +
+		i = ((int)(post->wallheight * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade) +
 			minshade - lv + la;
 		if (i > maxshade + la)
 			i = maxshade + la;
@@ -1596,7 +1596,7 @@ void SetWallLightLevel(wallcast_t* post)
 	}
 	else
 	{
-		i = maxshade - ((post->wallheight * 200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv + la;
+		i = maxshade - ((int)(post->wallheight * (double)200 / iGLOBAL_SCREENHEIGHT) >> normalshade) - lv + la;
 		if (i >= maxshade)
 			i = maxshade;
 		if (i < minshade + la)
@@ -1679,7 +1679,7 @@ void DrawWallPost(wallcast_t* post, byte* buf)
 	else if (dc_yl < 0)
 		dc_yl = 0;
 
-	dc_iscale = (64 << (16 + HEIGHTFRACTION)) / post->wallheight;
+	dc_iscale = (int)((double)(64 << (16 + HEIGHTFRACTION)) / post->wallheight);
 
 	if (dc_yh < 0)
 	{
@@ -2203,10 +2203,10 @@ void InterpolateWall(visobj_t* plane)
 	dx = (plane->x2 - plane->x1 + 1);
 	if (plane->h1 <= 0 || plane->h2 <= 0 || dx == 0)
 		return;
-	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
+	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	top = 0;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
@@ -2222,7 +2222,7 @@ void InterpolateWall(visobj_t* plane)
 		{
 			if (bot)
 			{
-				texture = ((top / bot) + (plane->texturestart >> 4)) & 0xfc0;
+				texture = ((int)((double)top / bot) + (plane->texturestart >> 4)) & 0xfc0;
 				posts[i].texture = texture << 4;
 				posts[i].lump = plane->shapenum;
 				posts[i].alttile = plane->altshapenum;
@@ -2270,10 +2270,10 @@ void InterpolateDoor(visobj_t* plane)
 	shape = W_CacheLumpNum(plane->shapenum, PU_CACHE, Cvt_patch_t, 1);
 	shape2 = W_CacheLumpNum(plane->altshapenum, PU_CACHE, Cvt_patch_t, 1);
 	p = (patch_t*)shape;
-	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
+	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
 	botinc = d1 - d2;
@@ -2298,7 +2298,7 @@ void InterpolateDoor(visobj_t* plane)
 				sprtopoffset =
 					centeryfrac - FixedMul(dc_texturemid, dc_invscale);
 
-				texture = ((top / bot) + (plane->texturestart >> 4)) >> 6;
+				texture = ((int)((double)top / bot) + (plane->texturestart >> 4)) >> 6;
 				SetLightLevel(height >> DHEIGHTFRACTION);
 				ScaleMaskedPost(p->collumnofs[texture] + shape, buf);
 
@@ -2396,10 +2396,10 @@ void InterpolateMaskedWall(visobj_t* plane)
 		drawbottom = false;
 	}
 
-	d1 = (1 << (18 + HEIGHTFRACTION)) / plane->h1;
-	d2 = (1 << (18 + HEIGHTFRACTION)) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
+	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
 	botinc = d1 - d2;
@@ -2416,14 +2416,14 @@ void InterpolateMaskedWall(visobj_t* plane)
 				(posts[i].wallheight <= (height >> DHEIGHTFRACTION)))
 			{
 				dc_invscale = height >> (HEIGHTFRACTION + DHEIGHTFRACTION - 10);
-				dc_iscale = 0xffffffffu / (unsigned)dc_invscale;
+				dc_iscale = (int)((double)0xffffffffu / (unsigned)dc_invscale);
 				dc_texturemid =
 					((pheight - nominalheight + topoffset) << SFRACBITS) +
 					(SFRACUNIT >> 1);
 				sprtopoffset =
 					centeryfrac - FixedMul(dc_texturemid, dc_invscale);
 
-				texture = ((top / bot) + (plane->texturestart >> 4)) >> 6;
+				texture = ((int)((double)top / bot) + (plane->texturestart >> 4)) >> 6;
 				SetLightLevel(height >> DHEIGHTFRACTION);
 				if (drawbottom == true)
 					ScaleTransparentPost(p->collumnofs[texture] + shape, buf,
@@ -3303,8 +3303,8 @@ void DrawScaledPost(int height, byte* src, int offset, int x)
 	patch_t* p;
 
 	p = (patch_t*)src;
-	dc_invscale = (height << 16) / p->origsize;
-	dc_iscale = (p->origsize << 16) / height;
+	dc_invscale = (int)((double)(height << 16)) / p->origsize;
+	dc_iscale = (int)((double)(p->origsize << 16)) / height;
 	dc_texturemid =
 		(((p->origsize >> 1) + p->topoffset) << SFRACBITS) + (SFRACUNIT >> 1);
 	sprtopoffset = centeryfrac - FixedMul(dc_texturemid, dc_invscale);
