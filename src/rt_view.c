@@ -53,7 +53,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =============================================================================
 */
-extern int G_weaponscale;
 
 int StatusBar = 0;
 int lightninglevel = 0;

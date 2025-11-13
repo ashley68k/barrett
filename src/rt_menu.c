@@ -542,12 +542,9 @@ CP_MenuNames OptionsNames[] = {
 // bna added
 CP_MenuNames ExtOptionsNames[] = {
 	"MOUSELOOK", "INVERSE MOUSE",		 "ALLOW Y AXIS MOUSE", "CROSS HAIR",
-	"JUMPING",	 "AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM",	   "USE OPL MUSIC"};
+	"AUTOAIM MISSILE WEPS", "ENABLE AUTOAIM",	   "USE OPL MUSIC"};
 
-CP_MenuNames ExtGameOptionsNames[] = {"BLITZ RANDOM WEPS", "ENABLE AMMO PICKUP",
-									  "EXTRA PISTOL DROPS",
-									  "ENABLE ZOMROTT", // LT added
-									  "LOW MEMORY MODE"}; // erysdren added
+CP_MenuNames ExtGameOptionsNames[] = {"LOW MEMORY MODE"}; // erysdren added
 
 CP_MenuNames VisualOptionsNames[] = {"SCREEN RESOLUTION", "ADJUST FOCAL WIDTH",
 									 "HUD SCALING", "DISPLAY OPTIONS"};
@@ -588,11 +585,11 @@ CP_iteminfo VisualOptionsItems = {
 
 CP_iteminfo ScreenResolutionItems; // This gets filled in at run time
 
-CP_iteminfo ExtOptionsItems = {20, MENU_Y,			8,			 0,
+CP_iteminfo ExtOptionsItems = {20, MENU_Y,			7,			 0,
 							   43, ExtOptionsNames, mn_largefont};
 
 CP_iteminfo ExtGameOptionsItems = {
-	20, MENU_Y, 5, 0, 43, ExtGameOptionsNames, mn_largefont}; // LT added
+	20, MENU_Y, 1, 0, 43, ExtGameOptionsNames, mn_largefont}; // LT added
 
 CP_iteminfo DisplayOptionsMenu = {
 	20, MENU_Y, 3, 0, 43, DisplayOptionsNames, mn_largefont}; // LT added
@@ -609,17 +606,13 @@ CP_itemtype VisualsOptionsMenu[] = {{1, "", 'S', (menuptr)CP_ScreenResolution},
 
 CP_itemtype ExtOptionsMenu[] = {
 	{1, "", 'M', NULL}, {1, "", 'I', NULL}, {1, "", 'D', NULL},
-	{1, "", 'C', NULL}, {1, "", 'J', NULL}, {1, "", 'A', NULL},
+	{1, "", 'C', NULL}, {1, "", 'A', NULL},
 	{1, "", 'U', NULL}, {1, "", 'O', NULL},
 };
 
 CP_itemtype ExtGameMenu[] = {
-	{1, "", 'A', NULL},
-	{1, "", 'P', NULL},
-	{1, "", 'E', NULL},
-	{1, "", 'Z', NULL},
-	{1, "", 'L', NULL},
-}; // LT added
+	{1, "", 'L', NULL}
+};
 
 // bna added end
 
@@ -4809,7 +4802,6 @@ static char* ExtOptionsDesc[8] = {
 	"Invert the mouse.",
 	"Move forward and backward using mouse.",
 	"Enable Crosshairs.",
-	"Allow Jumping (may completely break levels)",
 	"Missile weapons are auto aimed after 1st shot.",
 	"Allow auto aim.",
 	"Use OPL emulation for MIDI playback."};
@@ -4839,7 +4831,6 @@ extern int inverse_mouse;
 extern boolean usemouselook;
 extern boolean useoplmusic;
 extern boolean iG_aimCross;
-extern boolean usejump;
 extern boolean autoAimMissileWeps;
 extern boolean autoAim;
 extern boolean allowMovementWithMouseYAxis;
@@ -4883,18 +4874,14 @@ void CP_ExtOptionsMenu(void)
 			DrawExtOptionsButtons();
 			break;
 		case 4:
-			usejump ^= 1;
-			DrawExtOptionsButtons();
-			break;
-		case 5:
 			autoAimMissileWeps ^= 1;
 			DrawExtOptionsButtons();
 			break;
-		case 6:
+		case 5:
 			autoAim ^= 1;
 			DrawExtOptionsButtons();
 			break;
-		case 7:
+		case 6:
 			useoplmusic ^= 1;
 			DrawExtOptionsButtons();
 			break;
@@ -4942,18 +4929,14 @@ void DrawExtOptionsButtons(void)
 					on = 1;
 				break;
 			case 4:
-				if (usejump == 1)
-					on = 1;
-				break;
-			case 5:
 				if (autoAimMissileWeps == 1)
 					on = 1;
 				break;
-			case 6:
+			case 5:
 				if (autoAim == 1)
 					on = 1;
 				break;
-			case 7:
+			case 6:
 				if (useoplmusic == 1)
 					on = 1;
 				break;
@@ -4967,15 +4950,7 @@ void DrawExtOptionsButtons(void)
 								button_off);
 		}
 }
-extern boolean allowBlitzMoreMissileWeps;
-extern boolean enableAmmoPickups;
-extern boolean enableZomROTT;
-extern boolean enableExtraPistolDrops;
 static char* ExtGameOptionsDesc[sizeof(ExtGameOptionsItems)] = {
-	"Allow Blitzguards to be randomly given any missile weapon.",
-	"Take ammo from dropped missile weapons upon touching them.",
-	"Guards with pistols drop their pistol when killed.",
-	"If enabled, guards will respawn UNLESS if GIBBED.",
 	"If enabled, emulate DOS ROTT's \"low memory\" mode."
 };
 
@@ -5000,42 +4975,6 @@ void DrawExtGameOptionsButtons(void)
 			switch (i)
 			{
 			case 0:
-				if (allowBlitzMoreMissileWeps == 1)
-				{
-					on = 1;
-				}
-				break;
-			case 1:
-				if (enableAmmoPickups == 1)
-				{
-					/*
-										EraseMenuBufRegion (25, 4, 287 - 25, 10
-					   ); DrawOptionDescription( ExtGameOptionsDesc, 1);
-					*/
-					on = 1;
-				}
-				break;
-			case 2:
-				if (enableExtraPistolDrops == 1)
-				{
-					/*
-										EraseMenuBufRegion (25, 4, 287 - 25, 10
-					   ); DrawOptionDescription( ExtGameOptionsDesc, 2 );
-					*/
-					on = 1;
-				}
-				break;
-			case 3:
-				if (enableZomROTT == 1)
-				{
-					/*
-										EraseMenuBufRegion (25, 4, 287 - 25, 10
-					   ); DrawOptionDescription( ExtGameOptionsDesc, 3 );
-					*/
-					on = 1;
-				}
-				break;
-			case 4:
 				if (lowmemory == 1)
 				{
 					on = 1;
@@ -5116,22 +5055,6 @@ void CP_ExtGameOptionsMenu(void)
 		switch (which)
 		{
 		case 0:
-			allowBlitzMoreMissileWeps ^= 1;
-			DrawExtGameOptionsButtons();
-			break;
-		case 1:
-			enableAmmoPickups ^= 1;
-			DrawExtGameOptionsButtons();
-			break;
-		case 2:
-			enableExtraPistolDrops ^= 1;
-			DrawExtGameOptionsButtons();
-			break;
-		case 3:
-			enableZomROTT ^= 1;
-			DrawExtGameOptionsButtons();
-			break;
-		case 4:
 			lowmemory ^= 1;
 			DrawExtGameOptionsButtons();
 			break;
