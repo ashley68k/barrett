@@ -2205,8 +2205,8 @@ void InterpolateWall(visobj_t* plane)
 		return;
 	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
 	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	top = 0;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
@@ -2272,8 +2272,8 @@ void InterpolateDoor(visobj_t* plane)
 	p = (patch_t*)shape;
 	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
 	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
 	botinc = d1 - d2;
@@ -2398,8 +2398,8 @@ void InterpolateMaskedWall(visobj_t* plane)
 
 	d1 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h1;
 	d2 = (int)((double)(1 << (18 + HEIGHTFRACTION))) / plane->h2;
-	dh = (((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
-		  (1 << (DHEIGHTFRACTION - 1))) /
+	dh = (int)((double)(((plane->h2 - plane->h1) << DHEIGHTFRACTION) +
+		  (1 << (DHEIGHTFRACTION - 1)))) /
 		 dx;
 	topinc = FixedMulShift(d1, plane->textureend - plane->texturestart, 4);
 	botinc = d1 - d2;
