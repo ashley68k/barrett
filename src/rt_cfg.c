@@ -75,7 +75,6 @@ int FXvolume = 196;
 
 boolean mouseenabled = 1;
 boolean usemouselook = 0;
-boolean oplmusicset = 0;
 boolean useoplmusic = 0;
 int inverse_mouse = 1; // set  to -1 to invert mouse
 boolean usejump = 0;
@@ -438,11 +437,8 @@ boolean ParseConfigFile(void)
 		// Read in UseMouseLook
 		ReadBoolean("UseMouseLook", &usemouselook);
 
-		// Read in OPLMusicSet
-		ReadBoolean("OPLMusicSet", &oplmusicset);
-
-		// lock useoplmusic to state on cfg read
-		useoplmusic = oplmusicset;
+		// Read in UseOPLMusic
+		ReadBoolean("UseOPLMusic", &useoplmusic);
 
 		ReadInt("InverseMouse", &inverse_mouse);
 
@@ -1669,11 +1665,11 @@ void WriteConfig(void)
 	SafeWriteString(file, "; 0 - UseMouseLook Disabled\n");
 	WriteParameter(file, "UseMouseLook     ", usemouselook);
 
-	// Write out OPLMusicSet
+	// Write out UseOPLMusic
 	SafeWriteString(file, "\n;\n");
-	SafeWriteString(file, "; 1 - OPLMusicSet Enabled\n");
-	SafeWriteString(file, "; 0 - OPLMusicSet Disabled\n");
-	WriteParameter(file, "OPLMusicSet      ", oplmusicset);
+	SafeWriteString(file, "; 1 - UseOPLMusic Enabled\n");
+	SafeWriteString(file, "; 0 - UseOPLMusic Disabled\n");
+	WriteParameter(file, "UseOPLMusic      ", useoplmusic);
 
 
 	// Write out InverseMouse

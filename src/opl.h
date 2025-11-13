@@ -27,6 +27,7 @@ typedef struct opl
 {
     int oplChipNum;
     int bankNum;
+    int emulator;
 } oplCfg;
 
 void OPL_Init(void);
@@ -34,6 +35,7 @@ void OPL_Free(void);
 
 void OPL_RegisterHook(void);
 void OPL_DeregisterHook(void);
+void OPL_CheckForStateChange(void);
 
 int OPL_GetPosition(void);
 void OPL_SetPosition(int ms);
