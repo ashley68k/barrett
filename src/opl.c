@@ -33,8 +33,6 @@ static void OPLcallback(void *cbFunc, Uint8 *stream, int len);
 static boolean isPlaying = 0;
 static boolean isHooked = false;
 
-extern boolean useoplmusic;
-
 static double volume = 0;
 static double pos = 0;
 
@@ -76,10 +74,13 @@ static boolean OPL_WriteDefault(const char* path)
     // open chip section
     fputs("[chip]\n", ini);
 
-    // kvp for bank (70 default = rott bank)
-    fputs("; valid bank choices here\n", ini);
-    fputs("; https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini\n", ini);
-    fputs("bank=70\n", ini);
+    // kvp for bank
+    fputs("; - notable banks - \n", ini);
+    fputs("; 67 = ROTT v1.3\n", ini);
+    fputs("; 70 = ROTT v1.0-1.2\n", ini);
+    fputs("; 72 = DMXOPL\n", ini);
+    fputs("; for more: https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini\n", ini);
+    fputs("bank=67\n", ini);
 
     // kvp for chip count
     fputs("count=2", ini);
@@ -96,20 +97,13 @@ void OPL_Init(void)
     oplCfg cfg;
 
     GetPathFromEnvironment(oplCfgPath, ApogeePath, "opl.ini");
-
-    if (access(oplCfgPath, F_OK) != 0)
-    {
-        printf("opl.ini doesn't exist!\n");
-
-        if(!OPL_WriteDefault(oplCfgPath))
-            printf("opl.ini creation failed.\n");
-        else
-            printf("opl.ini creation succeeded in %s.\n", ApogeePath);
-    }
     
-    if (ini_parse(oplCfgPath, OPL_FetchConfig, &cfg) < 0) 
-    {
+    if (ini_parse(oplCfgPath, OPL_FetchConfig, &cfg) < 0) {
         printf("Can't load 'opl.ini'\n");
+        if(!OPL_WriteDefault(oplCfgPath))
+            printf("opl.ini creation failed.");
+        else
+            printf("opl.ini creation succeeded in %s.", ApogeePath);
         exit(0);
     }
 
@@ -132,13 +126,12 @@ void OPL_Init(void)
     
     adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
 
-    // banknum if set - default to Duke 3D (RoTT v1.3) bank
+    // banknum if set - default to ROTT v1.3 bank
     // https://github.com/Wohlstand/libADLMIDI/blob/master/banks.ini
-    int getBank = cfg.bankNum ? cfg.bankNum : 62;
+    int getBank = cfg.bankNum ? cfg.bankNum : 67;
     adl_setBank(midi_player, getBank);
-    
-    if(useoplmusic)
-        OPL_RegisterHook();
+
+    OPL_RegisterHook();
 
     Mix_QuerySpec(NULL, &obtained_format, NULL);
 
@@ -177,10 +170,6 @@ void OPL_Init(void)
     }
 }
 
-void OPL_Free(void)
-{
-    adl_close(midi_player);
-}
 
 void OPL_RegisterHook(void)
 {
@@ -194,17 +183,6 @@ void OPL_DeregisterHook(void)
     isHooked = false;
 }
 
-void OPL_CheckForStateChange(void)
-{
-    if(!OPL_IsHooked() && useoplmusic)
-	{
-		OPL_RegisterHook();
-	}
-	if(OPL_IsHooked() && !useoplmusic)
-	{
-		OPL_DeregisterHook();
-	}
-}
 
 int OPL_GetPosition(void)
 {
@@ -215,6 +193,7 @@ void OPL_SetPosition(int ms)
 {
     adl_positionSeek(midi_player, (double)ms / 1000);
 }
+
 
 void OPL_SetVolume(double newVol)
 {
