@@ -2163,7 +2163,8 @@ void PollKeyboardMove(void)
 
 #define MOUSE_SENSITIVITY_SCALE 1024
 
-int mouse_x_inscale = -65536;
+// For some reason inputs are inverted if this isn't negative, the x-angle space must be inverted somehow
+int mousex_tofracangle = -SFRACUNIT;
 
 extern int inverse_mouse;
 extern boolean allowMovementWithMouseYAxis;
@@ -2177,18 +2178,18 @@ void PollMouseMove(void)
 	MX = 0;
 	MY = 0;
 
+	// Player X angle is a fixed point value, convert integer representation of mouse movement to fixed-point
+	// fractional units of 1 (x*65536/65536) and then multiply it by a 1024*y scalar. For instance, if
+	// mouseadjustment was 16, this would be 16384, which is equivalent to quartering the mouse input.
 	if (abs(mousexmove))
-	{
-		MX += FixedMul(mousexmove * mouse_x_inscale, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
-	}
+		MX = FixedMul(mousexmove * mousex_tofracangle, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 
-	if (abs(mouseymove))
-	{
-		if (usemouselook || allowMovementWithMouseYAxis)
-		{
-			MY += FixedMul(mouseymove, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
-		}
-	}
+	// Player Y angle/horizon is stored as a whole integer value and doesn't use fractional components.
+	// As such, it isn't converted to a fractional value, 
+	// but the same FixedMul still scales the integer as expected.
+	// This ensures linearity between X/Y axis and with respect to mouse motion.
+	if (abs(mouseymove) && (usemouselook || allowMovementWithMouseYAxis))
+		MY = FixedMul(mouseymove * inverse_mouse, mouseadjustment * MOUSE_SENSITIVITY_SCALE);
 }
 
 //******************************************************************************
