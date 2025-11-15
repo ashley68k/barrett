@@ -182,9 +182,9 @@ void InterpolatePlane(visobj_t* plane)
 	dx = (plane->x2 - plane->x1 + 1);
 	if (plane->h1 <= 0 || plane->h2 <= 0 || (dx == 0))
 		return;
-	d1 = (int)((double)65536 / plane->h1);
-	d2 = (int)((double)65536 / plane->h2);
-	dh = (int)((double)((plane->h2 - plane->h1) << 8)) / dx;
+	d1 = 65536 / plane->h1;
+	d2 = 65536 / plane->h2;
+	dh = ((plane->h2 - plane->h1) << 8) / dx;
 	top = 0;
 	topinc = (d1) * ((plane->textureend - plane->texturestart) >> 4);
 	bot = d2 * dx;
@@ -198,7 +198,7 @@ void InterpolatePlane(visobj_t* plane)
 		{
 			if (bot)
 			{
-				texture = ((int)((double)top / bot) + (plane->texturestart >> 4)) >> 6;
+				texture = ((top / bot) + (plane->texturestart >> 4)) >> 6;
 				posts[i].texture = texture * plane->viewx;
 				posts[i].lump = plane->shapenum;
 				posts[i].wallheight = (height >> 8);

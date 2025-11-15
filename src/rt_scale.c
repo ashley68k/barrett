@@ -237,7 +237,6 @@ void ScaleMaskedPost(byte* src, byte* buf)
 			R_DrawColumn(buf);
 		}
 		src += length;
-
 		offset = *(src++);
 	}
 }
@@ -414,7 +413,7 @@ void ScaleShape(visobj_t* sprite)
 	}
 
 	// dc_iscale=(1<<(16+6+HEIGHTFRACTION+size))/sprite->viewheight;
-	dc_iscale = (int)((double)0xffffffffu / (unsigned)dc_invscale);
+	dc_iscale = 0xffffffffu / (unsigned)dc_invscale;
 	dc_texturemid =
 		(((sprite->h1 << size) + p->topoffset) << SFRACBITS); //+(SFRACUNIT>>1);
 	sprtopoffset = centeryfrac - FixedMul(dc_texturemid, dc_invscale);
@@ -570,7 +569,7 @@ void ScaleTransparentShape(visobj_t* sprite)
 	}
 
 	//   dc_iscale=(1<<(16+6+HEIGHTFRACTION+size))/sprite->viewheight;
-	dc_iscale = (int)((double)0xffffffffu / (unsigned)dc_invscale);
+	dc_iscale = 0xffffffffu / (unsigned)dc_invscale;
 	dc_texturemid =
 		(((sprite->h1 << size) + p->topoffset) << SFRACBITS); //+(SFRACUNIT>>1);
 	sprtopoffset = centeryfrac - FixedMul(dc_texturemid, dc_invscale);
@@ -885,7 +884,7 @@ void DrawPositionedScaledSprite(int x, int y, int shapenum, int height,
 	if (x2 < 0)
 		return; // off the left side
 
-	dc_iscale = (int)((double)0xffffffffu / (unsigned)dc_invscale);
+	dc_iscale = 0xffffffffu / (unsigned)dc_invscale;
 	//   dc_iscale=(1<<(16+6+size))/height;
 	dc_texturemid =
 		(((32 << size) + p->topoffset) << SFRACBITS) + (SFRACUNIT >> 1);
@@ -973,7 +972,7 @@ void DrawScreenSizedSprite(int lump)
 		return; // off the left side
 	}
 
-	dc_iscale = (int)((double)0xffffffffu / (unsigned)dc_invscale);
+	dc_iscale = 0xffffffffu / (unsigned)dc_invscale;
 	dc_texturemid =
 		(((p->origsize >> 1) + p->topoffset) << SFRACBITS) + (SFRACUNIT >> 1);
 	sprtopoffset =
@@ -1113,24 +1112,24 @@ void R_DrawColumn(byte* buf)
 {
 	// This is *NOT* 100% correct - DDOI
 	int count;
-	int frac;
+	int frac, fracstep;
 	byte* dest;
 
-	count = (dc_yh + 1) - dc_yl;
+	count = dc_yh - dc_yl + 1;
 	if (count < 0)
 		return;
 
 	dest = buf + ylookup[dc_yl];
 
-	frac = dc_texturemid - ((centery - dc_yl) * dc_iscale);
+	fracstep = dc_iscale;
+	frac = dc_texturemid + (dc_yl - centery) * fracstep;
 
 	while (count--)
 	{
 		//*dest = test++;
-		*dest = shadingtable[dc_source[(frac >> SFRACBITS)&127]];
+		*dest = shadingtable[dc_source[(frac >> SFRACBITS)]];
 		dest += iGLOBAL_SCREENWIDTH;
-
-		frac += dc_iscale;
+		frac += fracstep;
 	}
 }
 
